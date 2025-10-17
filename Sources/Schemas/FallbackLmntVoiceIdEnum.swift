@@ -1,0 +1,46 @@
+import Foundation
+
+public enum FallbackLmntVoiceIdEnum: String, Codable, Hashable, CaseIterable, Sendable {
+    case amy
+    case ansel
+    case autumn
+    case ava
+    case brandon
+    case caleb
+    case cassian
+    case chloe
+    case dalton
+    case daniel
+    case dustin
+    case elowen
+    case evander
+    case huxley
+    case james
+    case juniper
+    case kennedy
+    case lauren
+    case leah
+    case lily
+    case lucas
+    case magnus
+    case miles
+    case morgan
+    case natalie
+    case nathan
+    case noah
+    case nyssa
+    case oliver
+    case paige
+    case ryan
+    case sadie
+    case sophie
+    case stella
+    case terrence
+    case tyler
+    case vesper
+    case violet
+    case warrick
+    case zain
+    case zeke
+    case zoe
+}

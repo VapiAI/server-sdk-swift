@@ -1,0 +1,62 @@
+import Foundation
+
+/// This is the language that will be set for the transcription.
+public enum OpenAiTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
+    case af
+    case ar
+    case hy
+    case az
+    case be
+    case bs
+    case bg
+    case ca
+    case zh
+    case hr
+    case cs
+    case da
+    case nl
+    case en
+    case et
+    case fi
+    case fr
+    case gl
+    case de
+    case el
+    case he
+    case hi
+    case hu
+    case `is`
+    case id
+    case it
+    case ja
+    case kn
+    case kk
+    case ko
+    case lv
+    case lt
+    case mk
+    case ms
+    case mr
+    case mi
+    case ne
+    case no
+    case fa
+    case pl
+    case pt
+    case ro
+    case ru
+    case sr
+    case sk
+    case sl
+    case es
+    case sw
+    case sv
+    case tl
+    case ta
+    case th
+    case tr
+    case uk
+    case ur
+    case vi
+    case cy
+}

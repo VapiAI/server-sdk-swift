@@ -1,0 +1,136 @@
+import Foundation
+
+public enum ChatCostsItem: Codable, Hashable, Sendable {
+    case model(Model)
+    case chat(Chat)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let discriminant = try container.decode(String.self, forKey: .type)
+        switch discriminant {
+        case "model":
+            self = .model(try Model(from: decoder))
+        case "chat":
+            self = .chat(try Chat(from: decoder))
+        default:
+            throw DecodingError.dataCorrupted(
+                DecodingError.Context(
+                    codingPath: decoder.codingPath,
+                    debugDescription: "Unknown shape discriminant value: \(discriminant)"
+                )
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        switch self {
+        case .model(let data):
+            try data.encode(to: encoder)
+        case .chat(let data):
+            try data.encode(to: encoder)
+        }
+    }
+
+    public struct Model: Codable, Hashable, Sendable {
+        public let type: String = "model"
+        /// This is the model that was used during the call.
+        /// 
+        /// This matches one of the following:
+        /// - `call.assistant.model`,
+        /// - `call.assistantId->model`,
+        /// - `call.squad[n].assistant.model`,
+        /// - `call.squad[n].assistantId->model`,
+        /// - `call.squadId->[n].assistant.model`,
+        /// - `call.squadId->[n].assistantId->model`.
+        public let model: [String: JSONValue]
+        /// This is the number of prompt tokens used in the call. These should be total prompt tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.
+        public let promptTokens: Double
+        /// This is the number of completion tokens generated in the call. These should be total completion tokens used in the call for single assistant calls, while squad calls will have multiple model costs one for each assistant that was used.
+        public let completionTokens: Double
+        /// This is the cost of the component in USD.
+        public let cost: Double
+        /// Additional properties that are not explicitly defined in the schema
+        public let additionalProperties: [String: JSONValue]
+
+        public init(
+            model: [String: JSONValue],
+            promptTokens: Double,
+            completionTokens: Double,
+            cost: Double,
+            additionalProperties: [String: JSONValue] = .init()
+        ) {
+            self.model = model
+            self.promptTokens = promptTokens
+            self.completionTokens = completionTokens
+            self.cost = cost
+            self.additionalProperties = additionalProperties
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.model = try container.decode([String: JSONValue].self, forKey: .model)
+            self.promptTokens = try container.decode(Double.self, forKey: .promptTokens)
+            self.completionTokens = try container.decode(Double.self, forKey: .completionTokens)
+            self.cost = try container.decode(Double.self, forKey: .cost)
+            self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
+        }
+
+        public func encode(to encoder: Encoder) throws -> Void {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try encoder.encodeAdditionalProperties(self.additionalProperties)
+            try container.encode(self.type, forKey: .type)
+            try container.encode(self.model, forKey: .model)
+            try container.encode(self.promptTokens, forKey: .promptTokens)
+            try container.encode(self.completionTokens, forKey: .completionTokens)
+            try container.encode(self.cost, forKey: .cost)
+        }
+
+        /// Keys for encoding/decoding struct properties.
+        enum CodingKeys: String, CodingKey, CaseIterable {
+            case type
+            case model
+            case promptTokens
+            case completionTokens
+            case cost
+        }
+    }
+
+    public struct Chat: Codable, Hashable, Sendable {
+        public let type: String = "chat"
+        /// This is the cost of the component in USD.
+        public let cost: Double
+        /// Additional properties that are not explicitly defined in the schema
+        public let additionalProperties: [String: JSONValue]
+
+        public init(
+            cost: Double,
+            additionalProperties: [String: JSONValue] = .init()
+        ) {
+            self.cost = cost
+            self.additionalProperties = additionalProperties
+        }
+
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.cost = try container.decode(Double.self, forKey: .cost)
+            self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
+        }
+
+        public func encode(to encoder: Encoder) throws -> Void {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try encoder.encodeAdditionalProperties(self.additionalProperties)
+            try container.encode(self.type, forKey: .type)
+            try container.encode(self.cost, forKey: .cost)
+        }
+
+        /// Keys for encoding/decoding struct properties.
+        enum CodingKeys: String, CodingKey, CaseIterable {
+            case type
+            case cost
+        }
+    }
+
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case type
+    }
+}

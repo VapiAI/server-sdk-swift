@@ -1,0 +1,60 @@
+import Foundation
+
+/// This is the provider-specific ID that will be used.
+public enum DeepgramVoiceId: String, Codable, Hashable, CaseIterable, Sendable {
+    case asteria
+    case luna
+    case stella
+    case athena
+    case hera
+    case orion
+    case arcas
+    case perseus
+    case angus
+    case orpheus
+    case helios
+    case zeus
+    case thalia
+    case andromeda
+    case helena
+    case apollo
+    case aries
+    case amalthea
+    case atlas
+    case aurora
+    case callista
+    case cora
+    case cordelia
+    case delia
+    case draco
+    case electra
+    case harmonia
+    case hermes
+    case hyperion
+    case iris
+    case janus
+    case juno
+    case jupiter
+    case mars
+    case minerva
+    case neptune
+    case odysseus
+    case ophelia
+    case pandora
+    case phoebe
+    case pluto
+    case saturn
+    case selene
+    case theia
+    case vesta
+    case celeste
+    case estrella
+    case nestor
+    case sirio
+    case carina
+    case alvaro
+    case diana
+    case aquila
+    case selena
+    case javier
+}

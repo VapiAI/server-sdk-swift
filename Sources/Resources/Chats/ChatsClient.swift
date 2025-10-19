@@ -17,7 +17,7 @@ public final class ChatsClient: Sendable {
                 "workflowId": workflowId?.wrappedValue.map { .string($0) }, 
                 "sessionId": sessionId?.wrappedValue.map { .string($0) }, 
                 "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0) }, 
+                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
                 "limit": limit?.wrappedValue.map { .double($0) }, 
                 "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
                 "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 

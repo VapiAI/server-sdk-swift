@@ -14,7 +14,7 @@ public final class EvalClient: Sendable {
             queryParams: [
                 "id": id?.wrappedValue.map { .string($0) }, 
                 "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0) }, 
+                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
                 "limit": limit?.wrappedValue.map { .double($0) }, 
                 "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
                 "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
@@ -93,7 +93,7 @@ public final class EvalClient: Sendable {
             queryParams: [
                 "id": id?.wrappedValue.map { .string($0) }, 
                 "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0) }, 
+                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
                 "limit": limit?.wrappedValue.map { .double($0) }, 
                 "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
                 "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 

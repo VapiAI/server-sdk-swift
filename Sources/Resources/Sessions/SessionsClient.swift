@@ -17,7 +17,7 @@ public final class SessionsClient: Sendable {
                 "squadId": squadId?.wrappedValue.map { .string($0) }, 
                 "workflowId": workflowId?.wrappedValue.map { .string($0) }, 
                 "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0) }, 
+                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
                 "limit": limit?.wrappedValue.map { .double($0) }, 
                 "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
                 "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 

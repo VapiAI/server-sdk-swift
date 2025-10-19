@@ -6,7 +6,7 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
     case hume(Hume)
     case customVoice(CustomVoice)
     case deepgram(Deepgram)
-    case 11Labs(11Labs)
+    case elevenLabs(ElevenLabs)
     case vapi(Vapi)
     case lmnt(Lmnt)
     case openai(Openai)
@@ -33,7 +33,7 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
         case "deepgram":
             self = .deepgram(try Deepgram(from: decoder))
         case "11labs":
-            self = .11Labs(try 11Labs(from: decoder))
+            self = .elevenLabs(try ElevenLabs(from: decoder))
         case "vapi":
             self = .vapi(try Vapi(from: decoder))
         case "lmnt":
@@ -76,7 +76,7 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .deepgram(let data):
             try data.encode(to: encoder)
-        case .11Labs(let data):
+        case .elevenLabs(let data):
             try data.encode(to: encoder)
         case .vapi(let data):
             try data.encode(to: encoder)
@@ -443,7 +443,7 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
         }
     }
 
-    public struct 11Labs: Codable, Hashable, Sendable {
+    public struct ElevenLabs: Codable, Hashable, Sendable {
         public let provider: String = "11labs"
         /// This is the flag to toggle voice caching for the assistant.
         public let cachingEnabled: Bool?

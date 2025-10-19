@@ -6,7 +6,7 @@ public enum CreateAssistantDtoTranscriber: Codable, Hashable, Sendable {
     case azure(Azure)
     case customTranscriber(CustomTranscriber)
     case deepgram(Deepgram)
-    case 11Labs(11Labs)
+    case elevenLabs(ElevenLabs)
     case gladia(Gladia)
     case google(Google)
     case speechmatics(Speechmatics)
@@ -27,7 +27,7 @@ public enum CreateAssistantDtoTranscriber: Codable, Hashable, Sendable {
         case "deepgram":
             self = .deepgram(try Deepgram(from: decoder))
         case "11labs":
-            self = .11Labs(try 11Labs(from: decoder))
+            self = .elevenLabs(try ElevenLabs(from: decoder))
         case "gladia":
             self = .gladia(try Gladia(from: decoder))
         case "google":
@@ -60,7 +60,7 @@ public enum CreateAssistantDtoTranscriber: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .deepgram(let data):
             try data.encode(to: encoder)
-        case .11Labs(let data):
+        case .elevenLabs(let data):
             try data.encode(to: encoder)
         case .gladia(let data):
             try data.encode(to: encoder)
@@ -494,7 +494,7 @@ public enum CreateAssistantDtoTranscriber: Codable, Hashable, Sendable {
         }
     }
 
-    public struct 11Labs: Codable, Hashable, Sendable {
+    public struct ElevenLabs: Codable, Hashable, Sendable {
         public let provider: String = "11labs"
         /// This is the model that will be used for the transcription.
         public let model: ScribeV1?

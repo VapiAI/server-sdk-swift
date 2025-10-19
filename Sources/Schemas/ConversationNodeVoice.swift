@@ -8,7 +8,7 @@ public enum ConversationNodeVoice: Codable, Hashable, Sendable {
     case cartesia(Cartesia)
     case customVoice(CustomVoice)
     case deepgram(Deepgram)
-    case 11Labs(11Labs)
+    case elevenLabs(ElevenLabs)
     case hume(Hume)
     case lmnt(Lmnt)
     case neuphonic(Neuphonic)
@@ -35,7 +35,7 @@ public enum ConversationNodeVoice: Codable, Hashable, Sendable {
         case "deepgram":
             self = .deepgram(try Deepgram(from: decoder))
         case "11labs":
-            self = .11Labs(try 11Labs(from: decoder))
+            self = .elevenLabs(try ElevenLabs(from: decoder))
         case "hume":
             self = .hume(try Hume(from: decoder))
         case "lmnt":
@@ -80,7 +80,7 @@ public enum ConversationNodeVoice: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .deepgram(let data):
             try data.encode(to: encoder)
-        case .11Labs(let data):
+        case .elevenLabs(let data):
             try data.encode(to: encoder)
         case .hume(let data):
             try data.encode(to: encoder)
@@ -400,7 +400,7 @@ public enum ConversationNodeVoice: Codable, Hashable, Sendable {
         }
     }
 
-    public struct 11Labs: Codable, Hashable, Sendable {
+    public struct ElevenLabs: Codable, Hashable, Sendable {
         public let provider: String = "11labs"
         /// This is the flag to toggle voice caching for the assistant.
         public let cachingEnabled: Bool?

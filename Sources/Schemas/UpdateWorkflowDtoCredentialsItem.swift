@@ -1,7 +1,7 @@
 import Foundation
 
 public enum UpdateWorkflowDtoCredentialsItem: Codable, Hashable, Sendable {
-    case 11Labs(11Labs)
+    case elevenLabs(ElevenLabs)
     case anthropic(Anthropic)
     case anyscale(Anyscale)
     case assemblyAi(AssemblyAi)
@@ -58,7 +58,7 @@ public enum UpdateWorkflowDtoCredentialsItem: Codable, Hashable, Sendable {
         let discriminant = try container.decode(String.self, forKey: .provider)
         switch discriminant {
         case "11labs":
-            self = .11Labs(try 11Labs(from: decoder))
+            self = .elevenLabs(try ElevenLabs(from: decoder))
         case "anthropic":
             self = .anthropic(try Anthropic(from: decoder))
         case "anyscale":
@@ -171,7 +171,7 @@ public enum UpdateWorkflowDtoCredentialsItem: Codable, Hashable, Sendable {
 
     public func encode(to encoder: Encoder) throws -> Void {
         switch self {
-        case .11Labs(let data):
+        case .elevenLabs(let data):
             try data.encode(to: encoder)
         case .anthropic(let data):
             try data.encode(to: encoder)
@@ -276,7 +276,7 @@ public enum UpdateWorkflowDtoCredentialsItem: Codable, Hashable, Sendable {
         }
     }
 
-    public struct 11Labs: Codable, Hashable, Sendable {
+    public struct ElevenLabs: Codable, Hashable, Sendable {
         public let provider: String = "11labs"
         /// This is not returned in the API.
         public let apiKey: String

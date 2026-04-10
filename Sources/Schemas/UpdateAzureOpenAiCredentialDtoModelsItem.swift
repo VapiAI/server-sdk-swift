@@ -1,6 +1,13 @@
 import Foundation
 
 public enum UpdateAzureOpenAiCredentialDtoModelsItem: String, Codable, Hashable, CaseIterable, Sendable {
+    case gpt54 = "gpt-5.4"
+    case gpt54Mini = "gpt-5.4-mini"
+    case gpt54Nano = "gpt-5.4-nano"
+    case gpt52 = "gpt-5.2"
+    case gpt52Chat = "gpt-5.2-chat"
+    case gpt51 = "gpt-5.1"
+    case gpt51Chat = "gpt-5.1-chat"
     case gpt5 = "gpt-5"
     case gpt5Mini = "gpt-5-mini"
     case gpt5Nano = "gpt-5-nano"

@@ -5,6 +5,8 @@ public struct UpdateHandoffToolDto: Codable, Hashable, Sendable {
     /// 
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [UpdateHandoffToolDtoMessagesItem]?
+    /// This is the default local tool result message used when no runtime handoff result override is returned.
+    public let defaultResult: String?
     /// These are the destinations that the call can be handed off to.
     /// 
     /// Usage:
@@ -357,12 +359,14 @@ public struct UpdateHandoffToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateHandoffToolDtoMessagesItem]? = nil,
+        defaultResult: String? = nil,
         destinations: [UpdateHandoffToolDtoDestinationsItem]? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         function: OpenAiFunction? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.defaultResult = defaultResult
         self.destinations = destinations
         self.rejectionPlan = rejectionPlan
         self.function = function
@@ -372,6 +376,7 @@ public struct UpdateHandoffToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateHandoffToolDtoMessagesItem].self, forKey: .messages)
+        self.defaultResult = try container.decodeIfPresent(String.self, forKey: .defaultResult)
         self.destinations = try container.decodeIfPresent([UpdateHandoffToolDtoDestinationsItem].self, forKey: .destinations)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.function = try container.decodeIfPresent(OpenAiFunction.self, forKey: .function)
@@ -382,6 +387,7 @@ public struct UpdateHandoffToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.defaultResult, forKey: .defaultResult)
         try container.encodeIfPresent(self.destinations, forKey: .destinations)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encodeIfPresent(self.function, forKey: .function)
@@ -390,6 +396,7 @@ public struct UpdateHandoffToolDto: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case defaultResult
         case destinations
         case rejectionPlan
         case function

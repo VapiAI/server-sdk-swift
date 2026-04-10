@@ -14,7 +14,7 @@ public struct InflectionAiModel: Codable, Hashable, Sendable {
     /// These are the options for the knowledge base.
     public let knowledgeBase: CreateCustomKnowledgeBaseDto?
     /// This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b
-    public let model: Inflection3Pi
+    public let model: InflectionAiModelModel
     /// This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
     public let temperature: Double?
     /// This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.
@@ -39,7 +39,7 @@ public struct InflectionAiModel: Codable, Hashable, Sendable {
         tools: [InflectionAiModelToolsItem]? = nil,
         toolIds: [String]? = nil,
         knowledgeBase: CreateCustomKnowledgeBaseDto? = nil,
-        model: Inflection3Pi,
+        model: InflectionAiModelModel,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
         emotionRecognitionEnabled: Bool? = nil,
@@ -64,7 +64,7 @@ public struct InflectionAiModel: Codable, Hashable, Sendable {
         self.tools = try container.decodeIfPresent([InflectionAiModelToolsItem].self, forKey: .tools)
         self.toolIds = try container.decodeIfPresent([String].self, forKey: .toolIds)
         self.knowledgeBase = try container.decodeIfPresent(CreateCustomKnowledgeBaseDto.self, forKey: .knowledgeBase)
-        self.model = try container.decode(Inflection3Pi.self, forKey: .model)
+        self.model = try container.decode(InflectionAiModelModel.self, forKey: .model)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
         self.emotionRecognitionEnabled = try container.decodeIfPresent(Bool.self, forKey: .emotionRecognitionEnabled)
@@ -84,10 +84,6 @@ public struct InflectionAiModel: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
         try container.encodeIfPresent(self.emotionRecognitionEnabled, forKey: .emotionRecognitionEnabled)
         try container.encodeIfPresent(self.numFastTurns, forKey: .numFastTurns)
-    }
-
-    public enum Inflection3Pi: String, Codable, Hashable, CaseIterable, Sendable {
-        case inflection3Pi = "inflection_3_pi"
     }
 
     /// Keys for encoding/decoding struct properties.

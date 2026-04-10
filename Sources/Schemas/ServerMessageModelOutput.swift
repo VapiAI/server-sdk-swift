@@ -4,7 +4,10 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageModelOutputPhoneNumber?
     /// This is the type of the message. "model-output" is sent as the model outputs tokens.
-    public let type: ModelOutput
+    public let type: ServerMessageModelOutputType
+    /// This is the unique identifier for the current LLM turn. All tokens from the same
+    /// LLM response share the same turnId. Use this to group tokens and discard on interruption.
+    public let turnId: String?
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -26,7 +29,8 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageModelOutputPhoneNumber? = nil,
-        type: ModelOutput,
+        type: ServerMessageModelOutputType,
+        turnId: String? = nil,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -38,6 +42,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
     ) {
         self.phoneNumber = phoneNumber
         self.type = type
+        self.turnId = turnId
         self.timestamp = timestamp
         self.artifact = artifact
         self.assistant = assistant
@@ -51,7 +56,8 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageModelOutputPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(ModelOutput.self, forKey: .type)
+        self.type = try container.decode(ServerMessageModelOutputType.self, forKey: .type)
+        self.turnId = try container.decodeIfPresent(String.self, forKey: .turnId)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -67,6 +73,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
         try container.encode(self.type, forKey: .type)
+        try container.encodeIfPresent(self.turnId, forKey: .turnId)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encodeIfPresent(self.artifact, forKey: .artifact)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
@@ -76,14 +83,11 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
         try container.encode(self.output, forKey: .output)
     }
 
-    public enum ModelOutput: String, Codable, Hashable, CaseIterable, Sendable {
-        case modelOutput = "model-output"
-    }
-
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
         case type
+        case turnId
         case timestamp
         case artifact
         case assistant

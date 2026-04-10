@@ -2,12 +2,12 @@ import Foundation
 
 public struct XssSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
-    public let type: Xss
+    public let type: XssSecurityFilterType
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Xss,
+        type: XssSecurityFilterType,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.type = type
@@ -16,7 +16,7 @@ public struct XssSecurityFilter: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Xss.self, forKey: .type)
+        self.type = try container.decode(XssSecurityFilterType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -24,10 +24,6 @@ public struct XssSecurityFilter: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.type, forKey: .type)
-    }
-
-    public enum Xss: String, Codable, Hashable, CaseIterable, Sendable {
-        case xss
     }
 
     /// Keys for encoding/decoding struct properties.

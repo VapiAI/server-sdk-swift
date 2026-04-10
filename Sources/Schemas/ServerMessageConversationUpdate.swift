@@ -4,7 +4,7 @@ public struct ServerMessageConversationUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageConversationUpdatePhoneNumber?
     /// This is the type of the message. "conversation-update" is sent when an update is committed to the conversation history.
-    public let type: ConversationUpdate
+    public let type: ServerMessageConversationUpdateType
     /// This is the most up-to-date conversation history at the time the message is sent.
     public let messages: [ServerMessageConversationUpdateMessagesItem]?
     /// This is the most up-to-date conversation history at the time the message is sent, formatted for OpenAI.
@@ -28,7 +28,7 @@ public struct ServerMessageConversationUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageConversationUpdatePhoneNumber? = nil,
-        type: ConversationUpdate,
+        type: ServerMessageConversationUpdateType,
         messages: [ServerMessageConversationUpdateMessagesItem]? = nil,
         messagesOpenAiFormatted: [OpenAiMessage],
         timestamp: Double? = nil,
@@ -55,7 +55,7 @@ public struct ServerMessageConversationUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageConversationUpdatePhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(ConversationUpdate.self, forKey: .type)
+        self.type = try container.decode(ServerMessageConversationUpdateType.self, forKey: .type)
         self.messages = try container.decodeIfPresent([ServerMessageConversationUpdateMessagesItem].self, forKey: .messages)
         self.messagesOpenAiFormatted = try container.decode([OpenAiMessage].self, forKey: .messagesOpenAiFormatted)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
@@ -80,10 +80,6 @@ public struct ServerMessageConversationUpdate: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum ConversationUpdate: String, Codable, Hashable, CaseIterable, Sendable {
-        case conversationUpdate = "conversation-update"
     }
 
     /// Keys for encoding/decoding struct properties.

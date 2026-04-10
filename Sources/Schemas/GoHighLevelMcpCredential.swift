@@ -1,7 +1,7 @@
 import Foundation
 
 public struct GoHighLevelMcpCredential: Codable, Hashable, Sendable {
-    public let provider: GhlOauth2Authorization
+    public let provider: GoHighLevelMcpCredentialProvider
     /// This is the authentication session for the credential.
     public let authenticationSession: Oauth2AuthenticationSession
     /// This is the unique identifier for the credential.
@@ -18,7 +18,7 @@ public struct GoHighLevelMcpCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: GhlOauth2Authorization,
+        provider: GoHighLevelMcpCredentialProvider,
         authenticationSession: Oauth2AuthenticationSession,
         id: String,
         orgId: String,
@@ -39,7 +39,7 @@ public struct GoHighLevelMcpCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(GhlOauth2Authorization.self, forKey: .provider)
+        self.provider = try container.decode(GoHighLevelMcpCredentialProvider.self, forKey: .provider)
         self.authenticationSession = try container.decode(Oauth2AuthenticationSession.self, forKey: .authenticationSession)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -59,10 +59,6 @@ public struct GoHighLevelMcpCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum GhlOauth2Authorization: String, Codable, Hashable, CaseIterable, Sendable {
-        case ghlOauth2Authorization = "ghl.oauth2-authorization"
     }
 
     /// Keys for encoding/decoding struct properties.

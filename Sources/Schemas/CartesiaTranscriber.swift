@@ -1,15 +1,15 @@
 import Foundation
 
 public struct CartesiaTranscriber: Codable, Hashable, Sendable {
-    public let model: InkWhisper?
+    public let model: CartesiaTranscriberModel?
     public let language: CartesiaTranscriberLanguage?
-    /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+    /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        model: InkWhisper? = nil,
+        model: CartesiaTranscriberModel? = nil,
         language: CartesiaTranscriberLanguage? = nil,
         fallbackPlan: FallbackTranscriberPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -22,7 +22,7 @@ public struct CartesiaTranscriber: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.decodeIfPresent(InkWhisper.self, forKey: .model)
+        self.model = try container.decodeIfPresent(CartesiaTranscriberModel.self, forKey: .model)
         self.language = try container.decodeIfPresent(CartesiaTranscriberLanguage.self, forKey: .language)
         self.fallbackPlan = try container.decodeIfPresent(FallbackTranscriberPlan.self, forKey: .fallbackPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -34,10 +34,6 @@ public struct CartesiaTranscriber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.language, forKey: .language)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
-    }
-
-    public enum InkWhisper: String, Codable, Hashable, CaseIterable, Sendable {
-        case inkWhisper = "ink-whisper"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -4,7 +4,7 @@ public struct ClientMessageToolCallsResult: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageToolCallsResultPhoneNumber?
     /// This is the type of the message. "tool-calls-result" is sent to forward the result of a tool call to the client.
-    public let type: ToolCallsResult
+    public let type: ClientMessageToolCallsResultType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is the call that the message is associated with.
@@ -20,7 +20,7 @@ public struct ClientMessageToolCallsResult: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageToolCallsResultPhoneNumber? = nil,
-        type: ToolCallsResult,
+        type: ClientMessageToolCallsResultType,
         timestamp: Double? = nil,
         call: Call? = nil,
         customer: CreateCustomerDto? = nil,
@@ -41,7 +41,7 @@ public struct ClientMessageToolCallsResult: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageToolCallsResultPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(ToolCallsResult.self, forKey: .type)
+        self.type = try container.decode(ClientMessageToolCallsResultType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
         self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
@@ -60,10 +60,6 @@ public struct ClientMessageToolCallsResult: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
         try container.encode(self.toolCallResult, forKey: .toolCallResult)
-    }
-
-    public enum ToolCallsResult: String, Codable, Hashable, CaseIterable, Sendable {
-        case toolCallsResult = "tool-calls-result"
     }
 
     /// Keys for encoding/decoding struct properties.

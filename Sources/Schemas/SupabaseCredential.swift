@@ -2,7 +2,7 @@ import Foundation
 
 public struct SupabaseCredential: Codable, Hashable, Sendable {
     /// This is for supabase storage.
-    public let provider: Supabase
+    public let provider: SupabaseCredentialProvider
     /// This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
     public let fallbackIndex: Double?
     /// This is the unique identifier for the credential.
@@ -20,7 +20,7 @@ public struct SupabaseCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Supabase,
+        provider: SupabaseCredentialProvider,
         fallbackIndex: Double? = nil,
         id: String,
         orgId: String,
@@ -43,7 +43,7 @@ public struct SupabaseCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Supabase.self, forKey: .provider)
+        self.provider = try container.decode(SupabaseCredentialProvider.self, forKey: .provider)
         self.fallbackIndex = try container.decodeIfPresent(Double.self, forKey: .fallbackIndex)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -65,10 +65,6 @@ public struct SupabaseCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.bucketPlan, forKey: .bucketPlan)
-    }
-
-    public enum Supabase: String, Codable, Hashable, CaseIterable, Sendable {
-        case supabase
     }
 
     /// Keys for encoding/decoding struct properties.

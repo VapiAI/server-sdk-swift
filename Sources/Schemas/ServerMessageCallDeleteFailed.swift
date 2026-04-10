@@ -4,7 +4,7 @@ public struct ServerMessageCallDeleteFailed: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageCallDeleteFailedPhoneNumber?
     /// This is the type of the message. "call.deleted" is sent when a call is deleted.
-    public let type: CallDeleteFailed
+    public let type: ServerMessageCallDeleteFailedType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -24,7 +24,7 @@ public struct ServerMessageCallDeleteFailed: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageCallDeleteFailedPhoneNumber? = nil,
-        type: CallDeleteFailed,
+        type: ServerMessageCallDeleteFailedType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -47,7 +47,7 @@ public struct ServerMessageCallDeleteFailed: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageCallDeleteFailedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(CallDeleteFailed.self, forKey: .type)
+        self.type = try container.decode(ServerMessageCallDeleteFailedType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -68,10 +68,6 @@ public struct ServerMessageCallDeleteFailed: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum CallDeleteFailed: String, Codable, Hashable, CaseIterable, Sendable {
-        case callDeleteFailed = "call.delete.failed"
     }
 
     /// Keys for encoding/decoding struct properties.

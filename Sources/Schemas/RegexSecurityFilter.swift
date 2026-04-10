@@ -2,14 +2,14 @@ import Foundation
 
 public struct RegexSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
-    public let type: Regex
+    public let type: RegexSecurityFilterType
     /// The regex pattern to filter.
     public let regex: String
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Regex,
+        type: RegexSecurityFilterType,
         regex: String,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -20,7 +20,7 @@ public struct RegexSecurityFilter: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Regex.self, forKey: .type)
+        self.type = try container.decode(RegexSecurityFilterType.self, forKey: .type)
         self.regex = try container.decode(String.self, forKey: .regex)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -30,10 +30,6 @@ public struct RegexSecurityFilter: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.regex, forKey: .regex)
-    }
-
-    public enum Regex: String, Codable, Hashable, CaseIterable, Sendable {
-        case regex
     }
 
     /// Keys for encoding/decoding struct properties.

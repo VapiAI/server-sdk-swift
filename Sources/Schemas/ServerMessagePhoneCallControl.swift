@@ -6,7 +6,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
     /// This is the type of the message. "phone-call-control" is an advanced type of message.
     /// 
     /// When it is requested in `assistant.serverMessages`, the hangup and forwarding responsibilities are delegated to your server. Vapi will no longer do the actual transfer and hangup.
-    public let type: PhoneCallControl
+    public let type: ServerMessagePhoneCallControlType
     /// This is the request to control the phone call.
     public let request: ServerMessagePhoneCallControlRequest
     /// This is the destination to forward the call to if the request is "forward".
@@ -30,7 +30,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessagePhoneCallControlPhoneNumber? = nil,
-        type: PhoneCallControl,
+        type: ServerMessagePhoneCallControlType,
         request: ServerMessagePhoneCallControlRequest,
         destination: ServerMessagePhoneCallControlDestination? = nil,
         timestamp: Double? = nil,
@@ -57,7 +57,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessagePhoneCallControlPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(PhoneCallControl.self, forKey: .type)
+        self.type = try container.decode(ServerMessagePhoneCallControlType.self, forKey: .type)
         self.request = try container.decode(ServerMessagePhoneCallControlRequest.self, forKey: .request)
         self.destination = try container.decodeIfPresent(ServerMessagePhoneCallControlDestination.self, forKey: .destination)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
@@ -82,10 +82,6 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum PhoneCallControl: String, Codable, Hashable, CaseIterable, Sendable {
-        case phoneCallControl = "phone-call-control"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -4,7 +4,7 @@ public struct KnowledgeBase: Codable, Hashable, Sendable {
     /// The name of the knowledge base
     public let name: String
     /// The provider of the knowledge base
-    public let provider: Google
+    public let provider: KnowledgeBaseProvider
     /// The model to use for the knowledge base
     public let model: KnowledgeBaseModel?
     /// A description of the knowledge base
@@ -16,7 +16,7 @@ public struct KnowledgeBase: Codable, Hashable, Sendable {
 
     public init(
         name: String,
-        provider: Google,
+        provider: KnowledgeBaseProvider,
         model: KnowledgeBaseModel? = nil,
         description: String,
         fileIds: [String],
@@ -33,7 +33,7 @@ public struct KnowledgeBase: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = try container.decode(String.self, forKey: .name)
-        self.provider = try container.decode(Google.self, forKey: .provider)
+        self.provider = try container.decode(KnowledgeBaseProvider.self, forKey: .provider)
         self.model = try container.decodeIfPresent(KnowledgeBaseModel.self, forKey: .model)
         self.description = try container.decode(String.self, forKey: .description)
         self.fileIds = try container.decode([String].self, forKey: .fileIds)
@@ -48,10 +48,6 @@ public struct KnowledgeBase: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encode(self.description, forKey: .description)
         try container.encode(self.fileIds, forKey: .fileIds)
-    }
-
-    public enum Google: String, Codable, Hashable, CaseIterable, Sendable {
-        case google
     }
 
     /// Keys for encoding/decoding struct properties.

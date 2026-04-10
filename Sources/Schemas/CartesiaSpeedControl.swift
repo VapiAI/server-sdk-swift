@@ -1,13 +1,13 @@
 import Foundation
 
 public enum CartesiaSpeedControl: Codable, Hashable, Sendable {
-    case cartesiaExperimentalControlsSpeed(CartesiaExperimentalControlsSpeed)
+    case cartesiaExperimentalControlsSpeedZero(CartesiaExperimentalControlsSpeedZero)
     case double(Double)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(CartesiaExperimentalControlsSpeed.self) {
-            self = .cartesiaExperimentalControlsSpeed(value)
+        if let value = try? container.decode(CartesiaExperimentalControlsSpeedZero.self) {
+            self = .cartesiaExperimentalControlsSpeedZero(value)
         } else if let value = try? container.decode(Double.self) {
             self = .double(value)
         } else {
@@ -21,7 +21,7 @@ public enum CartesiaSpeedControl: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.singleValueContainer()
         switch self {
-        case .cartesiaExperimentalControlsSpeed(let value):
+        case .cartesiaExperimentalControlsSpeedZero(let value):
             try container.encode(value)
         case .double(let value):
             try container.encode(value)

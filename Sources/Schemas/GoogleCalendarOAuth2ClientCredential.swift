@@ -1,7 +1,7 @@
 import Foundation
 
 public struct GoogleCalendarOAuth2ClientCredential: Codable, Hashable, Sendable {
-    public let provider: GoogleCalendarOauth2Client
+    public let provider: GoogleCalendarOAuth2ClientCredentialProvider
     /// This is the unique identifier for the credential.
     public let id: String
     /// This is the unique identifier for the org that this credential belongs to.
@@ -16,7 +16,7 @@ public struct GoogleCalendarOAuth2ClientCredential: Codable, Hashable, Sendable 
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: GoogleCalendarOauth2Client,
+        provider: GoogleCalendarOAuth2ClientCredentialProvider,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -35,7 +35,7 @@ public struct GoogleCalendarOAuth2ClientCredential: Codable, Hashable, Sendable 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(GoogleCalendarOauth2Client.self, forKey: .provider)
+        self.provider = try container.decode(GoogleCalendarOAuth2ClientCredentialProvider.self, forKey: .provider)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -53,10 +53,6 @@ public struct GoogleCalendarOAuth2ClientCredential: Codable, Hashable, Sendable 
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum GoogleCalendarOauth2Client: String, Codable, Hashable, CaseIterable, Sendable {
-        case googleCalendarOauth2Client = "google.calendar.oauth2-client"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -6,7 +6,7 @@ public struct GoHighLevelCalendarAvailabilityToolWithToolCall: Codable, Hashable
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [GoHighLevelCalendarAvailabilityToolWithToolCallMessagesItem]?
     /// The type of tool. "gohighlevel.calendar.availability.check" for GoHighLevel Calendar Availability Check tool.
-    public let type: GohighlevelCalendarAvailabilityCheck
+    public let type: GoHighLevelCalendarAvailabilityToolWithToolCallType
     public let toolCall: ToolCall
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
@@ -92,7 +92,7 @@ public struct GoHighLevelCalendarAvailabilityToolWithToolCall: Codable, Hashable
 
     public init(
         messages: [GoHighLevelCalendarAvailabilityToolWithToolCallMessagesItem]? = nil,
-        type: GohighlevelCalendarAvailabilityCheck,
+        type: GoHighLevelCalendarAvailabilityToolWithToolCallType,
         toolCall: ToolCall,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -107,7 +107,7 @@ public struct GoHighLevelCalendarAvailabilityToolWithToolCall: Codable, Hashable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([GoHighLevelCalendarAvailabilityToolWithToolCallMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(GohighlevelCalendarAvailabilityCheck.self, forKey: .type)
+        self.type = try container.decode(GoHighLevelCalendarAvailabilityToolWithToolCallType.self, forKey: .type)
         self.toolCall = try container.decode(ToolCall.self, forKey: .toolCall)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -120,10 +120,6 @@ public struct GoHighLevelCalendarAvailabilityToolWithToolCall: Codable, Hashable
         try container.encode(self.type, forKey: .type)
         try container.encode(self.toolCall, forKey: .toolCall)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum GohighlevelCalendarAvailabilityCheck: String, Codable, Hashable, CaseIterable, Sendable {
-        case gohighlevelCalendarAvailabilityCheck = "gohighlevel.calendar.availability.check"
     }
 
     /// Keys for encoding/decoding struct properties.

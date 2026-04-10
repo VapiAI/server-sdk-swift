@@ -29,6 +29,21 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
     /// 
     /// @default `strip-unsupported-validation`
     public let toolStrictCompatibilityMode: OpenAiModelToolStrictCompatibilityMode?
+    /// This controls the prompt cache retention policy for models that support extended caching (GPT-4.1, GPT-5 series).
+    /// 
+    /// - `in_memory`: Default behavior, cache retained in GPU memory only
+    /// - `24h`: Extended caching, keeps cached prefixes active for up to 24 hours by offloading to GPU-local storage
+    /// 
+    /// Only applies to models: gpt-5.4, gpt-5.4-mini, gpt-5.4-nano, gpt-5.2, gpt-5.1, gpt-5.1-codex, gpt-5.1-codex-mini, gpt-5.1-chat-latest, gpt-5, gpt-5-codex, gpt-4.1
+    /// 
+    /// @default undefined (uses API default which is 'in_memory')
+    public let promptCacheRetention: OpenAiModelPromptCacheRetention?
+    /// This is the prompt cache key for models that support extended caching (GPT-4.1, GPT-5 series).
+    /// 
+    /// Providing a cache key allows you to share cached prefixes across requests.
+    /// 
+    /// @default undefined
+    public let promptCacheKey: String?
     /// This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
     public let temperature: Double?
     /// This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.
@@ -56,6 +71,8 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         model: OpenAiModelModel,
         fallbackModels: [OpenAiModelFallbackModelsItem]? = nil,
         toolStrictCompatibilityMode: OpenAiModelToolStrictCompatibilityMode? = nil,
+        promptCacheRetention: OpenAiModelPromptCacheRetention? = nil,
+        promptCacheKey: String? = nil,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
         emotionRecognitionEnabled: Bool? = nil,
@@ -69,6 +86,8 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         self.model = model
         self.fallbackModels = fallbackModels
         self.toolStrictCompatibilityMode = toolStrictCompatibilityMode
+        self.promptCacheRetention = promptCacheRetention
+        self.promptCacheKey = promptCacheKey
         self.temperature = temperature
         self.maxTokens = maxTokens
         self.emotionRecognitionEnabled = emotionRecognitionEnabled
@@ -85,6 +104,8 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         self.model = try container.decode(OpenAiModelModel.self, forKey: .model)
         self.fallbackModels = try container.decodeIfPresent([OpenAiModelFallbackModelsItem].self, forKey: .fallbackModels)
         self.toolStrictCompatibilityMode = try container.decodeIfPresent(OpenAiModelToolStrictCompatibilityMode.self, forKey: .toolStrictCompatibilityMode)
+        self.promptCacheRetention = try container.decodeIfPresent(OpenAiModelPromptCacheRetention.self, forKey: .promptCacheRetention)
+        self.promptCacheKey = try container.decodeIfPresent(String.self, forKey: .promptCacheKey)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
         self.emotionRecognitionEnabled = try container.decodeIfPresent(Bool.self, forKey: .emotionRecognitionEnabled)
@@ -102,6 +123,8 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.fallbackModels, forKey: .fallbackModels)
         try container.encodeIfPresent(self.toolStrictCompatibilityMode, forKey: .toolStrictCompatibilityMode)
+        try container.encodeIfPresent(self.promptCacheRetention, forKey: .promptCacheRetention)
+        try container.encodeIfPresent(self.promptCacheKey, forKey: .promptCacheKey)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
         try container.encodeIfPresent(self.emotionRecognitionEnabled, forKey: .emotionRecognitionEnabled)
@@ -117,6 +140,8 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         case model
         case fallbackModels
         case toolStrictCompatibilityMode
+        case promptCacheRetention
+        case promptCacheKey
         case temperature
         case maxTokens
         case emotionRecognitionEnabled

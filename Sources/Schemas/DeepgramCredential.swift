@@ -1,7 +1,7 @@
 import Foundation
 
 public struct DeepgramCredential: Codable, Hashable, Sendable {
-    public let provider: Deepgram
+    public let provider: DeepgramCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
     /// This is the unique identifier for the credential.
@@ -20,7 +20,7 @@ public struct DeepgramCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Deepgram,
+        provider: DeepgramCredentialProvider,
         apiKey: String,
         id: String,
         orgId: String,
@@ -43,7 +43,7 @@ public struct DeepgramCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Deepgram.self, forKey: .provider)
+        self.provider = try container.decode(DeepgramCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -65,10 +65,6 @@ public struct DeepgramCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.apiUrl, forKey: .apiUrl)
-    }
-
-    public enum Deepgram: String, Codable, Hashable, CaseIterable, Sendable {
-        case deepgram
     }
 
     /// Keys for encoding/decoding struct properties.

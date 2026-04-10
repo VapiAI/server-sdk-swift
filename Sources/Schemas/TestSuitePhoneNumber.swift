@@ -2,14 +2,14 @@ import Foundation
 
 public struct TestSuitePhoneNumber: Codable, Hashable, Sendable {
     /// This is the provider of the phone number.
-    public let provider: TestSuite
+    public let provider: TestSuitePhoneNumberProvider
     /// This is the phone number that is being tested.
     public let number: String
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: TestSuite,
+        provider: TestSuitePhoneNumberProvider,
         number: String,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -20,7 +20,7 @@ public struct TestSuitePhoneNumber: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(TestSuite.self, forKey: .provider)
+        self.provider = try container.decode(TestSuitePhoneNumberProvider.self, forKey: .provider)
         self.number = try container.decode(String.self, forKey: .number)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -30,10 +30,6 @@ public struct TestSuitePhoneNumber: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.provider, forKey: .provider)
         try container.encode(self.number, forKey: .number)
-    }
-
-    public enum TestSuite: String, Codable, Hashable, CaseIterable, Sendable {
-        case testSuite = "test-suite"
     }
 
     /// Keys for encoding/decoding struct properties.

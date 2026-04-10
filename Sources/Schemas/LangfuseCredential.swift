@@ -1,7 +1,7 @@
 import Foundation
 
 public struct LangfuseCredential: Codable, Hashable, Sendable {
-    public let provider: Langfuse
+    public let provider: LangfuseCredentialProvider
     /// The public key for Langfuse project. Eg: pk-lf-...
     public let publicKey: String
     /// The secret key for Langfuse project. Eg: sk-lf-... .This is not returned in the API.
@@ -22,7 +22,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Langfuse,
+        provider: LangfuseCredentialProvider,
         publicKey: String,
         apiKey: String,
         apiUrl: String,
@@ -47,7 +47,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Langfuse.self, forKey: .provider)
+        self.provider = try container.decode(LangfuseCredentialProvider.self, forKey: .provider)
         self.publicKey = try container.decode(String.self, forKey: .publicKey)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.apiUrl = try container.decode(String.self, forKey: .apiUrl)
@@ -71,10 +71,6 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Langfuse: String, Codable, Hashable, CaseIterable, Sendable {
-        case langfuse
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -12,6 +12,10 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
     public let timeoutSeconds: Double?
     /// The credential ID for API request authentication
     public let credentialId: String?
+    /// This is the paths to encrypt in the request body if credentialId and encryptionPlan are defined.
+    public let encryptedPaths: [String]?
+    /// Static key-value pairs merged into the request body. Values support Liquid templates.
+    public let parameters: [ToolParameter]?
     /// This is the name of the tool. This will be passed to the model.
     /// 
     /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
@@ -269,6 +273,8 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         method: CreateApiRequestToolDtoMethod,
         timeoutSeconds: Double? = nil,
         credentialId: String? = nil,
+        encryptedPaths: [String]? = nil,
+        parameters: [ToolParameter]? = nil,
         name: String? = nil,
         description: String? = nil,
         url: String,
@@ -283,6 +289,8 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         self.method = method
         self.timeoutSeconds = timeoutSeconds
         self.credentialId = credentialId
+        self.encryptedPaths = encryptedPaths
+        self.parameters = parameters
         self.name = name
         self.description = description
         self.url = url
@@ -300,6 +308,8 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         self.method = try container.decode(CreateApiRequestToolDtoMethod.self, forKey: .method)
         self.timeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .timeoutSeconds)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
+        self.encryptedPaths = try container.decodeIfPresent([String].self, forKey: .encryptedPaths)
+        self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.url = try container.decode(String.self, forKey: .url)
@@ -318,6 +328,8 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         try container.encode(self.method, forKey: .method)
         try container.encodeIfPresent(self.timeoutSeconds, forKey: .timeoutSeconds)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
+        try container.encodeIfPresent(self.encryptedPaths, forKey: .encryptedPaths)
+        try container.encodeIfPresent(self.parameters, forKey: .parameters)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encode(self.url, forKey: .url)
@@ -334,6 +346,8 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         case method
         case timeoutSeconds
         case credentialId
+        case encryptedPaths
+        case parameters
         case name
         case description
         case url

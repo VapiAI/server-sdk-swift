@@ -4,7 +4,7 @@ public struct ClientMessageSessionUpdated: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageSessionUpdatedPhoneNumber?
     /// This is the type of the message. "session.updated" is sent when a session is updated.
-    public let type: SessionUpdated
+    public let type: ClientMessageSessionUpdatedType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is the call that the message is associated with.
@@ -20,7 +20,7 @@ public struct ClientMessageSessionUpdated: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageSessionUpdatedPhoneNumber? = nil,
-        type: SessionUpdated,
+        type: ClientMessageSessionUpdatedType,
         timestamp: Double? = nil,
         call: Call? = nil,
         customer: CreateCustomerDto? = nil,
@@ -41,7 +41,7 @@ public struct ClientMessageSessionUpdated: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageSessionUpdatedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(SessionUpdated.self, forKey: .type)
+        self.type = try container.decode(ClientMessageSessionUpdatedType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
         self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
@@ -60,10 +60,6 @@ public struct ClientMessageSessionUpdated: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
         try container.encode(self.session, forKey: .session)
-    }
-
-    public enum SessionUpdated: String, Codable, Hashable, CaseIterable, Sendable {
-        case sessionUpdated = "session.updated"
     }
 
     /// Keys for encoding/decoding struct properties.

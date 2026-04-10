@@ -5,7 +5,7 @@ public struct Template: Codable, Hashable, Sendable {
     public let providerDetails: TemplateProviderDetails?
     public let metadata: ToolTemplateMetadata?
     public let visibility: TemplateVisibility?
-    public let type: Tool
+    public let type: TemplateType
     /// The name of the template. This is just for your own reference.
     public let name: String?
     public let provider: TemplateProvider?
@@ -25,7 +25,7 @@ public struct Template: Codable, Hashable, Sendable {
         providerDetails: TemplateProviderDetails? = nil,
         metadata: ToolTemplateMetadata? = nil,
         visibility: TemplateVisibility? = nil,
-        type: Tool,
+        type: TemplateType,
         name: String? = nil,
         provider: TemplateProvider? = nil,
         id: String,
@@ -54,7 +54,7 @@ public struct Template: Codable, Hashable, Sendable {
         self.providerDetails = try container.decodeIfPresent(TemplateProviderDetails.self, forKey: .providerDetails)
         self.metadata = try container.decodeIfPresent(ToolTemplateMetadata.self, forKey: .metadata)
         self.visibility = try container.decodeIfPresent(TemplateVisibility.self, forKey: .visibility)
-        self.type = try container.decode(Tool.self, forKey: .type)
+        self.type = try container.decode(TemplateType.self, forKey: .type)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.provider = try container.decodeIfPresent(TemplateProvider.self, forKey: .provider)
         self.id = try container.decode(String.self, forKey: .id)
@@ -78,10 +78,6 @@ public struct Template: Codable, Hashable, Sendable {
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
-    }
-
-    public enum Tool: String, Codable, Hashable, CaseIterable, Sendable {
-        case tool
     }
 
     /// Keys for encoding/decoding struct properties.

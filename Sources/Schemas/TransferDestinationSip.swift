@@ -11,6 +11,16 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
     public let message: TransferDestinationSipMessage?
     /// This is the SIP URI to transfer the call to.
     public let sipUri: String
+    /// This is the caller ID to use when transferring the call to the `sipUri`.
+    /// 
+    /// Usage:
+    /// - If not provided, the caller ID will be determined by the SIP infrastructure.
+    /// - Set to '{{customer.number}}' to always use the customer's number as the caller ID.
+    /// - Set to '{{phoneNumber.number}}' to always use the phone number of the assistant as the caller ID.
+    /// - Set to any E164 number to always use that number as the caller ID.
+    /// 
+    /// Only applicable when `transferPlan.sipVerb='dial'`. Not applicable for SIP REFER.
+    public let callerId: String?
     /// This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to `blind-transfer`.
     /// 
     /// @default `transferPlan.mode='blind-transfer'`
@@ -25,6 +35,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
     public init(
         message: TransferDestinationSipMessage? = nil,
         sipUri: String,
+        callerId: String? = nil,
         transferPlan: TransferPlan? = nil,
         sipHeaders: [String: JSONValue]? = nil,
         description: String? = nil,
@@ -32,6 +43,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
     ) {
         self.message = message
         self.sipUri = sipUri
+        self.callerId = callerId
         self.transferPlan = transferPlan
         self.sipHeaders = sipHeaders
         self.description = description
@@ -42,6 +54,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.message = try container.decodeIfPresent(TransferDestinationSipMessage.self, forKey: .message)
         self.sipUri = try container.decode(String.self, forKey: .sipUri)
+        self.callerId = try container.decodeIfPresent(String.self, forKey: .callerId)
         self.transferPlan = try container.decodeIfPresent(TransferPlan.self, forKey: .transferPlan)
         self.sipHeaders = try container.decodeIfPresent([String: JSONValue].self, forKey: .sipHeaders)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
@@ -53,6 +66,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.message, forKey: .message)
         try container.encode(self.sipUri, forKey: .sipUri)
+        try container.encodeIfPresent(self.callerId, forKey: .callerId)
         try container.encodeIfPresent(self.transferPlan, forKey: .transferPlan)
         try container.encodeIfPresent(self.sipHeaders, forKey: .sipHeaders)
         try container.encodeIfPresent(self.description, forKey: .description)
@@ -62,6 +76,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case message
         case sipUri
+        case callerId
         case transferPlan
         case sipHeaders
         case description

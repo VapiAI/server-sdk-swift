@@ -2,7 +2,7 @@ import Foundation
 
 public struct GoogleCredential: Codable, Hashable, Sendable {
     /// This is the key for Gemini in Google AI Studio. Get it from here: https://aistudio.google.com/app/apikey
-    public let provider: Google
+    public let provider: GoogleCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
     /// This is the unique identifier for the credential.
@@ -19,7 +19,7 @@ public struct GoogleCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Google,
+        provider: GoogleCredentialProvider,
         apiKey: String,
         id: String,
         orgId: String,
@@ -40,7 +40,7 @@ public struct GoogleCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Google.self, forKey: .provider)
+        self.provider = try container.decode(GoogleCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -60,10 +60,6 @@ public struct GoogleCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Google: String, Codable, Hashable, CaseIterable, Sendable {
-        case google
     }
 
     /// Keys for encoding/decoding struct properties.

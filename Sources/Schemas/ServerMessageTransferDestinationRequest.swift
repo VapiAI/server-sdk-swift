@@ -4,7 +4,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageTransferDestinationRequestPhoneNumber?
     /// This is the type of the message. "transfer-destination-request" is sent when the model is requesting transfer but destination is unknown.
-    public let type: TransferDestinationRequest
+    public let type: ServerMessageTransferDestinationRequestType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -24,7 +24,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
 
     public init(
         phoneNumber: ServerMessageTransferDestinationRequestPhoneNumber? = nil,
-        type: TransferDestinationRequest,
+        type: ServerMessageTransferDestinationRequestType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -47,7 +47,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageTransferDestinationRequestPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(TransferDestinationRequest.self, forKey: .type)
+        self.type = try container.decode(ServerMessageTransferDestinationRequestType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -68,10 +68,6 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum TransferDestinationRequest: String, Codable, Hashable, CaseIterable, Sendable {
-        case transferDestinationRequest = "transfer-destination-request"
     }
 
     /// Keys for encoding/decoding struct properties.

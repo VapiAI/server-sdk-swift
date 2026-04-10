@@ -1,0 +1,140 @@
+import Foundation
+
+public struct UpdateSipRequestToolDto: Codable, Hashable, Sendable {
+    /// These are the messages that will be spoken to the user as the tool is running.
+    /// 
+    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    public let messages: [UpdateSipRequestToolDtoMessagesItem]?
+    /// The SIP method to send.
+    public let verb: UpdateSipRequestToolDtoVerb?
+    /// JSON schema for headers the model should populate when sending the SIP request.
+    public let headers: JsonSchema?
+    /// Body to include in the SIP request. Either a literal string body, or a JSON schema describing a structured body that the model should populate.
+    public let body: UpdateSipRequestToolDtoBody?
+    /// This is the plan to reject a tool call based on the conversation state.
+    /// 
+    /// // Example 1: Reject endCall if user didn't say goodbye
+    /// ```json
+    /// {
+    ///   conditions: [{
+    ///     type: 'regex',
+    ///     regex: '(?i)\\b(bye|goodbye|farewell|see you later|take care)\\b',
+    ///     target: { position: -1, role: 'user' },
+    ///     negate: true  // Reject if pattern does NOT match
+    ///   }]
+    /// }
+    /// ```
+    /// 
+    /// // Example 2: Reject transfer if user is actually asking a question
+    /// ```json
+    /// {
+    ///   conditions: [{
+    ///     type: 'regex',
+    ///     regex: '\\?',
+    ///     target: { position: -1, role: 'user' }
+    ///   }]
+    /// }
+    /// ```
+    /// 
+    /// // Example 3: Reject transfer if user didn't mention transfer recently
+    /// ```json
+    /// {
+    ///   conditions: [{
+    ///     type: 'liquid',
+    ///     liquid: `{% assign recentMessages = messages | last: 5 %}
+    /// {% assign userMessages = recentMessages | where: 'role', 'user' %}
+    /// {% assign mentioned = false %}
+    /// {% for msg in userMessages %}
+    ///   {% if msg.content contains 'transfer' or msg.content contains 'connect' or msg.content contains 'speak to' %}
+    ///     {% assign mentioned = true %}
+    ///     {% break %}
+    ///   {% endif %}
+    /// {% endfor %}
+    /// {% if mentioned %}
+    ///   false
+    /// {% else %}
+    ///   true
+    /// {% endif %}`
+    ///   }]
+    /// }
+    /// ```
+    /// 
+    /// // Example 4: Reject endCall if the bot is looping and trying to exit
+    /// ```json
+    /// {
+    ///   conditions: [{
+    ///     type: 'liquid',
+    ///     liquid: `{% assign recentMessages = messages | last: 6 %}
+    /// {% assign userMessages = recentMessages | where: 'role', 'user' | reverse %}
+    /// {% if userMessages.size < 3 %}
+    ///   false
+    /// {% else %}
+    ///   {% assign msg1 = userMessages[0].content | downcase %}
+    ///   {% assign msg2 = userMessages[1].content | downcase %}
+    ///   {% assign msg3 = userMessages[2].content | downcase %}
+    ///   {% comment %} Check for repetitive messages {% endcomment %}
+    ///   {% if msg1 == msg2 or msg1 == msg3 or msg2 == msg3 %}
+    ///     true
+    ///   {% comment %} Check for common loop phrases {% endcomment %}
+    ///   {% elsif msg1 contains 'cool thanks' or msg2 contains 'cool thanks' or msg3 contains 'cool thanks' %}
+    ///     true
+    ///   {% elsif msg1 contains 'okay thanks' or msg2 contains 'okay thanks' or msg3 contains 'okay thanks' %}
+    ///     true
+    ///   {% elsif msg1 contains 'got it' or msg2 contains 'got it' or msg3 contains 'got it' %}
+    ///     true
+    ///   {% else %}
+    ///     false
+    ///   {% endif %}
+    /// {% endif %}`
+    ///   }]
+    /// }
+    /// ```
+    public let rejectionPlan: ToolRejectionPlan?
+    /// Additional properties that are not explicitly defined in the schema
+    public let additionalProperties: [String: JSONValue]
+
+    public init(
+        messages: [UpdateSipRequestToolDtoMessagesItem]? = nil,
+        verb: UpdateSipRequestToolDtoVerb? = nil,
+        headers: JsonSchema? = nil,
+        body: UpdateSipRequestToolDtoBody? = nil,
+        rejectionPlan: ToolRejectionPlan? = nil,
+        additionalProperties: [String: JSONValue] = .init()
+    ) {
+        self.messages = messages
+        self.verb = verb
+        self.headers = headers
+        self.body = body
+        self.rejectionPlan = rejectionPlan
+        self.additionalProperties = additionalProperties
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.messages = try container.decodeIfPresent([UpdateSipRequestToolDtoMessagesItem].self, forKey: .messages)
+        self.verb = try container.decodeIfPresent(UpdateSipRequestToolDtoVerb.self, forKey: .verb)
+        self.headers = try container.decodeIfPresent(JsonSchema.self, forKey: .headers)
+        self.body = try container.decodeIfPresent(UpdateSipRequestToolDtoBody.self, forKey: .body)
+        self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
+        self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.verb, forKey: .verb)
+        try container.encodeIfPresent(self.headers, forKey: .headers)
+        try container.encodeIfPresent(self.body, forKey: .body)
+        try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
+    }
+
+    /// Keys for encoding/decoding struct properties.
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case messages
+        case verb
+        case headers
+        case body
+        case rejectionPlan
+    }
+}

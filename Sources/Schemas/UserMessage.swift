@@ -21,6 +21,8 @@ public struct UserMessage: Codable, Hashable, Sendable {
     public let originalMessage: String?
     /// The metadata associated with the message. Currently used to store the transcriber's word level confidence.
     public let metadata: [String: JSONValue]?
+    /// Stable speaker label for diarized user speakers (e.g., "Speaker 1").
+    public let speakerLabel: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -35,6 +37,7 @@ public struct UserMessage: Codable, Hashable, Sendable {
         detectedThreats: [String]? = nil,
         originalMessage: String? = nil,
         metadata: [String: JSONValue]? = nil,
+        speakerLabel: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.role = role
@@ -47,6 +50,7 @@ public struct UserMessage: Codable, Hashable, Sendable {
         self.detectedThreats = detectedThreats
         self.originalMessage = originalMessage
         self.metadata = metadata
+        self.speakerLabel = speakerLabel
         self.additionalProperties = additionalProperties
     }
 
@@ -62,6 +66,7 @@ public struct UserMessage: Codable, Hashable, Sendable {
         self.detectedThreats = try container.decodeIfPresent([String].self, forKey: .detectedThreats)
         self.originalMessage = try container.decodeIfPresent(String.self, forKey: .originalMessage)
         self.metadata = try container.decodeIfPresent([String: JSONValue].self, forKey: .metadata)
+        self.speakerLabel = try container.decodeIfPresent(String.self, forKey: .speakerLabel)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -78,6 +83,7 @@ public struct UserMessage: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.detectedThreats, forKey: .detectedThreats)
         try container.encodeIfPresent(self.originalMessage, forKey: .originalMessage)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.speakerLabel, forKey: .speakerLabel)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -92,5 +98,6 @@ public struct UserMessage: Codable, Hashable, Sendable {
         case detectedThreats
         case originalMessage
         case metadata
+        case speakerLabel
     }
 }

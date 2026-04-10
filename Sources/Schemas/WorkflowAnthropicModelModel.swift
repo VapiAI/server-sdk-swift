@@ -10,7 +10,10 @@ public enum WorkflowAnthropicModelModel: String, Codable, Hashable, CaseIterable
     case claude35Haiku20241022 = "claude-3-5-haiku-20241022"
     case claude37Sonnet20250219 = "claude-3-7-sonnet-20250219"
     case claudeOpus420250514 = "claude-opus-4-20250514"
+    case claudeOpus4520251101 = "claude-opus-4-5-20251101"
+    case claudeOpus46 = "claude-opus-4-6"
     case claudeSonnet420250514 = "claude-sonnet-4-20250514"
     case claudeSonnet4520250929 = "claude-sonnet-4-5-20250929"
+    case claudeSonnet46 = "claude-sonnet-4-6"
     case claudeHaiku4520251001 = "claude-haiku-4-5-20251001"
 }

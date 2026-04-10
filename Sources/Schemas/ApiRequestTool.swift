@@ -12,6 +12,10 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
     public let timeoutSeconds: Double?
     /// The credential ID for API request authentication
     public let credentialId: String?
+    /// This is the paths to encrypt in the request body if credentialId and encryptionPlan are defined.
+    public let encryptedPaths: [String]?
+    /// Static key-value pairs merged into the request body. Values support Liquid templates.
+    public let parameters: [ToolParameter]?
     /// This is the unique identifier for the tool.
     public let id: String
     /// This is the unique identifier for the organization that this tool belongs to.
@@ -277,6 +281,8 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         method: ApiRequestToolMethod,
         timeoutSeconds: Double? = nil,
         credentialId: String? = nil,
+        encryptedPaths: [String]? = nil,
+        parameters: [ToolParameter]? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -295,6 +301,8 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         self.method = method
         self.timeoutSeconds = timeoutSeconds
         self.credentialId = credentialId
+        self.encryptedPaths = encryptedPaths
+        self.parameters = parameters
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -316,6 +324,8 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         self.method = try container.decode(ApiRequestToolMethod.self, forKey: .method)
         self.timeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .timeoutSeconds)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
+        self.encryptedPaths = try container.decodeIfPresent([String].self, forKey: .encryptedPaths)
+        self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -338,6 +348,8 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         try container.encode(self.method, forKey: .method)
         try container.encodeIfPresent(self.timeoutSeconds, forKey: .timeoutSeconds)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
+        try container.encodeIfPresent(self.encryptedPaths, forKey: .encryptedPaths)
+        try container.encodeIfPresent(self.parameters, forKey: .parameters)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -358,6 +370,8 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         case method
         case timeoutSeconds
         case credentialId
+        case encryptedPaths
+        case parameters
         case id
         case orgId
         case createdAt

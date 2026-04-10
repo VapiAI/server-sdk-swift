@@ -13,4 +13,8 @@ public enum InworldVoiceLanguageCode: String, Codable, Hashable, CaseIterable, S
     case it
     case pl
     case pt
+    case ru
+    case hi
+    case he
+    case ar
 }

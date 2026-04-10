@@ -1,7 +1,7 @@
 import Foundation
 
 public struct GoogleCalendarOAuth2AuthorizationCredential: Codable, Hashable, Sendable {
-    public let provider: GoogleCalendarOauth2Authorization
+    public let provider: GoogleCalendarOAuth2AuthorizationCredentialProvider
     /// The authorization ID for the OAuth2 authorization
     public let authorizationId: String
     /// This is the unique identifier for the credential.
@@ -18,7 +18,7 @@ public struct GoogleCalendarOAuth2AuthorizationCredential: Codable, Hashable, Se
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: GoogleCalendarOauth2Authorization,
+        provider: GoogleCalendarOAuth2AuthorizationCredentialProvider,
         authorizationId: String,
         id: String,
         orgId: String,
@@ -39,7 +39,7 @@ public struct GoogleCalendarOAuth2AuthorizationCredential: Codable, Hashable, Se
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(GoogleCalendarOauth2Authorization.self, forKey: .provider)
+        self.provider = try container.decode(GoogleCalendarOAuth2AuthorizationCredentialProvider.self, forKey: .provider)
         self.authorizationId = try container.decode(String.self, forKey: .authorizationId)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -59,10 +59,6 @@ public struct GoogleCalendarOAuth2AuthorizationCredential: Codable, Hashable, Se
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum GoogleCalendarOauth2Authorization: String, Codable, Hashable, CaseIterable, Sendable {
-        case googleCalendarOauth2Authorization = "google.calendar.oauth2-authorization"
     }
 
     /// Keys for encoding/decoding struct properties.

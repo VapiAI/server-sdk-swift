@@ -2,6 +2,7 @@ import Foundation
 
 public enum AssistantOverridesClientMessagesItem: String, Codable, Hashable, CaseIterable, Sendable {
     case conversationUpdate = "conversation-update"
+    case assistantSpeechStarted = "assistant.speechStarted"
     case functionCall = "function-call"
     case functionCallResult = "function-call-result"
     case hang
@@ -18,4 +19,5 @@ public enum AssistantOverridesClientMessagesItem: String, Codable, Hashable, Cas
     case userInterrupted = "user-interrupted"
     case voiceInput = "voice-input"
     case workflowNodeStarted = "workflow.node.started"
+    case assistantStarted = "assistant.started"
 }

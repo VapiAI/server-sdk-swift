@@ -4,7 +4,7 @@ public struct ServerMessageKnowledgeBaseRequest: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageKnowledgeBaseRequestPhoneNumber?
     /// This is the type of the message. "knowledge-base-request" is sent to request knowledge base documents. To enable, use `assistant.knowledgeBase.provider=custom-knowledge-base`.
-    public let type: KnowledgeBaseRequest
+    public let type: ServerMessageKnowledgeBaseRequestType
     /// These are the messages that are going to be sent to the `model` right after the `knowledge-base-request` webhook completes.
     public let messages: [ServerMessageKnowledgeBaseRequestMessagesItem]?
     /// This is just `messages` formatted for OpenAI.
@@ -28,7 +28,7 @@ public struct ServerMessageKnowledgeBaseRequest: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageKnowledgeBaseRequestPhoneNumber? = nil,
-        type: KnowledgeBaseRequest,
+        type: ServerMessageKnowledgeBaseRequestType,
         messages: [ServerMessageKnowledgeBaseRequestMessagesItem]? = nil,
         messagesOpenAiFormatted: [OpenAiMessage],
         timestamp: Double? = nil,
@@ -55,7 +55,7 @@ public struct ServerMessageKnowledgeBaseRequest: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageKnowledgeBaseRequestPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(KnowledgeBaseRequest.self, forKey: .type)
+        self.type = try container.decode(ServerMessageKnowledgeBaseRequestType.self, forKey: .type)
         self.messages = try container.decodeIfPresent([ServerMessageKnowledgeBaseRequestMessagesItem].self, forKey: .messages)
         self.messagesOpenAiFormatted = try container.decode([OpenAiMessage].self, forKey: .messagesOpenAiFormatted)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
@@ -80,10 +80,6 @@ public struct ServerMessageKnowledgeBaseRequest: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum KnowledgeBaseRequest: String, Codable, Hashable, CaseIterable, Sendable {
-        case knowledgeBaseRequest = "knowledge-base-request"
     }
 
     /// Keys for encoding/decoding struct properties.

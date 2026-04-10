@@ -7,84 +7,84 @@ public final class PhoneNumbersClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func list(limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> [PhoneNumbersListResponseItem] {
+    public func list(limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> [ListPhoneNumbersResponseItem] {
         return try await httpClient.performRequest(
             method: .get,
             path: "/phone-number",
             queryParams: [
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
-            responseType: [PhoneNumbersListResponseItem].self
+            responseType: [ListPhoneNumbersResponseItem].self
         )
     }
 
-    public func create(request: PhoneNumbersCreateRequest, requestOptions: RequestOptions? = nil) async throws -> PhoneNumbersCreateResponse {
+    public func create(request: CreatePhoneNumbersRequest, requestOptions: RequestOptions? = nil) async throws -> CreatePhoneNumbersResponse {
         return try await httpClient.performRequest(
             method: .post,
             path: "/phone-number",
             body: request,
             requestOptions: requestOptions,
-            responseType: PhoneNumbersCreateResponse.self
+            responseType: CreatePhoneNumbersResponse.self
         )
     }
 
-    public func phoneNumberControllerFindAllPaginated(search: Nullable<String>? = nil, page: Nullable<Double>? = nil, sortOrder: Nullable<PhoneNumberControllerFindAllPaginatedRequestSortOrder>? = nil, limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> PhoneNumberPaginatedResponse {
+    public func phoneNumberControllerFindAllPaginated(search: String? = nil, page: Double? = nil, sortOrder: PhoneNumberControllerFindAllPaginatedRequestSortOrder? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> PhoneNumberPaginatedResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/v2/phone-number",
             queryParams: [
-                "search": search?.wrappedValue.map { .string($0) }, 
-                "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "search": search.map { .string($0) }, 
+                "page": page.map { .double($0) }, 
+                "sortOrder": sortOrder.map { .string($0.rawValue) }, 
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
             responseType: PhoneNumberPaginatedResponse.self
         )
     }
 
-    public func get(id: String, requestOptions: RequestOptions? = nil) async throws -> PhoneNumbersGetResponse {
+    public func get(id: String, requestOptions: RequestOptions? = nil) async throws -> GetPhoneNumbersResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/phone-number/\(id)",
             requestOptions: requestOptions,
-            responseType: PhoneNumbersGetResponse.self
+            responseType: GetPhoneNumbersResponse.self
         )
     }
 
-    public func delete(id: String, requestOptions: RequestOptions? = nil) async throws -> PhoneNumbersDeleteResponse {
+    public func delete(id: String, requestOptions: RequestOptions? = nil) async throws -> DeletePhoneNumbersResponse {
         return try await httpClient.performRequest(
             method: .delete,
             path: "/phone-number/\(id)",
             requestOptions: requestOptions,
-            responseType: PhoneNumbersDeleteResponse.self
+            responseType: DeletePhoneNumbersResponse.self
         )
     }
 
-    public func update(id: String, request: PhoneNumbersUpdateRequest, requestOptions: RequestOptions? = nil) async throws -> PhoneNumbersUpdateResponse {
+    public func update(id: String, request: UpdatePhoneNumbersRequestBody, requestOptions: RequestOptions? = nil) async throws -> UpdatePhoneNumbersResponse {
         return try await httpClient.performRequest(
             method: .patch,
             path: "/phone-number/\(id)",
             body: request,
             requestOptions: requestOptions,
-            responseType: PhoneNumbersUpdateResponse.self
+            responseType: UpdatePhoneNumbersResponse.self
         )
     }
 }

@@ -5,11 +5,24 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
     public let name: String?
     /// Model configuration for the transfer assistant
     public let model: TransferAssistantModel
+    /// These are the options for the transfer assistant's voice.
+    public let voice: TransferAssistantVoice?
+    /// These are the options for the transfer assistant's transcriber.
+    public let transcriber: TransferAssistantTranscriber?
     /// This is the first message that the transfer assistant will say.
     /// This can also be a URL to a custom audio file.
     /// 
     /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
     public let firstMessage: String?
+    /// This is the background sound in the transfer assistant call. Default for phone calls is 'office' and default for web calls is 'off'.
+    /// You can also provide a custom sound by providing a URL to an audio file.
+    public let backgroundSound: TransferAssistantBackgroundSound?
+    /// This is the plan for when the transfer assistant should start talking.
+    /// 
+    /// You should configure this if the transfer assistant needs different endpointing behavior than the base assistant.
+    /// 
+    /// If this is not set, the transfer assistant will inherit the start speaking plan from the base assistant.
+    public let startSpeakingPlan: StartSpeakingPlan?
     /// This is the mode for the first message. Default is 'assistant-speaks-first'.
     /// 
     /// Use:
@@ -23,6 +36,18 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
     /// After this time, the transfer will be cancelled automatically.
     /// @default 120
     public let maxDurationSeconds: Double?
+    /// This enables filtering of noise and background speech while the user is talking.
+    /// 
+    /// Features:
+    /// - Smart denoising using Krisp
+    /// - Fourier denoising
+    /// 
+    /// Smart denoising can be combined with or used independently of Fourier denoising.
+    /// 
+    /// Order of precedence:
+    /// - Smart denoising
+    /// - Fourier denoising
+    public let backgroundSpeechDenoisingPlan: BackgroundSpeechDenoisingPlan?
     /// This is the number of seconds of silence to wait before ending the call. Defaults to 30.
     /// 
     /// @default 30
@@ -33,17 +58,27 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
     public init(
         name: String? = nil,
         model: TransferAssistantModel,
+        voice: TransferAssistantVoice? = nil,
+        transcriber: TransferAssistantTranscriber? = nil,
         firstMessage: String? = nil,
+        backgroundSound: TransferAssistantBackgroundSound? = nil,
+        startSpeakingPlan: StartSpeakingPlan? = nil,
         firstMessageMode: TransferAssistantFirstMessageMode? = nil,
         maxDurationSeconds: Double? = nil,
+        backgroundSpeechDenoisingPlan: BackgroundSpeechDenoisingPlan? = nil,
         silenceTimeoutSeconds: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.name = name
         self.model = model
+        self.voice = voice
+        self.transcriber = transcriber
         self.firstMessage = firstMessage
+        self.backgroundSound = backgroundSound
+        self.startSpeakingPlan = startSpeakingPlan
         self.firstMessageMode = firstMessageMode
         self.maxDurationSeconds = maxDurationSeconds
+        self.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan
         self.silenceTimeoutSeconds = silenceTimeoutSeconds
         self.additionalProperties = additionalProperties
     }
@@ -52,9 +87,14 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.model = try container.decode(TransferAssistantModel.self, forKey: .model)
+        self.voice = try container.decodeIfPresent(TransferAssistantVoice.self, forKey: .voice)
+        self.transcriber = try container.decodeIfPresent(TransferAssistantTranscriber.self, forKey: .transcriber)
         self.firstMessage = try container.decodeIfPresent(String.self, forKey: .firstMessage)
+        self.backgroundSound = try container.decodeIfPresent(TransferAssistantBackgroundSound.self, forKey: .backgroundSound)
+        self.startSpeakingPlan = try container.decodeIfPresent(StartSpeakingPlan.self, forKey: .startSpeakingPlan)
         self.firstMessageMode = try container.decodeIfPresent(TransferAssistantFirstMessageMode.self, forKey: .firstMessageMode)
         self.maxDurationSeconds = try container.decodeIfPresent(Double.self, forKey: .maxDurationSeconds)
+        self.backgroundSpeechDenoisingPlan = try container.decodeIfPresent(BackgroundSpeechDenoisingPlan.self, forKey: .backgroundSpeechDenoisingPlan)
         self.silenceTimeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .silenceTimeoutSeconds)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -64,9 +104,14 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.model, forKey: .model)
+        try container.encodeIfPresent(self.voice, forKey: .voice)
+        try container.encodeIfPresent(self.transcriber, forKey: .transcriber)
         try container.encodeIfPresent(self.firstMessage, forKey: .firstMessage)
+        try container.encodeIfPresent(self.backgroundSound, forKey: .backgroundSound)
+        try container.encodeIfPresent(self.startSpeakingPlan, forKey: .startSpeakingPlan)
         try container.encodeIfPresent(self.firstMessageMode, forKey: .firstMessageMode)
         try container.encodeIfPresent(self.maxDurationSeconds, forKey: .maxDurationSeconds)
+        try container.encodeIfPresent(self.backgroundSpeechDenoisingPlan, forKey: .backgroundSpeechDenoisingPlan)
         try container.encodeIfPresent(self.silenceTimeoutSeconds, forKey: .silenceTimeoutSeconds)
     }
 
@@ -74,9 +119,14 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case name
         case model
+        case voice
+        case transcriber
         case firstMessage
+        case backgroundSound
+        case startSpeakingPlan
         case firstMessageMode
         case maxDurationSeconds
+        case backgroundSpeechDenoisingPlan
         case silenceTimeoutSeconds
     }
 }

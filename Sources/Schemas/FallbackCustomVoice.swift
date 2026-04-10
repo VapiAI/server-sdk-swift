@@ -3,6 +3,8 @@ import Foundation
 public struct FallbackCustomVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
+    /// This is the provider-specific ID that will be used. This is passed in the voice request payload to identify the voice to use.
+    public let voiceId: String?
     /// This is where the voice request will be sent.
     /// 
     /// Request Example:
@@ -33,11 +35,13 @@ public struct FallbackCustomVoice: Codable, Hashable, Sendable {
 
     public init(
         cachingEnabled: Bool? = nil,
+        voiceId: String? = nil,
         server: Server,
         chunkPlan: ChunkPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.cachingEnabled = cachingEnabled
+        self.voiceId = voiceId
         self.server = server
         self.chunkPlan = chunkPlan
         self.additionalProperties = additionalProperties
@@ -46,6 +50,7 @@ public struct FallbackCustomVoice: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
+        self.voiceId = try container.decodeIfPresent(String.self, forKey: .voiceId)
         self.server = try container.decode(Server.self, forKey: .server)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -55,6 +60,7 @@ public struct FallbackCustomVoice: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.cachingEnabled, forKey: .cachingEnabled)
+        try container.encodeIfPresent(self.voiceId, forKey: .voiceId)
         try container.encode(self.server, forKey: .server)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
     }
@@ -62,6 +68,7 @@ public struct FallbackCustomVoice: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case cachingEnabled
+        case voiceId
         case server
         case chunkPlan
     }

@@ -6,7 +6,7 @@ public struct SmallestAiVoice: Codable, Hashable, Sendable {
     /// This is the provider-specific ID that will be used.
     public let voiceId: SmallestAiVoiceId
     /// Smallest AI voice model to use. Defaults to 'lightning' when not specified.
-    public let model: Lightning?
+    public let model: SmallestAiVoiceModel?
     /// This is the speed multiplier that will be used.
     public let speed: Double?
     /// This is the plan for chunking the model output before it is sent to the voice provider.
@@ -19,7 +19,7 @@ public struct SmallestAiVoice: Codable, Hashable, Sendable {
     public init(
         cachingEnabled: Bool? = nil,
         voiceId: SmallestAiVoiceId,
-        model: Lightning? = nil,
+        model: SmallestAiVoiceModel? = nil,
         speed: Double? = nil,
         chunkPlan: ChunkPlan? = nil,
         fallbackPlan: FallbackPlan? = nil,
@@ -38,7 +38,7 @@ public struct SmallestAiVoice: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
         self.voiceId = try container.decode(SmallestAiVoiceId.self, forKey: .voiceId)
-        self.model = try container.decodeIfPresent(Lightning.self, forKey: .model)
+        self.model = try container.decodeIfPresent(SmallestAiVoiceModel.self, forKey: .model)
         self.speed = try container.decodeIfPresent(Double.self, forKey: .speed)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.fallbackPlan = try container.decodeIfPresent(FallbackPlan.self, forKey: .fallbackPlan)
@@ -54,10 +54,6 @@ public struct SmallestAiVoice: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.speed, forKey: .speed)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
-    }
-
-    public enum Lightning: String, Codable, Hashable, CaseIterable, Sendable {
-        case lightning
     }
 
     /// Keys for encoding/decoding struct properties.

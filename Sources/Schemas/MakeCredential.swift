@@ -1,7 +1,7 @@
 import Foundation
 
 public struct MakeCredential: Codable, Hashable, Sendable {
-    public let provider: Make
+    public let provider: MakeCredentialProvider
     /// Team ID
     public let teamId: String
     /// Region of your application. For example: eu1, eu2, us1, us2
@@ -22,7 +22,7 @@ public struct MakeCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Make,
+        provider: MakeCredentialProvider,
         teamId: String,
         region: String,
         apiKey: String,
@@ -47,7 +47,7 @@ public struct MakeCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Make.self, forKey: .provider)
+        self.provider = try container.decode(MakeCredentialProvider.self, forKey: .provider)
         self.teamId = try container.decode(String.self, forKey: .teamId)
         self.region = try container.decode(String.self, forKey: .region)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
@@ -71,10 +71,6 @@ public struct MakeCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Make: String, Codable, Hashable, CaseIterable, Sendable {
-        case make
     }
 
     /// Keys for encoding/decoding struct properties.

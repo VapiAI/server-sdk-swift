@@ -4,15 +4,15 @@ import Foundation
 /// Can be a string or an array of chat messages.
 /// This field is REQUIRED for chat creation.
 public enum OpenAiResponsesRequestInput: Codable, Hashable, Sendable {
+    case openAiResponsesRequestInputOneItemArray([OpenAiResponsesRequestInputOneItem])
     case string(String)
-    case openAiResponsesRequestInputItemArray([OpenAiResponsesRequestInputItem])
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = try? container.decode(String.self) {
+        if let value = try? container.decode([OpenAiResponsesRequestInputOneItem].self) {
+            self = .openAiResponsesRequestInputOneItemArray(value)
+        } else if let value = try? container.decode(String.self) {
             self = .string(value)
-        } else if let value = try? container.decode([OpenAiResponsesRequestInputItem].self) {
-            self = .openAiResponsesRequestInputItemArray(value)
         } else {
             throw DecodingError.dataCorruptedError(
                 in: container,
@@ -24,9 +24,9 @@ public enum OpenAiResponsesRequestInput: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.singleValueContainer()
         switch self {
-        case .string(let value):
+        case .openAiResponsesRequestInputOneItemArray(let value):
             try container.encode(value)
-        case .openAiResponsesRequestInputItemArray(let value):
+        case .string(let value):
             try container.encode(value)
         }
     }

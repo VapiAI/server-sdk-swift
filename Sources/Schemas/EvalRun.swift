@@ -25,9 +25,13 @@ public struct EvalRun: Codable, Hashable, Sendable {
     /// This is the results of the eval or suite run.
     /// The array will have a single item for an eval run, and multiple items each corresponding to the an eval in a suite run in the same order as the evals in the suite.
     public let results: [EvalRunResult]
+    /// This is the cost of the eval or suite run in USD.
+    public let cost: Double
+    /// This is the break up of costs of the eval or suite run.
+    public let costs: [[String: JSONValue]]
     /// This is the type of the run.
     /// Currently it is fixed to `eval`.
-    public let type: Eval
+    public let type: EvalRunType
     /// This is the id of the eval that will be run.
     public let evalId: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -45,7 +49,9 @@ public struct EvalRun: Codable, Hashable, Sendable {
         endedAt: Date,
         endedMessage: String? = nil,
         results: [EvalRunResult],
-        type: Eval,
+        cost: Double,
+        costs: [[String: JSONValue]],
+        type: EvalRunType,
         evalId: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -60,6 +66,8 @@ public struct EvalRun: Codable, Hashable, Sendable {
         self.endedAt = endedAt
         self.endedMessage = endedMessage
         self.results = results
+        self.cost = cost
+        self.costs = costs
         self.type = type
         self.evalId = evalId
         self.additionalProperties = additionalProperties
@@ -78,7 +86,9 @@ public struct EvalRun: Codable, Hashable, Sendable {
         self.endedAt = try container.decode(Date.self, forKey: .endedAt)
         self.endedMessage = try container.decodeIfPresent(String.self, forKey: .endedMessage)
         self.results = try container.decode([EvalRunResult].self, forKey: .results)
-        self.type = try container.decode(Eval.self, forKey: .type)
+        self.cost = try container.decode(Double.self, forKey: .cost)
+        self.costs = try container.decode([[String: JSONValue]].self, forKey: .costs)
+        self.type = try container.decode(EvalRunType.self, forKey: .type)
         self.evalId = try container.decodeIfPresent(String.self, forKey: .evalId)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -97,12 +107,10 @@ public struct EvalRun: Codable, Hashable, Sendable {
         try container.encode(self.endedAt, forKey: .endedAt)
         try container.encodeIfPresent(self.endedMessage, forKey: .endedMessage)
         try container.encode(self.results, forKey: .results)
+        try container.encode(self.cost, forKey: .cost)
+        try container.encode(self.costs, forKey: .costs)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.evalId, forKey: .evalId)
-    }
-
-    public enum Eval: String, Codable, Hashable, CaseIterable, Sendable {
-        case eval
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -118,6 +126,8 @@ public struct EvalRun: Codable, Hashable, Sendable {
         case endedAt
         case endedMessage
         case results
+        case cost
+        case costs
         case type
         case evalId
     }

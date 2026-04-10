@@ -12,6 +12,7 @@ public struct CredentialWebhookDto: Codable, Hashable, Sendable {
     public let success: Bool
     public let endUser: CredentialEndUser
     public let error: CredentialSessionError?
+    public let tags: [String: JSONValue]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -27,6 +28,7 @@ public struct CredentialWebhookDto: Codable, Hashable, Sendable {
         success: Bool,
         endUser: CredentialEndUser,
         error: CredentialSessionError? = nil,
+        tags: [String: JSONValue]? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.type = type
@@ -40,6 +42,7 @@ public struct CredentialWebhookDto: Codable, Hashable, Sendable {
         self.success = success
         self.endUser = endUser
         self.error = error
+        self.tags = tags
         self.additionalProperties = additionalProperties
     }
 
@@ -56,6 +59,7 @@ public struct CredentialWebhookDto: Codable, Hashable, Sendable {
         self.success = try container.decode(Bool.self, forKey: .success)
         self.endUser = try container.decode(CredentialEndUser.self, forKey: .endUser)
         self.error = try container.decodeIfPresent(CredentialSessionError.self, forKey: .error)
+        self.tags = try container.decodeIfPresent([String: JSONValue].self, forKey: .tags)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -73,6 +77,7 @@ public struct CredentialWebhookDto: Codable, Hashable, Sendable {
         try container.encode(self.success, forKey: .success)
         try container.encode(self.endUser, forKey: .endUser)
         try container.encodeIfPresent(self.error, forKey: .error)
+        try container.encodeIfPresent(self.tags, forKey: .tags)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -88,5 +93,6 @@ public struct CredentialWebhookDto: Codable, Hashable, Sendable {
         case success
         case endUser
         case error
+        case tags
     }
 }

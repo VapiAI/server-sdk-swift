@@ -2,20 +2,38 @@ import Foundation
 
 extension Requests {
     public struct UpdateStructuredOutputDto: Codable, Hashable, Sendable {
+        /// This is the type of structured output.
+        /// 
+        /// - 'ai': Uses an LLM to extract structured data from the conversation (default).
+        /// - 'regex': Uses a regex pattern to extract data from the transcript without an LLM.
+        public let type: UpdateStructuredOutputDtoType?
+        /// This is the regex pattern to match against the transcript.
+        /// 
+        /// Only used when type is 'regex'. Supports both raw patterns (e.g. '\d+') and
+        /// regex literal format (e.g. '/\d+/gi'). Uses RE2 syntax for safety.
+        /// 
+        /// The result depends on the schema type:
+        /// - boolean: true if the pattern matches, false otherwise
+        /// - string: the first match or first capture group
+        /// - number/integer: the first match parsed as a number
+        /// - array: all matches
+        public let regex: String?
         /// This is the model that will be used to extract the structured output.
         /// 
         /// To provide your own custom system and user prompts for structured output extraction, populate the messages array with your system and user messages. You can specify liquid templating in your system and user messages.
-        /// Between the system or user messages, you must reference either 'transcript' or 'messages' with the '{{}}' syntax to access the conversation history.
-        /// Between the system or user messages, you must reference a variation of the structured output with the '{{}}' syntax to access the structured output definition.
+        /// Between the system or user messages, you must reference either 'transcript' or 'messages' with the `{{}}` syntax to access the conversation history.
+        /// Between the system or user messages, you must reference a variation of the structured output with the `{{}}` syntax to access the structured output definition.
         /// i.e.:
-        /// {{structuredOutput}}
-        /// {{structuredOutput.name}}
-        /// {{structuredOutput.description}}
-        /// {{structuredOutput.schema}}
+        /// `{{structuredOutput}}`
+        /// `{{structuredOutput.name}}`
+        /// `{{structuredOutput.description}}`
+        /// `{{structuredOutput.schema}}`
         /// 
         /// If model is not specified, GPT-4.1 will be used by default for extraction, utilizing default system and user prompts.
         /// If messages or required fields are not specified, the default system and user prompts will be used.
         public let model: UpdateStructuredOutputDtoModel?
+        /// Compliance configuration for this output. Only enable overrides if no sensitive data will be stored.
+        public let compliancePlan: ComplianceOverride?
         /// This is the name of the structured output.
         public let name: String?
         /// This is the description of what the structured output extracts.
@@ -44,7 +62,10 @@ extension Requests {
         public let additionalProperties: [String: JSONValue]
 
         public init(
+            type: UpdateStructuredOutputDtoType? = nil,
+            regex: String? = nil,
             model: UpdateStructuredOutputDtoModel? = nil,
+            compliancePlan: ComplianceOverride? = nil,
             name: String? = nil,
             description: String? = nil,
             assistantIds: [String]? = nil,
@@ -52,7 +73,10 @@ extension Requests {
             schema: JsonSchema? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
+            self.type = type
+            self.regex = regex
             self.model = model
+            self.compliancePlan = compliancePlan
             self.name = name
             self.description = description
             self.assistantIds = assistantIds
@@ -63,7 +87,10 @@ extension Requests {
 
         public init(from decoder: Decoder) throws {
             let container = try decoder.container(keyedBy: CodingKeys.self)
+            self.type = try container.decodeIfPresent(UpdateStructuredOutputDtoType.self, forKey: .type)
+            self.regex = try container.decodeIfPresent(String.self, forKey: .regex)
             self.model = try container.decodeIfPresent(UpdateStructuredOutputDtoModel.self, forKey: .model)
+            self.compliancePlan = try container.decodeIfPresent(ComplianceOverride.self, forKey: .compliancePlan)
             self.name = try container.decodeIfPresent(String.self, forKey: .name)
             self.description = try container.decodeIfPresent(String.self, forKey: .description)
             self.assistantIds = try container.decodeIfPresent([String].self, forKey: .assistantIds)
@@ -75,7 +102,10 @@ extension Requests {
         public func encode(to encoder: Encoder) throws -> Void {
             var container = encoder.container(keyedBy: CodingKeys.self)
             try encoder.encodeAdditionalProperties(self.additionalProperties)
+            try container.encodeIfPresent(self.type, forKey: .type)
+            try container.encodeIfPresent(self.regex, forKey: .regex)
             try container.encodeIfPresent(self.model, forKey: .model)
+            try container.encodeIfPresent(self.compliancePlan, forKey: .compliancePlan)
             try container.encodeIfPresent(self.name, forKey: .name)
             try container.encodeIfPresent(self.description, forKey: .description)
             try container.encodeIfPresent(self.assistantIds, forKey: .assistantIds)
@@ -85,7 +115,10 @@ extension Requests {
 
         /// Keys for encoding/decoding struct properties.
         enum CodingKeys: String, CodingKey, CaseIterable {
+            case type
+            case regex
             case model
+            case compliancePlan
             case name
             case description
             case assistantIds

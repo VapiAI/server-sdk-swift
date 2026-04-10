@@ -1,7 +1,7 @@
 import Foundation
 
 public struct CustomLlmCredential: Codable, Hashable, Sendable {
-    public let provider: CustomLlm
+    public let provider: CustomLlmCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
     /// This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey
@@ -22,7 +22,7 @@ public struct CustomLlmCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: CustomLlm,
+        provider: CustomLlmCredentialProvider,
         apiKey: String,
         authenticationPlan: OAuth2AuthenticationPlan? = nil,
         id: String,
@@ -47,7 +47,7 @@ public struct CustomLlmCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(CustomLlm.self, forKey: .provider)
+        self.provider = try container.decode(CustomLlmCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.authenticationPlan = try container.decodeIfPresent(OAuth2AuthenticationPlan.self, forKey: .authenticationPlan)
         self.id = try container.decode(String.self, forKey: .id)
@@ -71,10 +71,6 @@ public struct CustomLlmCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.authenticationSession, forKey: .authenticationSession)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum CustomLlm: String, Codable, Hashable, CaseIterable, Sendable {
-        case customLlm = "custom-llm"
     }
 
     /// Keys for encoding/decoding struct properties.

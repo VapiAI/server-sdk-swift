@@ -23,6 +23,8 @@ public struct Artifact: Codable, Hashable, Sendable {
     public let logUrl: String?
     /// This is the history of workflow nodes that were executed during the call.
     public let nodes: [NodeArtifact]?
+    /// Ordered list of assistants that were active during the call, including after transfers and handoffs.
+    public let assistantActivations: [AssistantActivation]?
     /// These are the variable values at the end of the workflow execution.
     public let variableValues: [String: JSONValue]?
     /// This is the performance metrics for the call. It contains the turn latency, broken down by component.
@@ -30,8 +32,13 @@ public struct Artifact: Codable, Hashable, Sendable {
     /// These are the structured outputs that will be extracted from the call.
     /// To enable, set `assistant.artifactPlan.structuredOutputIds` with the IDs of the structured outputs you want to extract.
     public let structuredOutputs: [String: JSONValue]?
+    /// These are the scorecards that have been evaluated based on the structured outputs extracted during the call.
+    /// To enable, set `assistant.artifactPlan.scorecardIds` or `assistant.artifactPlan.scorecards` with the IDs or objects of the scorecards you want to evaluate.
+    public let scorecards: [String: JSONValue]?
     /// These are the transfer records from warm transfers, including destinations, transcripts, and status.
     public let transfers: [String]?
+    /// This is when the structured outputs were last updated
+    public let structuredOutputsLastUpdatedAt: Date?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -47,10 +54,13 @@ public struct Artifact: Codable, Hashable, Sendable {
         pcapUrl: String? = nil,
         logUrl: String? = nil,
         nodes: [NodeArtifact]? = nil,
+        assistantActivations: [AssistantActivation]? = nil,
         variableValues: [String: JSONValue]? = nil,
         performanceMetrics: PerformanceMetrics? = nil,
         structuredOutputs: [String: JSONValue]? = nil,
+        scorecards: [String: JSONValue]? = nil,
         transfers: [String]? = nil,
+        structuredOutputsLastUpdatedAt: Date? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
@@ -64,10 +74,13 @@ public struct Artifact: Codable, Hashable, Sendable {
         self.pcapUrl = pcapUrl
         self.logUrl = logUrl
         self.nodes = nodes
+        self.assistantActivations = assistantActivations
         self.variableValues = variableValues
         self.performanceMetrics = performanceMetrics
         self.structuredOutputs = structuredOutputs
+        self.scorecards = scorecards
         self.transfers = transfers
+        self.structuredOutputsLastUpdatedAt = structuredOutputsLastUpdatedAt
         self.additionalProperties = additionalProperties
     }
 
@@ -84,10 +97,13 @@ public struct Artifact: Codable, Hashable, Sendable {
         self.pcapUrl = try container.decodeIfPresent(String.self, forKey: .pcapUrl)
         self.logUrl = try container.decodeIfPresent(String.self, forKey: .logUrl)
         self.nodes = try container.decodeIfPresent([NodeArtifact].self, forKey: .nodes)
+        self.assistantActivations = try container.decodeIfPresent([AssistantActivation].self, forKey: .assistantActivations)
         self.variableValues = try container.decodeIfPresent([String: JSONValue].self, forKey: .variableValues)
         self.performanceMetrics = try container.decodeIfPresent(PerformanceMetrics.self, forKey: .performanceMetrics)
         self.structuredOutputs = try container.decodeIfPresent([String: JSONValue].self, forKey: .structuredOutputs)
+        self.scorecards = try container.decodeIfPresent([String: JSONValue].self, forKey: .scorecards)
         self.transfers = try container.decodeIfPresent([String].self, forKey: .transfers)
+        self.structuredOutputsLastUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .structuredOutputsLastUpdatedAt)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -105,10 +121,13 @@ public struct Artifact: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.pcapUrl, forKey: .pcapUrl)
         try container.encodeIfPresent(self.logUrl, forKey: .logUrl)
         try container.encodeIfPresent(self.nodes, forKey: .nodes)
+        try container.encodeIfPresent(self.assistantActivations, forKey: .assistantActivations)
         try container.encodeIfPresent(self.variableValues, forKey: .variableValues)
         try container.encodeIfPresent(self.performanceMetrics, forKey: .performanceMetrics)
         try container.encodeIfPresent(self.structuredOutputs, forKey: .structuredOutputs)
+        try container.encodeIfPresent(self.scorecards, forKey: .scorecards)
         try container.encodeIfPresent(self.transfers, forKey: .transfers)
+        try container.encodeIfPresent(self.structuredOutputsLastUpdatedAt, forKey: .structuredOutputsLastUpdatedAt)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -124,9 +143,12 @@ public struct Artifact: Codable, Hashable, Sendable {
         case pcapUrl
         case logUrl
         case nodes
+        case assistantActivations
         case variableValues
         case performanceMetrics
         case structuredOutputs
+        case scorecards
         case transfers
+        case structuredOutputsLastUpdatedAt
     }
 }

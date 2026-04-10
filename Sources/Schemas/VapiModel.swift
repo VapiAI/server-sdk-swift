@@ -13,7 +13,7 @@ public struct VapiModel: Codable, Hashable, Sendable {
     public let toolIds: [String]?
     /// These are the options for the knowledge base.
     public let knowledgeBase: CreateCustomKnowledgeBaseDto?
-    public let provider: Vapi
+    public let provider: VapiModelProvider
     /// This is the workflow that will be used for the call. To use a transient workflow, use `workflow` instead.
     public let workflowId: String?
     /// This is the workflow that will be used for the call. To use an existing workflow, use `workflowId` instead.
@@ -44,7 +44,7 @@ public struct VapiModel: Codable, Hashable, Sendable {
         tools: [VapiModelToolsItem]? = nil,
         toolIds: [String]? = nil,
         knowledgeBase: CreateCustomKnowledgeBaseDto? = nil,
-        provider: Vapi,
+        provider: VapiModelProvider,
         workflowId: String? = nil,
         workflow: WorkflowUserEditable? = nil,
         model: String,
@@ -75,7 +75,7 @@ public struct VapiModel: Codable, Hashable, Sendable {
         self.tools = try container.decodeIfPresent([VapiModelToolsItem].self, forKey: .tools)
         self.toolIds = try container.decodeIfPresent([String].self, forKey: .toolIds)
         self.knowledgeBase = try container.decodeIfPresent(CreateCustomKnowledgeBaseDto.self, forKey: .knowledgeBase)
-        self.provider = try container.decode(Vapi.self, forKey: .provider)
+        self.provider = try container.decode(VapiModelProvider.self, forKey: .provider)
         self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
         self.workflow = try container.decodeIfPresent(WorkflowUserEditable.self, forKey: .workflow)
         self.model = try container.decode(String.self, forKey: .model)
@@ -101,10 +101,6 @@ public struct VapiModel: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
         try container.encodeIfPresent(self.emotionRecognitionEnabled, forKey: .emotionRecognitionEnabled)
         try container.encodeIfPresent(self.numFastTurns, forKey: .numFastTurns)
-    }
-
-    public enum Vapi: String, Codable, Hashable, CaseIterable, Sendable {
-        case vapi
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -4,7 +4,7 @@ public struct CreateTestSuiteTestVoiceDto: Codable, Hashable, Sendable {
     /// These are the scorers used to evaluate the test.
     public let scorers: [TestSuiteTestScorerAi]
     /// This is the type of the test, which must be voice.
-    public let type: Voice
+    public let type: CreateTestSuiteTestVoiceDtoType
     /// This is the script to be used for the voice test.
     public let script: String
     /// This is the number of attempts allowed for the test.
@@ -16,7 +16,7 @@ public struct CreateTestSuiteTestVoiceDto: Codable, Hashable, Sendable {
 
     public init(
         scorers: [TestSuiteTestScorerAi],
-        type: Voice,
+        type: CreateTestSuiteTestVoiceDtoType,
         script: String,
         numAttempts: Double? = nil,
         name: String? = nil,
@@ -33,7 +33,7 @@ public struct CreateTestSuiteTestVoiceDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.scorers = try container.decode([TestSuiteTestScorerAi].self, forKey: .scorers)
-        self.type = try container.decode(Voice.self, forKey: .type)
+        self.type = try container.decode(CreateTestSuiteTestVoiceDtoType.self, forKey: .type)
         self.script = try container.decode(String.self, forKey: .script)
         self.numAttempts = try container.decodeIfPresent(Double.self, forKey: .numAttempts)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -48,10 +48,6 @@ public struct CreateTestSuiteTestVoiceDto: Codable, Hashable, Sendable {
         try container.encode(self.script, forKey: .script)
         try container.encodeIfPresent(self.numAttempts, forKey: .numAttempts)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Voice: String, Codable, Hashable, CaseIterable, Sendable {
-        case voice
     }
 
     /// Keys for encoding/decoding struct properties.

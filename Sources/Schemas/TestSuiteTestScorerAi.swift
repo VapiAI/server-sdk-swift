@@ -2,14 +2,14 @@ import Foundation
 
 public struct TestSuiteTestScorerAi: Codable, Hashable, Sendable {
     /// This is the type of the scorer, which must be AI.
-    public let type: Ai
+    public let type: TestSuiteTestScorerAiType
     /// This is the rubric used by the AI scorer.
     public let rubric: String
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Ai,
+        type: TestSuiteTestScorerAiType,
         rubric: String,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -20,7 +20,7 @@ public struct TestSuiteTestScorerAi: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Ai.self, forKey: .type)
+        self.type = try container.decode(TestSuiteTestScorerAiType.self, forKey: .type)
         self.rubric = try container.decode(String.self, forKey: .rubric)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -30,10 +30,6 @@ public struct TestSuiteTestScorerAi: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.rubric, forKey: .rubric)
-    }
-
-    public enum Ai: String, Codable, Hashable, CaseIterable, Sendable {
-        case ai
     }
 
     /// Keys for encoding/decoding struct properties.

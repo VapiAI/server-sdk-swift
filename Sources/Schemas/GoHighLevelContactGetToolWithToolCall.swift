@@ -6,7 +6,7 @@ public struct GoHighLevelContactGetToolWithToolCall: Codable, Hashable, Sendable
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [GoHighLevelContactGetToolWithToolCallMessagesItem]?
     /// The type of tool. "gohighlevel.contact.get" for GoHighLevel Contact Get tool.
-    public let type: GohighlevelContactGet
+    public let type: GoHighLevelContactGetToolWithToolCallType
     public let toolCall: ToolCall
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
@@ -92,7 +92,7 @@ public struct GoHighLevelContactGetToolWithToolCall: Codable, Hashable, Sendable
 
     public init(
         messages: [GoHighLevelContactGetToolWithToolCallMessagesItem]? = nil,
-        type: GohighlevelContactGet,
+        type: GoHighLevelContactGetToolWithToolCallType,
         toolCall: ToolCall,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -107,7 +107,7 @@ public struct GoHighLevelContactGetToolWithToolCall: Codable, Hashable, Sendable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([GoHighLevelContactGetToolWithToolCallMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(GohighlevelContactGet.self, forKey: .type)
+        self.type = try container.decode(GoHighLevelContactGetToolWithToolCallType.self, forKey: .type)
         self.toolCall = try container.decode(ToolCall.self, forKey: .toolCall)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -120,10 +120,6 @@ public struct GoHighLevelContactGetToolWithToolCall: Codable, Hashable, Sendable
         try container.encode(self.type, forKey: .type)
         try container.encode(self.toolCall, forKey: .toolCall)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum GohighlevelContactGet: String, Codable, Hashable, CaseIterable, Sendable {
-        case gohighlevelContactGet = "gohighlevel.contact.get"
     }
 
     /// Keys for encoding/decoding struct properties.

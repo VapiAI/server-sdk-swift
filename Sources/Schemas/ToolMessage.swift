@@ -2,7 +2,7 @@ import Foundation
 
 public struct ToolMessage: Codable, Hashable, Sendable {
     /// This is the role of the message author
-    public let role: Tool
+    public let role: ToolMessageRole
     /// This is the content of the tool message
     public let content: String
     /// This is the ID of the tool call this message is responding to
@@ -15,7 +15,7 @@ public struct ToolMessage: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        role: Tool,
+        role: ToolMessageRole,
         content: String,
         toolCallId: String,
         name: String? = nil,
@@ -32,7 +32,7 @@ public struct ToolMessage: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.role = try container.decode(Tool.self, forKey: .role)
+        self.role = try container.decode(ToolMessageRole.self, forKey: .role)
         self.content = try container.decode(String.self, forKey: .content)
         self.toolCallId = try container.decode(String.self, forKey: .toolCallId)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -48,10 +48,6 @@ public struct ToolMessage: Codable, Hashable, Sendable {
         try container.encode(self.toolCallId, forKey: .toolCallId)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
-    }
-
-    public enum Tool: String, Codable, Hashable, CaseIterable, Sendable {
-        case tool
     }
 
     /// Keys for encoding/decoding struct properties.

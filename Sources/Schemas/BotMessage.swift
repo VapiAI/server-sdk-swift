@@ -15,8 +15,6 @@ public struct BotMessage: Codable, Hashable, Sendable {
     public let source: String?
     /// The duration of the message in seconds.
     public let duration: Double?
-    /// Stable speaker label for diarized user speakers (e.g., "Speaker 1").
-    public let speakerLabel: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -28,7 +26,6 @@ public struct BotMessage: Codable, Hashable, Sendable {
         secondsFromStart: Double,
         source: String? = nil,
         duration: Double? = nil,
-        speakerLabel: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.role = role
@@ -38,7 +35,6 @@ public struct BotMessage: Codable, Hashable, Sendable {
         self.secondsFromStart = secondsFromStart
         self.source = source
         self.duration = duration
-        self.speakerLabel = speakerLabel
         self.additionalProperties = additionalProperties
     }
 
@@ -51,7 +47,6 @@ public struct BotMessage: Codable, Hashable, Sendable {
         self.secondsFromStart = try container.decode(Double.self, forKey: .secondsFromStart)
         self.source = try container.decodeIfPresent(String.self, forKey: .source)
         self.duration = try container.decodeIfPresent(Double.self, forKey: .duration)
-        self.speakerLabel = try container.decodeIfPresent(String.self, forKey: .speakerLabel)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -65,7 +60,6 @@ public struct BotMessage: Codable, Hashable, Sendable {
         try container.encode(self.secondsFromStart, forKey: .secondsFromStart)
         try container.encodeIfPresent(self.source, forKey: .source)
         try container.encodeIfPresent(self.duration, forKey: .duration)
-        try container.encodeIfPresent(self.speakerLabel, forKey: .speakerLabel)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -77,6 +71,5 @@ public struct BotMessage: Codable, Hashable, Sendable {
         case secondsFromStart
         case source
         case duration
-        case speakerLabel
     }
 }

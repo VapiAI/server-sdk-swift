@@ -2,14 +2,14 @@ import Foundation
 
 public enum StartSpeakingPlanSmartEndpointingEnabled: Codable, Hashable, Sendable {
     case bool(Bool)
-    case json(JSONValue)
+    case startSpeakingPlanSmartEndpointingEnabledOne(StartSpeakingPlanSmartEndpointingEnabledOne)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let value = try? container.decode(Bool.self) {
             self = .bool(value)
-        } else if let value = try? container.decode(JSONValue.self) {
-            self = .json(value)
+        } else if let value = try? container.decode(StartSpeakingPlanSmartEndpointingEnabledOne.self) {
+            self = .startSpeakingPlanSmartEndpointingEnabledOne(value)
         } else {
             throw DecodingError.dataCorruptedError(
                 in: container,
@@ -23,7 +23,7 @@ public enum StartSpeakingPlanSmartEndpointingEnabled: Codable, Hashable, Sendabl
         switch self {
         case .bool(let value):
             try container.encode(value)
-        case .json(let value):
+        case .startSpeakingPlanSmartEndpointingEnabledOne(let value):
             try container.encode(value)
         }
     }

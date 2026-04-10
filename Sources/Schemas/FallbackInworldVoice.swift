@@ -4,7 +4,7 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
     /// Available voices by language:
-    /// • en: Alex, Ashley, Craig, Deborah, Dennis, Edward, Elizabeth, Hades, Julia, Pixie, Mark, Olivia, Priya, Ronald, Sarah, Shaun, Theodore, Timothy, Wendy, Dominus
+    /// • en: Alex, Ashley, Craig, Deborah, Dennis, Edward, Elizabeth, Hades, Julia, Pixie, Mark, Olivia, Priya, Ronald, Sarah, Shaun, Theodore, Timothy, Wendy, Dominus, Hana, Clive, Carter, Blake, Luna
     /// • zh: Yichen, Xiaoyin, Xinyi, Jing
     /// • nl: Erik, Katrien, Lennart, Lore
     /// • fr: Alain, Hélène, Mathieu, Étienne
@@ -15,11 +15,23 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
     /// • pl: Szymon, Wojciech
     /// • pt: Heitor, Maitê
     /// • es: Diego, Lupita, Miguel, Rafael
+    /// • ru: Svetlana, Elena, Dmitry, Nikolai
+    /// • hi: Riya, Manoj
+    /// • he: Yael, Oren
+    /// • ar: Nour, Omar
     public let voiceId: FallbackInworldVoiceVoiceId
     /// This is the model that will be used.
-    public let model: InworldTts1?
+    public let model: FallbackInworldVoiceModel?
     /// Language code for Inworld TTS synthesis
     public let languageCode: FallbackInworldVoiceLanguageCode?
+    /// A floating point number between 0, exclusive, and 2, inclusive. If equal to null or not provided, the model's default temperature of 1.1 will be used. The temperature parameter controls variance.
+    /// Higher values will make the output more random and can lead to more expressive results. Lower values will make it more deterministic.
+    /// See https://docs.inworld.ai/docs/tts/capabilities/generating-audio#additional-configurations for more details.
+    public let temperature: Double?
+    /// A floating point number between 0.5, inclusive, and 1.5, inclusive. If equal to null or not provided, the model's default speaking speed of 1.0 will be used.
+    /// Values above 0.8 are recommended for higher quality.
+    /// See https://docs.inworld.ai/docs/tts/capabilities/generating-audio#additional-configurations for more details.
+    public let speakingRate: Double?
     /// This is the plan for chunking the model output before it is sent to the voice provider.
     public let chunkPlan: ChunkPlan?
     /// Additional properties that are not explicitly defined in the schema
@@ -28,8 +40,10 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
     public init(
         cachingEnabled: Bool? = nil,
         voiceId: FallbackInworldVoiceVoiceId,
-        model: InworldTts1? = nil,
+        model: FallbackInworldVoiceModel? = nil,
         languageCode: FallbackInworldVoiceLanguageCode? = nil,
+        temperature: Double? = nil,
+        speakingRate: Double? = nil,
         chunkPlan: ChunkPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -37,6 +51,8 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
         self.voiceId = voiceId
         self.model = model
         self.languageCode = languageCode
+        self.temperature = temperature
+        self.speakingRate = speakingRate
         self.chunkPlan = chunkPlan
         self.additionalProperties = additionalProperties
     }
@@ -45,8 +61,10 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
         self.voiceId = try container.decode(FallbackInworldVoiceVoiceId.self, forKey: .voiceId)
-        self.model = try container.decodeIfPresent(InworldTts1.self, forKey: .model)
+        self.model = try container.decodeIfPresent(FallbackInworldVoiceModel.self, forKey: .model)
         self.languageCode = try container.decodeIfPresent(FallbackInworldVoiceLanguageCode.self, forKey: .languageCode)
+        self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
+        self.speakingRate = try container.decodeIfPresent(Double.self, forKey: .speakingRate)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -58,11 +76,9 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
         try container.encode(self.voiceId, forKey: .voiceId)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.languageCode, forKey: .languageCode)
+        try container.encodeIfPresent(self.temperature, forKey: .temperature)
+        try container.encodeIfPresent(self.speakingRate, forKey: .speakingRate)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
-    }
-
-    public enum InworldTts1: String, Codable, Hashable, CaseIterable, Sendable {
-        case inworldTts1 = "inworld-tts-1"
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -71,6 +87,8 @@ public struct FallbackInworldVoice: Codable, Hashable, Sendable {
         case voiceId
         case model
         case languageCode
+        case temperature
+        case speakingRate
         case chunkPlan
     }
 }

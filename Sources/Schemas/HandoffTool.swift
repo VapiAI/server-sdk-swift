@@ -5,6 +5,8 @@ public struct HandoffTool: Codable, Hashable, Sendable {
     /// 
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [HandoffToolMessagesItem]?
+    /// This is the default local tool result message used when no runtime handoff result override is returned.
+    public let defaultResult: String?
     /// These are the destinations that the call can be handed off to.
     /// 
     /// Usage:
@@ -365,6 +367,7 @@ public struct HandoffTool: Codable, Hashable, Sendable {
 
     public init(
         messages: [HandoffToolMessagesItem]? = nil,
+        defaultResult: String? = nil,
         destinations: [HandoffToolDestinationsItem]? = nil,
         id: String,
         orgId: String,
@@ -375,6 +378,7 @@ public struct HandoffTool: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.defaultResult = defaultResult
         self.destinations = destinations
         self.id = id
         self.orgId = orgId
@@ -388,6 +392,7 @@ public struct HandoffTool: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([HandoffToolMessagesItem].self, forKey: .messages)
+        self.defaultResult = try container.decodeIfPresent(String.self, forKey: .defaultResult)
         self.destinations = try container.decodeIfPresent([HandoffToolDestinationsItem].self, forKey: .destinations)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -402,6 +407,7 @@ public struct HandoffTool: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.defaultResult, forKey: .defaultResult)
         try container.encodeIfPresent(self.destinations, forKey: .destinations)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
@@ -414,6 +420,7 @@ public struct HandoffTool: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case defaultResult
         case destinations
         case id
         case orgId

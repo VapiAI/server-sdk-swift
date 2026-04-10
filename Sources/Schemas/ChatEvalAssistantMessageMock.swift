@@ -1,6 +1,10 @@
 import Foundation
 
 public struct ChatEvalAssistantMessageMock: Codable, Hashable, Sendable {
+    /// This is the role of the message author.
+    /// For a mock assistant message, the role is always 'assistant'
+    /// @default 'assistant'
+    public let role: ChatEvalAssistantMessageMockRole
     /// This is the content of the assistant message.
     /// This is the message that the assistant would have sent.
     public let content: String?
@@ -10,10 +14,12 @@ public struct ChatEvalAssistantMessageMock: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        role: ChatEvalAssistantMessageMockRole,
         content: String? = nil,
         toolCalls: [ChatEvalAssistantMessageMockToolCall]? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.role = role
         self.content = content
         self.toolCalls = toolCalls
         self.additionalProperties = additionalProperties
@@ -21,6 +27,7 @@ public struct ChatEvalAssistantMessageMock: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.role = try container.decode(ChatEvalAssistantMessageMockRole.self, forKey: .role)
         self.content = try container.decodeIfPresent(String.self, forKey: .content)
         self.toolCalls = try container.decodeIfPresent([ChatEvalAssistantMessageMockToolCall].self, forKey: .toolCalls)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -29,12 +36,14 @@ public struct ChatEvalAssistantMessageMock: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encode(self.role, forKey: .role)
         try container.encodeIfPresent(self.content, forKey: .content)
         try container.encodeIfPresent(self.toolCalls, forKey: .toolCalls)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case role
         case content
         case toolCalls
     }

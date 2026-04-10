@@ -4,7 +4,7 @@ public struct UpdateTestSuiteTestChatDto: Codable, Hashable, Sendable {
     /// These are the scorers used to evaluate the test.
     public let scorers: [TestSuiteTestScorerAi]?
     /// This is the type of the test, which must be chat.
-    public let type: Chat?
+    public let type: UpdateTestSuiteTestChatDtoType?
     /// This is the name of the test.
     public let name: String?
     /// This is the script to be used for the chat test.
@@ -16,7 +16,7 @@ public struct UpdateTestSuiteTestChatDto: Codable, Hashable, Sendable {
 
     public init(
         scorers: [TestSuiteTestScorerAi]? = nil,
-        type: Chat? = nil,
+        type: UpdateTestSuiteTestChatDtoType? = nil,
         name: String? = nil,
         script: String? = nil,
         numAttempts: Double? = nil,
@@ -33,7 +33,7 @@ public struct UpdateTestSuiteTestChatDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.scorers = try container.decodeIfPresent([TestSuiteTestScorerAi].self, forKey: .scorers)
-        self.type = try container.decodeIfPresent(Chat.self, forKey: .type)
+        self.type = try container.decodeIfPresent(UpdateTestSuiteTestChatDtoType.self, forKey: .type)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.script = try container.decodeIfPresent(String.self, forKey: .script)
         self.numAttempts = try container.decodeIfPresent(Double.self, forKey: .numAttempts)
@@ -48,10 +48,6 @@ public struct UpdateTestSuiteTestChatDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.script, forKey: .script)
         try container.encodeIfPresent(self.numAttempts, forKey: .numAttempts)
-    }
-
-    public enum Chat: String, Codable, Hashable, CaseIterable, Sendable {
-        case chat
     }
 
     /// Keys for encoding/decoding struct properties.

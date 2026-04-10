@@ -1,7 +1,7 @@
 import Foundation
 
 public struct WebhookCredential: Codable, Hashable, Sendable {
-    public let provider: Webhook
+    public let provider: WebhookCredentialProvider
     /// This is the authentication plan. Supports OAuth2 RFC 6749, HMAC signing, and Bearer authentication.
     public let authenticationPlan: WebhookCredentialAuthenticationPlan
     /// This is the unique identifier for the credential.
@@ -20,7 +20,7 @@ public struct WebhookCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Webhook,
+        provider: WebhookCredentialProvider,
         authenticationPlan: WebhookCredentialAuthenticationPlan,
         id: String,
         orgId: String,
@@ -43,7 +43,7 @@ public struct WebhookCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Webhook.self, forKey: .provider)
+        self.provider = try container.decode(WebhookCredentialProvider.self, forKey: .provider)
         self.authenticationPlan = try container.decode(WebhookCredentialAuthenticationPlan.self, forKey: .authenticationPlan)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -65,10 +65,6 @@ public struct WebhookCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encode(self.authenticationSession, forKey: .authenticationSession)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Webhook: String, Codable, Hashable, CaseIterable, Sendable {
-        case webhook
     }
 
     /// Keys for encoding/decoding struct properties.

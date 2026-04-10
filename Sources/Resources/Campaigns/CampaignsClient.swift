@@ -7,24 +7,24 @@ public final class CampaignsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func campaignControllerFindAll(id: Nullable<String>? = nil, status: Nullable<CampaignControllerFindAllRequestStatus>? = nil, page: Nullable<Double>? = nil, sortOrder: Nullable<CampaignControllerFindAllRequestSortOrder>? = nil, limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> CampaignPaginatedResponse {
+    public func campaignControllerFindAll(id: String? = nil, status: CampaignControllerFindAllRequestStatus? = nil, page: Double? = nil, sortOrder: CampaignControllerFindAllRequestSortOrder? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> CampaignPaginatedResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/campaign",
             queryParams: [
-                "id": id?.wrappedValue.map { .string($0) }, 
-                "status": status?.wrappedValue.map { .string($0.rawValue) }, 
-                "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "id": id.map { .string($0) }, 
+                "status": status.map { .string($0.rawValue) }, 
+                "page": page.map { .double($0) }, 
+                "sortOrder": sortOrder.map { .string($0.rawValue) }, 
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
             responseType: CampaignPaginatedResponse.self

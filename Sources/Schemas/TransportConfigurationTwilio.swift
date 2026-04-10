@@ -1,7 +1,7 @@
 import Foundation
 
 public struct TransportConfigurationTwilio: Codable, Hashable, Sendable {
-    public let provider: Twilio
+    public let provider: TransportConfigurationTwilioProvider
     /// The integer number of seconds that we should allow the phone to ring before assuming there is no answer.
     /// The default is `60` seconds and the maximum is `600` seconds.
     /// For some call flows, we will add a 5-second buffer to the timeout value you provide.
@@ -29,7 +29,7 @@ public struct TransportConfigurationTwilio: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Twilio,
+        provider: TransportConfigurationTwilioProvider,
         timeout: Double? = nil,
         record: Bool? = nil,
         recordingChannels: TransportConfigurationTwilioRecordingChannels? = nil,
@@ -44,7 +44,7 @@ public struct TransportConfigurationTwilio: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Twilio.self, forKey: .provider)
+        self.provider = try container.decode(TransportConfigurationTwilioProvider.self, forKey: .provider)
         self.timeout = try container.decodeIfPresent(Double.self, forKey: .timeout)
         self.record = try container.decodeIfPresent(Bool.self, forKey: .record)
         self.recordingChannels = try container.decodeIfPresent(TransportConfigurationTwilioRecordingChannels.self, forKey: .recordingChannels)
@@ -58,10 +58,6 @@ public struct TransportConfigurationTwilio: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.timeout, forKey: .timeout)
         try container.encodeIfPresent(self.record, forKey: .record)
         try container.encodeIfPresent(self.recordingChannels, forKey: .recordingChannels)
-    }
-
-    public enum Twilio: String, Codable, Hashable, CaseIterable, Sendable {
-        case twilio
     }
 
     /// Keys for encoding/decoding struct properties.

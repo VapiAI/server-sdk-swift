@@ -25,7 +25,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
     ///   outputStream.write(chunk);
     /// });
     /// ```
-    public let type: VoiceRequest
+    public let type: ServerMessageVoiceRequestType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -49,7 +49,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageVoiceRequestPhoneNumber? = nil,
-        type: VoiceRequest,
+        type: ServerMessageVoiceRequestType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -76,7 +76,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageVoiceRequestPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(VoiceRequest.self, forKey: .type)
+        self.type = try container.decode(ServerMessageVoiceRequestType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -101,10 +101,6 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.chat, forKey: .chat)
         try container.encode(self.text, forKey: .text)
         try container.encode(self.sampleRate, forKey: .sampleRate)
-    }
-
-    public enum VoiceRequest: String, Codable, Hashable, CaseIterable, Sendable {
-        case voiceRequest = "voice-request"
     }
 
     /// Keys for encoding/decoding struct properties.

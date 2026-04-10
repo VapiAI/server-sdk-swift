@@ -2,14 +2,14 @@ import Foundation
 
 public struct CallHookCustomerSpeechInterrupted: Codable, Hashable, Sendable {
     /// This is the event that triggers this hook
-    public let on: CustomerSpeechInterrupted
+    public let on: CallHookCustomerSpeechInterruptedOn
     /// This is the set of actions to perform when the hook triggers
     public let `do`: [CallHookCustomerSpeechInterruptedDoItem]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        on: CustomerSpeechInterrupted,
+        on: CallHookCustomerSpeechInterruptedOn,
         do: [CallHookCustomerSpeechInterruptedDoItem],
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -20,7 +20,7 @@ public struct CallHookCustomerSpeechInterrupted: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.on = try container.decode(CustomerSpeechInterrupted.self, forKey: .on)
+        self.on = try container.decode(CallHookCustomerSpeechInterruptedOn.self, forKey: .on)
         self.do = try container.decode([CallHookCustomerSpeechInterruptedDoItem].self, forKey: .do)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -30,10 +30,6 @@ public struct CallHookCustomerSpeechInterrupted: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.on, forKey: .on)
         try container.encode(self.do, forKey: .do)
-    }
-
-    public enum CustomerSpeechInterrupted: String, Codable, Hashable, CaseIterable, Sendable {
-        case customerSpeechInterrupted = "customer.speech.interrupted"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -16,7 +16,7 @@ extension Requests {
         public let description: String?
         /// This is the type of the eval.
         /// Currently it is fixed to `chat.mockConversation`.
-        public let type: ChatMockConversation?
+        public let type: UpdateEvalDtoType?
         /// Additional properties that are not explicitly defined in the schema
         public let additionalProperties: [String: JSONValue]
 
@@ -24,7 +24,7 @@ extension Requests {
             messages: [UpdateEvalDtoMessagesItem]? = nil,
             name: String? = nil,
             description: String? = nil,
-            type: ChatMockConversation? = nil,
+            type: UpdateEvalDtoType? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
             self.messages = messages
@@ -39,7 +39,7 @@ extension Requests {
             self.messages = try container.decodeIfPresent([UpdateEvalDtoMessagesItem].self, forKey: .messages)
             self.name = try container.decodeIfPresent(String.self, forKey: .name)
             self.description = try container.decodeIfPresent(String.self, forKey: .description)
-            self.type = try container.decodeIfPresent(ChatMockConversation.self, forKey: .type)
+            self.type = try container.decodeIfPresent(UpdateEvalDtoType.self, forKey: .type)
             self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
         }
 
@@ -50,10 +50,6 @@ extension Requests {
             try container.encodeIfPresent(self.name, forKey: .name)
             try container.encodeIfPresent(self.description, forKey: .description)
             try container.encodeIfPresent(self.type, forKey: .type)
-        }
-
-        public enum ChatMockConversation: String, Codable, Hashable, CaseIterable, Sendable {
-            case chatMockConversation = "chat.mockConversation"
         }
 
         /// Keys for encoding/decoding struct properties.

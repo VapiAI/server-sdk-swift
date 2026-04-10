@@ -4,7 +4,7 @@ public struct TrieveKnowledgeBase: Codable, Hashable, Sendable {
     /// This knowledge base is provided by Trieve.
     /// 
     /// To learn more about Trieve, visit https://trieve.ai.
-    public let provider: Trieve
+    public let provider: TrieveKnowledgeBaseProvider
     /// This is the name of the knowledge base.
     public let name: String?
     /// This is the searching plan used when searching for relevant chunks from the vector store.
@@ -23,7 +23,7 @@ public struct TrieveKnowledgeBase: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Trieve,
+        provider: TrieveKnowledgeBaseProvider,
         name: String? = nil,
         searchPlan: TrieveKnowledgeBaseSearchPlan? = nil,
         createPlan: TrieveKnowledgeBaseImport? = nil,
@@ -42,7 +42,7 @@ public struct TrieveKnowledgeBase: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Trieve.self, forKey: .provider)
+        self.provider = try container.decode(TrieveKnowledgeBaseProvider.self, forKey: .provider)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.searchPlan = try container.decodeIfPresent(TrieveKnowledgeBaseSearchPlan.self, forKey: .searchPlan)
         self.createPlan = try container.decodeIfPresent(TrieveKnowledgeBaseImport.self, forKey: .createPlan)
@@ -60,10 +60,6 @@ public struct TrieveKnowledgeBase: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.createPlan, forKey: .createPlan)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
-    }
-
-    public enum Trieve: String, Codable, Hashable, CaseIterable, Sendable {
-        case trieve
     }
 
     /// Keys for encoding/decoding struct properties.

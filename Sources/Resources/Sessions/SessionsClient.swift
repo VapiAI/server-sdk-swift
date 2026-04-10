@@ -7,26 +7,38 @@ public final class SessionsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func list(name: Nullable<String>? = nil, assistantId: Nullable<String>? = nil, squadId: Nullable<String>? = nil, workflowId: Nullable<String>? = nil, page: Nullable<Double>? = nil, sortOrder: Nullable<SessionsListRequestSortOrder>? = nil, limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionPaginatedResponse {
+    public func list(id: String? = nil, name: String? = nil, assistantId: String? = nil, assistantIdAny: String? = nil, squadId: String? = nil, workflowId: String? = nil, numberE164CheckEnabled: Bool? = nil, extension: String? = nil, assistantOverrides: String? = nil, number: String? = nil, sipUri: String? = nil, email: String? = nil, externalId: String? = nil, customerNumberAny: String? = nil, phoneNumberId: String? = nil, phoneNumberIdAny: String? = nil, page: Double? = nil, sortOrder: ListSessionsRequestSortOrder? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionPaginatedResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/session",
             queryParams: [
-                "name": name?.wrappedValue.map { .string($0) }, 
-                "assistantId": assistantId?.wrappedValue.map { .string($0) }, 
-                "squadId": squadId?.wrappedValue.map { .string($0) }, 
-                "workflowId": workflowId?.wrappedValue.map { .string($0) }, 
-                "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "id": id.map { .string($0) }, 
+                "name": name.map { .string($0) }, 
+                "assistantId": assistantId.map { .string($0) }, 
+                "assistantIdAny": assistantIdAny.map { .string($0) }, 
+                "squadId": squadId.map { .string($0) }, 
+                "workflowId": workflowId.map { .string($0) }, 
+                "numberE164CheckEnabled": numberE164CheckEnabled.map { .bool($0) }, 
+                "extension": `extension`.map { .string($0) }, 
+                "assistantOverrides": assistantOverrides.map { .string($0) }, 
+                "number": number.map { .string($0) }, 
+                "sipUri": sipUri.map { .string($0) }, 
+                "email": email.map { .string($0) }, 
+                "externalId": externalId.map { .string($0) }, 
+                "customerNumberAny": customerNumberAny.map { .string($0) }, 
+                "phoneNumberId": phoneNumberId.map { .string($0) }, 
+                "phoneNumberIdAny": phoneNumberIdAny.map { .string($0) }, 
+                "page": page.map { .double($0) }, 
+                "sortOrder": sortOrder.map { .string($0.rawValue) }, 
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
             responseType: SessionPaginatedResponse.self

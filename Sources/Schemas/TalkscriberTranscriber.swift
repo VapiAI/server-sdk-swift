@@ -2,16 +2,16 @@ import Foundation
 
 public struct TalkscriberTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
-    public let model: Whisper?
+    public let model: TalkscriberTranscriberModel?
     /// This is the language that will be set for the transcription. The list of languages Whisper supports can be found here: https://github.com/openai/whisper/blob/main/whisper/tokenizer.py
     public let language: TalkscriberTranscriberLanguage?
-    /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+    /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        model: Whisper? = nil,
+        model: TalkscriberTranscriberModel? = nil,
         language: TalkscriberTranscriberLanguage? = nil,
         fallbackPlan: FallbackTranscriberPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -24,7 +24,7 @@ public struct TalkscriberTranscriber: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.decodeIfPresent(Whisper.self, forKey: .model)
+        self.model = try container.decodeIfPresent(TalkscriberTranscriberModel.self, forKey: .model)
         self.language = try container.decodeIfPresent(TalkscriberTranscriberLanguage.self, forKey: .language)
         self.fallbackPlan = try container.decodeIfPresent(FallbackTranscriberPlan.self, forKey: .fallbackPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -36,10 +36,6 @@ public struct TalkscriberTranscriber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.language, forKey: .language)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
-    }
-
-    public enum Whisper: String, Codable, Hashable, CaseIterable, Sendable {
-        case whisper
     }
 
     /// Keys for encoding/decoding struct properties.

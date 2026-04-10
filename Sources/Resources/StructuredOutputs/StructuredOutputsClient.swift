@@ -7,31 +7,31 @@ public final class StructuredOutputsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func structuredOutputControllerFindAll(id: Nullable<String>? = nil, name: Nullable<String>? = nil, page: Nullable<Double>? = nil, sortOrder: Nullable<StructuredOutputControllerFindAllRequestSortOrder>? = nil, limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> StructuredOutputPaginatedResponse {
+    public func structuredOutputControllerFindAll(id: String? = nil, name: String? = nil, page: Double? = nil, sortOrder: StructuredOutputControllerFindAllRequestSortOrder? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> StructuredOutputPaginatedResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/structured-output",
             queryParams: [
-                "id": id?.wrappedValue.map { .string($0) }, 
-                "name": name?.wrappedValue.map { .string($0) }, 
-                "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "id": id.map { .string($0) }, 
+                "name": name.map { .string($0) }, 
+                "page": page.map { .double($0) }, 
+                "sortOrder": sortOrder.map { .string($0.rawValue) }, 
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
             responseType: StructuredOutputPaginatedResponse.self
         )
     }
 
-    public func structuredOutputControllerCreate(request: Requests.CreateStructuredOutputDto, requestOptions: RequestOptions? = nil) async throws -> StructuredOutput {
+    public func structuredOutputControllerCreate(request: CreateStructuredOutputDto, requestOptions: RequestOptions? = nil) async throws -> StructuredOutput {
         return try await httpClient.performRequest(
             method: .post,
             path: "/structured-output",
@@ -66,6 +66,16 @@ public final class StructuredOutputsClient: Sendable {
             queryParams: [
                 "schemaOverride": .string(schemaOverride)
             ],
+            body: request,
+            requestOptions: requestOptions,
+            responseType: StructuredOutput.self
+        )
+    }
+
+    public func structuredOutputControllerRun(request: Requests.StructuredOutputRunDto, requestOptions: RequestOptions? = nil) async throws -> StructuredOutput {
+        return try await httpClient.performRequest(
+            method: .post,
+            path: "/structured-output/run",
             body: request,
             requestOptions: requestOptions,
             responseType: StructuredOutput.self

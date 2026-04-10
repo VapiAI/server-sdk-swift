@@ -1,0 +1,10 @@
+import Foundation
+
+/// This is the format of the data to return.
+/// If not provided, defaults to "raw".
+/// Raw provides the data as fetched from the database, with formulas evaluated.
+/// Recharts provides the data in a format that can is ready to be used by recharts.js to render charts.
+public enum InsightRunFormatPlanFormat: String, Codable, Hashable, CaseIterable, Sendable {
+    case raw
+    case recharts
+}

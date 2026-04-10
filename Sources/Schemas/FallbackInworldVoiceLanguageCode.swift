@@ -13,4 +13,8 @@ public enum FallbackInworldVoiceLanguageCode: String, Codable, Hashable, CaseIte
     case it
     case pl
     case pt
+    case ru
+    case hi
+    case he
+    case ar
 }

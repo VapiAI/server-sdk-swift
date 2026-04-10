@@ -1,13 +1,13 @@
 import Foundation
 
 public struct FallbackCartesiaTranscriber: Codable, Hashable, Sendable {
-    public let model: InkWhisper?
+    public let model: FallbackCartesiaTranscriberModel?
     public let language: FallbackCartesiaTranscriberLanguage?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        model: InkWhisper? = nil,
+        model: FallbackCartesiaTranscriberModel? = nil,
         language: FallbackCartesiaTranscriberLanguage? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -18,7 +18,7 @@ public struct FallbackCartesiaTranscriber: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.decodeIfPresent(InkWhisper.self, forKey: .model)
+        self.model = try container.decodeIfPresent(FallbackCartesiaTranscriberModel.self, forKey: .model)
         self.language = try container.decodeIfPresent(FallbackCartesiaTranscriberLanguage.self, forKey: .language)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -28,10 +28,6 @@ public struct FallbackCartesiaTranscriber: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.language, forKey: .language)
-    }
-
-    public enum InkWhisper: String, Codable, Hashable, CaseIterable, Sendable {
-        case inkWhisper = "ink-whisper"
     }
 
     /// Keys for encoding/decoding struct properties.

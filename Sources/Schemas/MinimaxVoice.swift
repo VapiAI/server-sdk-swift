@@ -14,6 +14,12 @@ public struct MinimaxVoice: Codable, Hashable, Sendable {
     /// The emotion to use for the voice. If not provided, will use auto-detect mode.
     /// Options include: 'happy', 'sad', 'angry', 'fearful', 'surprised', 'disgusted', 'neutral'
     public let emotion: String?
+    /// Controls the granularity of subtitle/timing data returned by Minimax
+    /// during synthesis. Set to 'word' to receive per-word timestamps in
+    /// assistant.speechStarted events for karaoke-style caption rendering.
+    /// 
+    /// @default "sentence"
+    public let subtitleType: MinimaxVoiceSubtitleType?
     /// Voice pitch adjustment. Range from -12 to 12 semitones.
     /// @default 0
     public let pitch: Double?
@@ -41,6 +47,7 @@ public struct MinimaxVoice: Codable, Hashable, Sendable {
         voiceId: String,
         model: MinimaxVoiceModel? = nil,
         emotion: String? = nil,
+        subtitleType: MinimaxVoiceSubtitleType? = nil,
         pitch: Double? = nil,
         speed: Double? = nil,
         volume: Double? = nil,
@@ -55,6 +62,7 @@ public struct MinimaxVoice: Codable, Hashable, Sendable {
         self.voiceId = voiceId
         self.model = model
         self.emotion = emotion
+        self.subtitleType = subtitleType
         self.pitch = pitch
         self.speed = speed
         self.volume = volume
@@ -72,6 +80,7 @@ public struct MinimaxVoice: Codable, Hashable, Sendable {
         self.voiceId = try container.decode(String.self, forKey: .voiceId)
         self.model = try container.decodeIfPresent(MinimaxVoiceModel.self, forKey: .model)
         self.emotion = try container.decodeIfPresent(String.self, forKey: .emotion)
+        self.subtitleType = try container.decodeIfPresent(MinimaxVoiceSubtitleType.self, forKey: .subtitleType)
         self.pitch = try container.decodeIfPresent(Double.self, forKey: .pitch)
         self.speed = try container.decodeIfPresent(Double.self, forKey: .speed)
         self.volume = try container.decodeIfPresent(Double.self, forKey: .volume)
@@ -90,6 +99,7 @@ public struct MinimaxVoice: Codable, Hashable, Sendable {
         try container.encode(self.voiceId, forKey: .voiceId)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.emotion, forKey: .emotion)
+        try container.encodeIfPresent(self.subtitleType, forKey: .subtitleType)
         try container.encodeIfPresent(self.pitch, forKey: .pitch)
         try container.encodeIfPresent(self.speed, forKey: .speed)
         try container.encodeIfPresent(self.volume, forKey: .volume)
@@ -106,6 +116,7 @@ public struct MinimaxVoice: Codable, Hashable, Sendable {
         case voiceId
         case model
         case emotion
+        case subtitleType
         case pitch
         case speed
         case volume

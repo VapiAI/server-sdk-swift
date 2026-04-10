@@ -4,7 +4,7 @@ public struct ServerMessageSessionCreated: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageSessionCreatedPhoneNumber?
     /// This is the type of the message. "session.created" is sent when a new session is created.
-    public let type: SessionCreated
+    public let type: ServerMessageSessionCreatedType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -26,7 +26,7 @@ public struct ServerMessageSessionCreated: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageSessionCreatedPhoneNumber? = nil,
-        type: SessionCreated,
+        type: ServerMessageSessionCreatedType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -51,7 +51,7 @@ public struct ServerMessageSessionCreated: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageSessionCreatedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(SessionCreated.self, forKey: .type)
+        self.type = try container.decode(ServerMessageSessionCreatedType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -74,10 +74,6 @@ public struct ServerMessageSessionCreated: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
         try container.encode(self.session, forKey: .session)
-    }
-
-    public enum SessionCreated: String, Codable, Hashable, CaseIterable, Sendable {
-        case sessionCreated = "session.created"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -8,6 +8,14 @@ public struct EvalGoogleModel: Codable, Hashable, Sendable {
     /// This is the max tokens of the model.
     /// If your Judge instructions return `true` or `false` takes only 1 token (as per the OpenAI Tokenizer), and therefore is recommended to set it to a low number to force the model to return a short response.
     public let maxTokens: Double?
+    /// These are the messages which will instruct the AI Judge on how to evaluate the assistant message.
+    /// The LLM-Judge must respond with "pass" or "fail" to indicate if the assistant message passes the eval.
+    /// 
+    /// To access the messages in the mock conversation, use the LiquidJS variable `{{messages}}`.
+    /// The assistant message to be evaluated will be passed as the last message in the `messages` array and can be accessed using `{{messages[-1]}}`.
+    /// 
+    /// It is recommended to use the system message to instruct the LLM how to evaluate the assistant message, and then use the first user message to pass the assistant message to be evaluated.
+    public let messages: [[String: JSONValue]]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -15,11 +23,13 @@ public struct EvalGoogleModel: Codable, Hashable, Sendable {
         model: EvalGoogleModelModel,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
+        messages: [[String: JSONValue]],
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.model = model
         self.temperature = temperature
         self.maxTokens = maxTokens
+        self.messages = messages
         self.additionalProperties = additionalProperties
     }
 
@@ -28,6 +38,7 @@ public struct EvalGoogleModel: Codable, Hashable, Sendable {
         self.model = try container.decode(EvalGoogleModelModel.self, forKey: .model)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
+        self.messages = try container.decode([[String: JSONValue]].self, forKey: .messages)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -37,6 +48,7 @@ public struct EvalGoogleModel: Codable, Hashable, Sendable {
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
+        try container.encode(self.messages, forKey: .messages)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -44,5 +56,6 @@ public struct EvalGoogleModel: Codable, Hashable, Sendable {
         case model
         case temperature
         case maxTokens
+        case messages
     }
 }

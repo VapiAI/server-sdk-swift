@@ -5,6 +5,8 @@ public struct UpdateDtmfToolDto: Codable, Hashable, Sendable {
     /// 
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [UpdateDtmfToolDtoMessagesItem]?
+    /// This enables sending DTMF tones via SIP INFO messages instead of RFC 2833 (RTP events). When enabled, DTMF digits will be sent using the SIP INFO method, which can be more reliable in some network configurations. Only relevant when using the `vapi.sip` transport.
+    public let sipInfoDtmfEnabled: Bool?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -89,10 +91,12 @@ public struct UpdateDtmfToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateDtmfToolDtoMessagesItem]? = nil,
+        sipInfoDtmfEnabled: Bool? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.sipInfoDtmfEnabled = sipInfoDtmfEnabled
         self.rejectionPlan = rejectionPlan
         self.additionalProperties = additionalProperties
     }
@@ -100,6 +104,7 @@ public struct UpdateDtmfToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateDtmfToolDtoMessagesItem].self, forKey: .messages)
+        self.sipInfoDtmfEnabled = try container.decodeIfPresent(Bool.self, forKey: .sipInfoDtmfEnabled)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -108,12 +113,14 @@ public struct UpdateDtmfToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.sipInfoDtmfEnabled, forKey: .sipInfoDtmfEnabled)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case sipInfoDtmfEnabled
         case rejectionPlan
     }
 }

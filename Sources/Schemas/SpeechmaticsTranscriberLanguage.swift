@@ -3,6 +3,7 @@ import Foundation
 public enum SpeechmaticsTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case auto
     case ar
+    case arEn = "ar_en"
     case ba
     case eu
     case be
@@ -34,8 +35,10 @@ public enum SpeechmaticsTranscriberLanguage: String, Codable, Hashable, CaseIter
     case lv
     case lt
     case ms
+    case enMs = "en_ms"
     case mt
     case cmn
+    case cmnEn = "cmn_en"
     case mr
     case mn
     case no
@@ -47,9 +50,12 @@ public enum SpeechmaticsTranscriberLanguage: String, Codable, Hashable, CaseIter
     case sk
     case sl
     case es
+    case enEs = "en_es"
     case sw
     case sv
+    case tl
     case ta
+    case enTa = "en_ta"
     case th
     case tr
     case uk

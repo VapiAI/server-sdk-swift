@@ -1,6 +1,7 @@
 import Foundation
 
 public enum DeepgramTranscriberModel: String, Codable, Hashable, CaseIterable, Sendable {
+    case fluxGeneralEn = "flux-general-en"
     case nova3 = "nova-3"
     case nova3General = "nova-3-general"
     case nova3Medical = "nova-3-medical"
@@ -32,4 +33,5 @@ public enum DeepgramTranscriberModel: String, Codable, Hashable, CaseIterable, S
     case baseConversationalai = "base-conversationalai"
     case baseVoicemail = "base-voicemail"
     case baseVideo = "base-video"
+    case whisper
 }

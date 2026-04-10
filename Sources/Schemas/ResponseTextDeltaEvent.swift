@@ -10,7 +10,7 @@ public struct ResponseTextDeltaEvent: Codable, Hashable, Sendable {
     /// Index of the output item
     public let outputIndex: Double
     /// Event type
-    public let type: ResponseOutputTextDelta
+    public let type: ResponseTextDeltaEventType
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -19,7 +19,7 @@ public struct ResponseTextDeltaEvent: Codable, Hashable, Sendable {
         delta: String,
         itemId: String,
         outputIndex: Double,
-        type: ResponseOutputTextDelta,
+        type: ResponseTextDeltaEventType,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.contentIndex = contentIndex
@@ -36,7 +36,7 @@ public struct ResponseTextDeltaEvent: Codable, Hashable, Sendable {
         self.delta = try container.decode(String.self, forKey: .delta)
         self.itemId = try container.decode(String.self, forKey: .itemId)
         self.outputIndex = try container.decode(Double.self, forKey: .outputIndex)
-        self.type = try container.decode(ResponseOutputTextDelta.self, forKey: .type)
+        self.type = try container.decode(ResponseTextDeltaEventType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -48,10 +48,6 @@ public struct ResponseTextDeltaEvent: Codable, Hashable, Sendable {
         try container.encode(self.itemId, forKey: .itemId)
         try container.encode(self.outputIndex, forKey: .outputIndex)
         try container.encode(self.type, forKey: .type)
-    }
-
-    public enum ResponseOutputTextDelta: String, Codable, Hashable, CaseIterable, Sendable {
-        case responseOutputTextDelta = "response.output_text.delta"
     }
 
     /// Keys for encoding/decoding struct properties.

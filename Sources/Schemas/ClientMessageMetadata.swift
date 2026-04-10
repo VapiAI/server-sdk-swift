@@ -4,7 +4,7 @@ public struct ClientMessageMetadata: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageMetadataPhoneNumber?
     /// This is the type of the message. "metadata" is sent to forward metadata to the client.
-    public let type: Metadata
+    public let type: ClientMessageMetadataType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is the call that the message is associated with.
@@ -20,7 +20,7 @@ public struct ClientMessageMetadata: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageMetadataPhoneNumber? = nil,
-        type: Metadata,
+        type: ClientMessageMetadataType,
         timestamp: Double? = nil,
         call: Call? = nil,
         customer: CreateCustomerDto? = nil,
@@ -41,7 +41,7 @@ public struct ClientMessageMetadata: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageMetadataPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(Metadata.self, forKey: .type)
+        self.type = try container.decode(ClientMessageMetadataType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
         self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
@@ -60,10 +60,6 @@ public struct ClientMessageMetadata: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
         try container.encode(self.metadata, forKey: .metadata)
-    }
-
-    public enum Metadata: String, Codable, Hashable, CaseIterable, Sendable {
-        case metadata
     }
 
     /// Keys for encoding/decoding struct properties.

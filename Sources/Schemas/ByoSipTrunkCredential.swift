@@ -2,7 +2,7 @@ import Foundation
 
 public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
     /// This can be used to bring your own SIP trunks or to connect to a Carrier.
-    public let provider: ByoSipTrunk?
+    public let provider: ByoSipTrunkCredentialProvider?
     /// This is the unique identifier for the credential.
     public let id: String
     /// This is the unique identifier for the org that this credential belongs to.
@@ -34,7 +34,7 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: ByoSipTrunk? = nil,
+        provider: ByoSipTrunkCredentialProvider? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -65,7 +65,7 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decodeIfPresent(ByoSipTrunk.self, forKey: .provider)
+        self.provider = try container.decodeIfPresent(ByoSipTrunkCredentialProvider.self, forKey: .provider)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -95,10 +95,6 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.techPrefix, forKey: .techPrefix)
         try container.encodeIfPresent(self.sipDiversionHeader, forKey: .sipDiversionHeader)
         try container.encodeIfPresent(self.sbcConfiguration, forKey: .sbcConfiguration)
-    }
-
-    public enum ByoSipTrunk: String, Codable, Hashable, CaseIterable, Sendable {
-        case byoSipTrunk = "byo-sip-trunk"
     }
 
     /// Keys for encoding/decoding struct properties.

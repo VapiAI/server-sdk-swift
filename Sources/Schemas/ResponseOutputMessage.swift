@@ -6,20 +6,20 @@ public struct ResponseOutputMessage: Codable, Hashable, Sendable {
     /// Content of the output message
     public let content: [ResponseOutputText]
     /// The role of the output message
-    public let role: Assistant
+    public let role: ResponseOutputMessageRole
     /// The status of the message
     public let status: ResponseOutputMessageStatus
     /// The type of the output message
-    public let type: Message
+    public let type: ResponseOutputMessageType
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         id: String,
         content: [ResponseOutputText],
-        role: Assistant,
+        role: ResponseOutputMessageRole,
         status: ResponseOutputMessageStatus,
-        type: Message,
+        type: ResponseOutputMessageType,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.id = id
@@ -34,9 +34,9 @@ public struct ResponseOutputMessage: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
         self.content = try container.decode([ResponseOutputText].self, forKey: .content)
-        self.role = try container.decode(Assistant.self, forKey: .role)
+        self.role = try container.decode(ResponseOutputMessageRole.self, forKey: .role)
         self.status = try container.decode(ResponseOutputMessageStatus.self, forKey: .status)
-        self.type = try container.decode(Message.self, forKey: .type)
+        self.type = try container.decode(ResponseOutputMessageType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -48,14 +48,6 @@ public struct ResponseOutputMessage: Codable, Hashable, Sendable {
         try container.encode(self.role, forKey: .role)
         try container.encode(self.status, forKey: .status)
         try container.encode(self.type, forKey: .type)
-    }
-
-    public enum Assistant: String, Codable, Hashable, CaseIterable, Sendable {
-        case assistant
-    }
-
-    public enum Message: String, Codable, Hashable, CaseIterable, Sendable {
-        case message
     }
 
     /// Keys for encoding/decoding struct properties.

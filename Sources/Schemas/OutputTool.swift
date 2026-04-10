@@ -6,7 +6,7 @@ public struct OutputTool: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [OutputToolMessagesItem]?
     /// The type of tool. "output" for Output tool.
-    public let type: Output
+    public let type: OutputToolType
     /// This is the unique identifier for the tool.
     public let id: String
     /// This is the unique identifier for the organization that this tool belongs to.
@@ -99,7 +99,7 @@ public struct OutputTool: Codable, Hashable, Sendable {
 
     public init(
         messages: [OutputToolMessagesItem]? = nil,
-        type: Output,
+        type: OutputToolType,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -120,7 +120,7 @@ public struct OutputTool: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([OutputToolMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(Output.self, forKey: .type)
+        self.type = try container.decode(OutputToolType.self, forKey: .type)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -139,10 +139,6 @@ public struct OutputTool: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum Output: String, Codable, Hashable, CaseIterable, Sendable {
-        case output
     }
 
     /// Keys for encoding/decoding struct properties.

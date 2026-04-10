@@ -1,7 +1,7 @@
 import Foundation
 
 public struct File: Codable, Hashable, Sendable {
-    public let object: File?
+    public let object: FileObject?
     public let status: FileStatus?
     /// This is the name of the file. This is just for your own reference.
     public let name: String?
@@ -28,7 +28,7 @@ public struct File: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        object: File? = nil,
+        object: FileObject? = nil,
         status: FileStatus? = nil,
         name: String? = nil,
         originalName: String? = nil,
@@ -71,7 +71,7 @@ public struct File: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.object = try container.decodeIfPresent(File.self, forKey: .object)
+        self.object = try container.decodeIfPresent(FileObject.self, forKey: .object)
         self.status = try container.decodeIfPresent(FileStatus.self, forKey: .status)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.originalName = try container.decodeIfPresent(String.self, forKey: .originalName)
@@ -113,10 +113,6 @@ public struct File: Codable, Hashable, Sendable {
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
-    }
-
-    public enum File: String, Codable, Hashable, CaseIterable, Sendable {
-        case file
     }
 
     /// Keys for encoding/decoding struct properties.

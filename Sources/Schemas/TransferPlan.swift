@@ -29,6 +29,12 @@ public struct TransferPlan: Codable, Hashable, Sendable {
     /// - 'bye': Ends current call with SIP BYE
     /// - 'dial': Uses SIP DIAL to transfer the call
     public let sipVerb: [String: JSONValue]?
+    /// This sets the timeout for the dial operation in seconds. This is the duration the call will ring before timing out.
+    /// 
+    /// Only applicable when `sipVerb='dial'`. Not applicable for SIP REFER or BYE.
+    /// 
+    /// @default 60
+    public let dialTimeout: Double?
     /// This is the URL to an audio file played while the customer is on hold during transfer.
     /// 
     /// Usage:
@@ -47,6 +53,15 @@ public struct TransferPlan: Codable, Hashable, Sendable {
     /// - Must be a publicly accessible URL to an audio file.
     /// - Supported formats: MP3 and WAV.
     public let transferCompleteAudioUrl: String?
+    /// This is the plan for manipulating the message context before initiating the warm transfer.
+    /// Usage:
+    /// - Used only when `mode` is `warm-transfer-experimental`.
+    /// - These messages will automatically be added to the transferAssistant's system message.
+    /// - If 'none', we will not add any transcript to the transferAssistant's system message.
+    /// - If you want to provide your own messages, use transferAssistant.model.messages instead.
+    /// 
+    /// @default { type: 'all' }
+    public let contextEngineeringPlan: TransferPlanContextEngineeringPlan?
     /// This is the TwiML instructions to execute on the destination call leg before connecting the customer.
     /// 
     /// Usage:
@@ -84,8 +99,10 @@ public struct TransferPlan: Codable, Hashable, Sendable {
         message: TransferPlanMessage? = nil,
         timeout: Double? = nil,
         sipVerb: [String: JSONValue]? = nil,
+        dialTimeout: Double? = nil,
         holdAudioUrl: String? = nil,
         transferCompleteAudioUrl: String? = nil,
+        contextEngineeringPlan: TransferPlanContextEngineeringPlan? = nil,
         twiml: String? = nil,
         summaryPlan: SummaryPlan? = nil,
         sipHeadersInReferToEnabled: Bool? = nil,
@@ -96,8 +113,10 @@ public struct TransferPlan: Codable, Hashable, Sendable {
         self.message = message
         self.timeout = timeout
         self.sipVerb = sipVerb
+        self.dialTimeout = dialTimeout
         self.holdAudioUrl = holdAudioUrl
         self.transferCompleteAudioUrl = transferCompleteAudioUrl
+        self.contextEngineeringPlan = contextEngineeringPlan
         self.twiml = twiml
         self.summaryPlan = summaryPlan
         self.sipHeadersInReferToEnabled = sipHeadersInReferToEnabled
@@ -111,8 +130,10 @@ public struct TransferPlan: Codable, Hashable, Sendable {
         self.message = try container.decodeIfPresent(TransferPlanMessage.self, forKey: .message)
         self.timeout = try container.decodeIfPresent(Double.self, forKey: .timeout)
         self.sipVerb = try container.decodeIfPresent([String: JSONValue].self, forKey: .sipVerb)
+        self.dialTimeout = try container.decodeIfPresent(Double.self, forKey: .dialTimeout)
         self.holdAudioUrl = try container.decodeIfPresent(String.self, forKey: .holdAudioUrl)
         self.transferCompleteAudioUrl = try container.decodeIfPresent(String.self, forKey: .transferCompleteAudioUrl)
+        self.contextEngineeringPlan = try container.decodeIfPresent(TransferPlanContextEngineeringPlan.self, forKey: .contextEngineeringPlan)
         self.twiml = try container.decodeIfPresent(String.self, forKey: .twiml)
         self.summaryPlan = try container.decodeIfPresent(SummaryPlan.self, forKey: .summaryPlan)
         self.sipHeadersInReferToEnabled = try container.decodeIfPresent(Bool.self, forKey: .sipHeadersInReferToEnabled)
@@ -127,8 +148,10 @@ public struct TransferPlan: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.message, forKey: .message)
         try container.encodeIfPresent(self.timeout, forKey: .timeout)
         try container.encodeIfPresent(self.sipVerb, forKey: .sipVerb)
+        try container.encodeIfPresent(self.dialTimeout, forKey: .dialTimeout)
         try container.encodeIfPresent(self.holdAudioUrl, forKey: .holdAudioUrl)
         try container.encodeIfPresent(self.transferCompleteAudioUrl, forKey: .transferCompleteAudioUrl)
+        try container.encodeIfPresent(self.contextEngineeringPlan, forKey: .contextEngineeringPlan)
         try container.encodeIfPresent(self.twiml, forKey: .twiml)
         try container.encodeIfPresent(self.summaryPlan, forKey: .summaryPlan)
         try container.encodeIfPresent(self.sipHeadersInReferToEnabled, forKey: .sipHeadersInReferToEnabled)
@@ -141,8 +164,10 @@ public struct TransferPlan: Codable, Hashable, Sendable {
         case message
         case timeout
         case sipVerb
+        case dialTimeout
         case holdAudioUrl
         case transferCompleteAudioUrl
+        case contextEngineeringPlan
         case twiml
         case summaryPlan
         case sipHeadersInReferToEnabled

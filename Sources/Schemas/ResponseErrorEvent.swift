@@ -2,7 +2,7 @@ import Foundation
 
 public struct ResponseErrorEvent: Codable, Hashable, Sendable {
     /// Event type
-    public let type: Error
+    public let type: ResponseErrorEventType
     /// Error code
     public let code: String
     /// Error message
@@ -15,7 +15,7 @@ public struct ResponseErrorEvent: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Error,
+        type: ResponseErrorEventType,
         code: String,
         message: String,
         param: Nullable<String>? = nil,
@@ -32,7 +32,7 @@ public struct ResponseErrorEvent: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Error.self, forKey: .type)
+        self.type = try container.decode(ResponseErrorEventType.self, forKey: .type)
         self.code = try container.decode(String.self, forKey: .code)
         self.message = try container.decode(String.self, forKey: .message)
         self.param = try container.decodeNullableIfPresent(String.self, forKey: .param)
@@ -48,10 +48,6 @@ public struct ResponseErrorEvent: Codable, Hashable, Sendable {
         try container.encode(self.message, forKey: .message)
         try container.encodeNullableIfPresent(self.param, forKey: .param)
         try container.encode(self.sequenceNumber, forKey: .sequenceNumber)
-    }
-
-    public enum Error: String, Codable, Hashable, CaseIterable, Sendable {
-        case error
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -6,7 +6,7 @@ public struct UpdateComputerToolDto: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [UpdateComputerToolDtoMessagesItem]?
     /// The sub type of tool.
-    public let subType: Computer20241022?
+    public let subType: UpdateComputerToolDtoSubType?
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
     /// 
@@ -97,7 +97,7 @@ public struct UpdateComputerToolDto: Codable, Hashable, Sendable {
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
     /// The name of the tool, fixed to 'computer'
-    public let name: Computer?
+    public let name: UpdateComputerToolDtoName?
     /// The display width in pixels
     public let displayWidthPx: Double?
     /// The display height in pixels
@@ -109,10 +109,10 @@ public struct UpdateComputerToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateComputerToolDtoMessagesItem]? = nil,
-        subType: Computer20241022? = nil,
+        subType: UpdateComputerToolDtoSubType? = nil,
         server: Server? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
-        name: Computer? = nil,
+        name: UpdateComputerToolDtoName? = nil,
         displayWidthPx: Double? = nil,
         displayHeightPx: Double? = nil,
         displayNumber: Double? = nil,
@@ -132,10 +132,10 @@ public struct UpdateComputerToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateComputerToolDtoMessagesItem].self, forKey: .messages)
-        self.subType = try container.decodeIfPresent(Computer20241022.self, forKey: .subType)
+        self.subType = try container.decodeIfPresent(UpdateComputerToolDtoSubType.self, forKey: .subType)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
-        self.name = try container.decodeIfPresent(Computer.self, forKey: .name)
+        self.name = try container.decodeIfPresent(UpdateComputerToolDtoName.self, forKey: .name)
         self.displayWidthPx = try container.decodeIfPresent(Double.self, forKey: .displayWidthPx)
         self.displayHeightPx = try container.decodeIfPresent(Double.self, forKey: .displayHeightPx)
         self.displayNumber = try container.decodeIfPresent(Double.self, forKey: .displayNumber)
@@ -153,14 +153,6 @@ public struct UpdateComputerToolDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.displayWidthPx, forKey: .displayWidthPx)
         try container.encodeIfPresent(self.displayHeightPx, forKey: .displayHeightPx)
         try container.encodeIfPresent(self.displayNumber, forKey: .displayNumber)
-    }
-
-    public enum Computer20241022: String, Codable, Hashable, CaseIterable, Sendable {
-        case computer20241022 = "computer_20241022"
-    }
-
-    public enum Computer: String, Codable, Hashable, CaseIterable, Sendable {
-        case computer
     }
 
     /// Keys for encoding/decoding struct properties.

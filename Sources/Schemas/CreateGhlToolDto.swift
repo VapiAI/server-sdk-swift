@@ -6,7 +6,7 @@ public struct CreateGhlToolDto: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [CreateGhlToolDtoMessagesItem]?
     /// The type of tool. "ghl" for GHL tool.
-    public let type: Ghl
+    public let type: CreateGhlToolDtoType
     public let metadata: GhlToolMetadata
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
@@ -92,7 +92,7 @@ public struct CreateGhlToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [CreateGhlToolDtoMessagesItem]? = nil,
-        type: Ghl,
+        type: CreateGhlToolDtoType,
         metadata: GhlToolMetadata,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -107,7 +107,7 @@ public struct CreateGhlToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([CreateGhlToolDtoMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(Ghl.self, forKey: .type)
+        self.type = try container.decode(CreateGhlToolDtoType.self, forKey: .type)
         self.metadata = try container.decode(GhlToolMetadata.self, forKey: .metadata)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -120,10 +120,6 @@ public struct CreateGhlToolDto: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encode(self.metadata, forKey: .metadata)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum Ghl: String, Codable, Hashable, CaseIterable, Sendable {
-        case ghl
     }
 
     /// Keys for encoding/decoding struct properties.

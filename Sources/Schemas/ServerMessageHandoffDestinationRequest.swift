@@ -4,7 +4,7 @@ public struct ServerMessageHandoffDestinationRequest: Codable, Hashable, Sendabl
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageHandoffDestinationRequestPhoneNumber?
     /// This is the type of the message. "handoff-destination-request" is sent when the model is requesting handoff but destination is unknown.
-    public let type: HandoffDestinationRequest
+    public let type: ServerMessageHandoffDestinationRequestType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -26,7 +26,7 @@ public struct ServerMessageHandoffDestinationRequest: Codable, Hashable, Sendabl
 
     public init(
         phoneNumber: ServerMessageHandoffDestinationRequestPhoneNumber? = nil,
-        type: HandoffDestinationRequest,
+        type: ServerMessageHandoffDestinationRequestType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -51,7 +51,7 @@ public struct ServerMessageHandoffDestinationRequest: Codable, Hashable, Sendabl
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageHandoffDestinationRequestPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(HandoffDestinationRequest.self, forKey: .type)
+        self.type = try container.decode(ServerMessageHandoffDestinationRequestType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -74,10 +74,6 @@ public struct ServerMessageHandoffDestinationRequest: Codable, Hashable, Sendabl
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
         try container.encode(self.parameters, forKey: .parameters)
-    }
-
-    public enum HandoffDestinationRequest: String, Codable, Hashable, CaseIterable, Sendable {
-        case handoffDestinationRequest = "handoff-destination-request"
     }
 
     /// Keys for encoding/decoding struct properties.

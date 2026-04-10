@@ -1,7 +1,7 @@
 import Foundation
 
 public struct TrieveCredential: Codable, Hashable, Sendable {
-    public let provider: Trieve
+    public let provider: TrieveCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
     /// This is the unique identifier for the credential.
@@ -18,7 +18,7 @@ public struct TrieveCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Trieve,
+        provider: TrieveCredentialProvider,
         apiKey: String,
         id: String,
         orgId: String,
@@ -39,7 +39,7 @@ public struct TrieveCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Trieve.self, forKey: .provider)
+        self.provider = try container.decode(TrieveCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -59,10 +59,6 @@ public struct TrieveCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Trieve: String, Codable, Hashable, CaseIterable, Sendable {
-        case trieve
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -3,6 +3,8 @@ import Foundation
 public struct TestSuiteTestVoice: Codable, Hashable, Sendable {
     /// These are the scorers used to evaluate the test.
     public let scorers: [TestSuiteTestScorerAi]
+    /// This is the type of the test, which must be voice.
+    public let type: TestSuiteTestVoiceType
     /// This is the unique identifier for the test.
     public let id: String
     /// This is the unique identifier for the test suite this test belongs to.
@@ -24,6 +26,7 @@ public struct TestSuiteTestVoice: Codable, Hashable, Sendable {
 
     public init(
         scorers: [TestSuiteTestScorerAi],
+        type: TestSuiteTestVoiceType,
         id: String,
         testSuiteId: String,
         orgId: String,
@@ -35,6 +38,7 @@ public struct TestSuiteTestVoice: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.scorers = scorers
+        self.type = type
         self.id = id
         self.testSuiteId = testSuiteId
         self.orgId = orgId
@@ -49,6 +53,7 @@ public struct TestSuiteTestVoice: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.scorers = try container.decode([TestSuiteTestScorerAi].self, forKey: .scorers)
+        self.type = try container.decode(TestSuiteTestVoiceType.self, forKey: .type)
         self.id = try container.decode(String.self, forKey: .id)
         self.testSuiteId = try container.decode(String.self, forKey: .testSuiteId)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -64,6 +69,7 @@ public struct TestSuiteTestVoice: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.scorers, forKey: .scorers)
+        try container.encode(self.type, forKey: .type)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.testSuiteId, forKey: .testSuiteId)
         try container.encode(self.orgId, forKey: .orgId)
@@ -77,6 +83,7 @@ public struct TestSuiteTestVoice: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case scorers
+        case type
         case id
         case testSuiteId
         case orgId

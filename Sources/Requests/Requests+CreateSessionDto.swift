@@ -13,6 +13,10 @@ extension Requests {
         /// This is the assistant configuration for this session. Use this when creating a new assistant configuration.
         /// If assistantId is provided, this will be ignored.
         public let assistant: CreateAssistantDto?
+        /// These are the overrides for the assistant configuration.
+        /// Use this to provide variable values and other overrides when using assistantId.
+        /// Variable substitution will be applied to the assistant's messages and other text-based fields.
+        public let assistantOverrides: AssistantOverrides?
         /// This is the squad ID associated with this session. Use this when referencing an existing squad.
         public let squadId: String?
         /// This is the squad configuration for this session. Use this when creating a new squad configuration.
@@ -22,6 +26,8 @@ extension Requests {
         public let messages: [CreateSessionDtoMessagesItem]?
         /// This is the customer information associated with this session.
         public let customer: CreateCustomerDto?
+        /// This is the customerId of the customer associated with this session.
+        public let customerId: String?
         /// This is the ID of the phone number associated with this session.
         public let phoneNumberId: String?
         /// This is the phone number configuration for this session.
@@ -35,10 +41,12 @@ extension Requests {
             expirationSeconds: Double? = nil,
             assistantId: String? = nil,
             assistant: CreateAssistantDto? = nil,
+            assistantOverrides: AssistantOverrides? = nil,
             squadId: String? = nil,
             squad: CreateSquadDto? = nil,
             messages: [CreateSessionDtoMessagesItem]? = nil,
             customer: CreateCustomerDto? = nil,
+            customerId: String? = nil,
             phoneNumberId: String? = nil,
             phoneNumber: ImportTwilioPhoneNumberDto? = nil,
             additionalProperties: [String: JSONValue] = .init()
@@ -48,10 +56,12 @@ extension Requests {
             self.expirationSeconds = expirationSeconds
             self.assistantId = assistantId
             self.assistant = assistant
+            self.assistantOverrides = assistantOverrides
             self.squadId = squadId
             self.squad = squad
             self.messages = messages
             self.customer = customer
+            self.customerId = customerId
             self.phoneNumberId = phoneNumberId
             self.phoneNumber = phoneNumber
             self.additionalProperties = additionalProperties
@@ -64,10 +74,12 @@ extension Requests {
             self.expirationSeconds = try container.decodeIfPresent(Double.self, forKey: .expirationSeconds)
             self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
             self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+            self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
             self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
             self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)
             self.messages = try container.decodeIfPresent([CreateSessionDtoMessagesItem].self, forKey: .messages)
             self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
+            self.customerId = try container.decodeIfPresent(String.self, forKey: .customerId)
             self.phoneNumberId = try container.decodeIfPresent(String.self, forKey: .phoneNumberId)
             self.phoneNumber = try container.decodeIfPresent(ImportTwilioPhoneNumberDto.self, forKey: .phoneNumber)
             self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -81,10 +93,12 @@ extension Requests {
             try container.encodeIfPresent(self.expirationSeconds, forKey: .expirationSeconds)
             try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
             try container.encodeIfPresent(self.assistant, forKey: .assistant)
+            try container.encodeIfPresent(self.assistantOverrides, forKey: .assistantOverrides)
             try container.encodeIfPresent(self.squadId, forKey: .squadId)
             try container.encodeIfPresent(self.squad, forKey: .squad)
             try container.encodeIfPresent(self.messages, forKey: .messages)
             try container.encodeIfPresent(self.customer, forKey: .customer)
+            try container.encodeIfPresent(self.customerId, forKey: .customerId)
             try container.encodeIfPresent(self.phoneNumberId, forKey: .phoneNumberId)
             try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
         }
@@ -96,10 +110,12 @@ extension Requests {
             case expirationSeconds
             case assistantId
             case assistant
+            case assistantOverrides
             case squadId
             case squad
             case messages
             case customer
+            case customerId
             case phoneNumberId
             case phoneNumber
         }

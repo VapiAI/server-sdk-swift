@@ -2,7 +2,7 @@ import Foundation
 
 public struct CreateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
     /// This knowledge base is bring your own knowledge base implementation.
-    public let provider: CustomKnowledgeBase
+    public let provider: CreateCustomKnowledgeBaseDtoProvider
     /// This is where the knowledge base request will be sent.
     /// 
     /// Request Example:
@@ -47,7 +47,7 @@ public struct CreateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: CustomKnowledgeBase,
+        provider: CreateCustomKnowledgeBaseDtoProvider,
         server: Server,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -58,7 +58,7 @@ public struct CreateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(CustomKnowledgeBase.self, forKey: .provider)
+        self.provider = try container.decode(CreateCustomKnowledgeBaseDtoProvider.self, forKey: .provider)
         self.server = try container.decode(Server.self, forKey: .server)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -68,10 +68,6 @@ public struct CreateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.provider, forKey: .provider)
         try container.encode(self.server, forKey: .server)
-    }
-
-    public enum CustomKnowledgeBase: String, Codable, Hashable, CaseIterable, Sendable {
-        case customKnowledgeBase = "custom-knowledge-base"
     }
 
     /// Keys for encoding/decoding struct properties.

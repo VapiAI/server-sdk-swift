@@ -11,14 +11,10 @@ public struct JsonSchema: Codable, Hashable, Sendable {
     /// 
     /// For `object`, you can define the properties of the object using the `properties` property.
     public let type: JsonSchemaType
-    /// This is required if the type is "array". This is the schema of the items in the array.
-    /// 
-    /// This is of type JsonSchema. However, Swagger doesn't support circular references.
-    public let items: [String: JSONValue]?
-    /// This is required if the type is "object". This specifies the properties of the object.
-    /// 
-    /// This is a map of string to JsonSchema. However, Swagger doesn't support circular references.
-    public let properties: [String: JSONValue]?
+    /// This is required if the type is "array". This is the schema of the items in the array. This is a recursive reference to JsonSchema.
+    public let items: Indirect<JsonSchema>?
+    /// This is required if the type is "object". This specifies the properties of the object. This is a map of property names to JsonSchema objects.
+    public let properties: [String: JsonSchema]?
     /// This is the description to help the model understand what it needs to output.
     public let description: String?
     /// This is the pattern of the string. This is a regex that will be used to validate the data in question. To use a common format, use the `format` property instead.
@@ -42,8 +38,8 @@ public struct JsonSchema: Codable, Hashable, Sendable {
 
     public init(
         type: JsonSchemaType,
-        items: [String: JSONValue]? = nil,
-        properties: [String: JSONValue]? = nil,
+        items: JsonSchema? = nil,
+        properties: [String: JsonSchema]? = nil,
         description: String? = nil,
         pattern: String? = nil,
         format: JsonSchemaFormat? = nil,
@@ -53,7 +49,7 @@ public struct JsonSchema: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.type = type
-        self.items = items
+        self.items = items.map { Indirect($0) }
         self.properties = properties
         self.description = description
         self.pattern = pattern
@@ -67,8 +63,8 @@ public struct JsonSchema: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.type = try container.decode(JsonSchemaType.self, forKey: .type)
-        self.items = try container.decodeIfPresent([String: JSONValue].self, forKey: .items)
-        self.properties = try container.decodeIfPresent([String: JSONValue].self, forKey: .properties)
+        self.items = try container.decodeIfPresent(Indirect<JsonSchema>.self, forKey: .items)
+        self.properties = try container.decodeIfPresent([String: JsonSchema].self, forKey: .properties)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.pattern = try container.decodeIfPresent(String.self, forKey: .pattern)
         self.format = try container.decodeIfPresent(JsonSchemaFormat.self, forKey: .format)

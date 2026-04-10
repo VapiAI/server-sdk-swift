@@ -6,7 +6,7 @@ public struct ComputerTool: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [ComputerToolMessagesItem]?
     /// The sub type of tool.
-    public let subType: Computer20241022
+    public let subType: ComputerToolSubType
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
     /// 
@@ -105,7 +105,7 @@ public struct ComputerTool: Codable, Hashable, Sendable {
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
     /// The name of the tool, fixed to 'computer'
-    public let name: Computer
+    public let name: ComputerToolName
     /// The display width in pixels
     public let displayWidthPx: Double
     /// The display height in pixels
@@ -117,14 +117,14 @@ public struct ComputerTool: Codable, Hashable, Sendable {
 
     public init(
         messages: [ComputerToolMessagesItem]? = nil,
-        subType: Computer20241022,
+        subType: ComputerToolSubType,
         server: Server? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
         updatedAt: Date,
         rejectionPlan: ToolRejectionPlan? = nil,
-        name: Computer,
+        name: ComputerToolName,
         displayWidthPx: Double,
         displayHeightPx: Double,
         displayNumber: Double? = nil,
@@ -148,14 +148,14 @@ public struct ComputerTool: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([ComputerToolMessagesItem].self, forKey: .messages)
-        self.subType = try container.decode(Computer20241022.self, forKey: .subType)
+        self.subType = try container.decode(ComputerToolSubType.self, forKey: .subType)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
-        self.name = try container.decode(Computer.self, forKey: .name)
+        self.name = try container.decode(ComputerToolName.self, forKey: .name)
         self.displayWidthPx = try container.decode(Double.self, forKey: .displayWidthPx)
         self.displayHeightPx = try container.decode(Double.self, forKey: .displayHeightPx)
         self.displayNumber = try container.decodeIfPresent(Double.self, forKey: .displayNumber)
@@ -177,14 +177,6 @@ public struct ComputerTool: Codable, Hashable, Sendable {
         try container.encode(self.displayWidthPx, forKey: .displayWidthPx)
         try container.encode(self.displayHeightPx, forKey: .displayHeightPx)
         try container.encodeIfPresent(self.displayNumber, forKey: .displayNumber)
-    }
-
-    public enum Computer20241022: String, Codable, Hashable, CaseIterable, Sendable {
-        case computer20241022 = "computer_20241022"
-    }
-
-    public enum Computer: String, Codable, Hashable, CaseIterable, Sendable {
-        case computer
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -5,6 +5,8 @@ public struct DtmfTool: Codable, Hashable, Sendable {
     /// 
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [DtmfToolMessagesItem]?
+    /// This enables sending DTMF tones via SIP INFO messages instead of RFC 2833 (RTP events). When enabled, DTMF digits will be sent using the SIP INFO method, which can be more reliable in some network configurations. Only relevant when using the `vapi.sip` transport.
+    public let sipInfoDtmfEnabled: Bool?
     /// This is the unique identifier for the tool.
     public let id: String
     /// This is the unique identifier for the organization that this tool belongs to.
@@ -97,6 +99,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
 
     public init(
         messages: [DtmfToolMessagesItem]? = nil,
+        sipInfoDtmfEnabled: Bool? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -105,6 +108,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.sipInfoDtmfEnabled = sipInfoDtmfEnabled
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -116,6 +120,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([DtmfToolMessagesItem].self, forKey: .messages)
+        self.sipInfoDtmfEnabled = try container.decodeIfPresent(Bool.self, forKey: .sipInfoDtmfEnabled)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -128,6 +133,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.sipInfoDtmfEnabled, forKey: .sipInfoDtmfEnabled)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -138,6 +144,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case sipInfoDtmfEnabled
         case id
         case orgId
         case createdAt

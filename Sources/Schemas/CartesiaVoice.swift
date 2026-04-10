@@ -11,6 +11,10 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
     public let language: CartesiaVoiceLanguage?
     /// Experimental controls for Cartesia voice generation
     public let experimentalControls: CartesiaExperimentalControls?
+    /// Generation config for fine-grained control of sonic-3 voice output (speed, volume, and experimental controls). Only available for sonic-3 model.
+    public let generationConfig: CartesiaGenerationConfig?
+    /// Pronunciation dictionary ID for sonic-3. Allows custom pronunciations for specific words. Only available for sonic-3 model.
+    public let pronunciationDictId: String?
     /// This is the plan for chunking the model output before it is sent to the voice provider.
     public let chunkPlan: ChunkPlan?
     /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
@@ -24,6 +28,8 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
         model: CartesiaVoiceModel? = nil,
         language: CartesiaVoiceLanguage? = nil,
         experimentalControls: CartesiaExperimentalControls? = nil,
+        generationConfig: CartesiaGenerationConfig? = nil,
+        pronunciationDictId: String? = nil,
         chunkPlan: ChunkPlan? = nil,
         fallbackPlan: FallbackPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -33,6 +39,8 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
         self.model = model
         self.language = language
         self.experimentalControls = experimentalControls
+        self.generationConfig = generationConfig
+        self.pronunciationDictId = pronunciationDictId
         self.chunkPlan = chunkPlan
         self.fallbackPlan = fallbackPlan
         self.additionalProperties = additionalProperties
@@ -45,6 +53,8 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
         self.model = try container.decodeIfPresent(CartesiaVoiceModel.self, forKey: .model)
         self.language = try container.decodeIfPresent(CartesiaVoiceLanguage.self, forKey: .language)
         self.experimentalControls = try container.decodeIfPresent(CartesiaExperimentalControls.self, forKey: .experimentalControls)
+        self.generationConfig = try container.decodeIfPresent(CartesiaGenerationConfig.self, forKey: .generationConfig)
+        self.pronunciationDictId = try container.decodeIfPresent(String.self, forKey: .pronunciationDictId)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.fallbackPlan = try container.decodeIfPresent(FallbackPlan.self, forKey: .fallbackPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -58,6 +68,8 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.language, forKey: .language)
         try container.encodeIfPresent(self.experimentalControls, forKey: .experimentalControls)
+        try container.encodeIfPresent(self.generationConfig, forKey: .generationConfig)
+        try container.encodeIfPresent(self.pronunciationDictId, forKey: .pronunciationDictId)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
     }
@@ -69,6 +81,8 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
         case model
         case language
         case experimentalControls
+        case generationConfig
+        case pronunciationDictId
         case chunkPlan
         case fallbackPlan
     }

@@ -1,14 +1,14 @@
 import Foundation
 
 public struct AiEdgeCondition: Codable, Hashable, Sendable {
-    public let type: Ai
+    public let type: AiEdgeConditionType
     /// This is the prompt for the AI edge condition. It should evaluate to a boolean.
     public let prompt: String
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Ai,
+        type: AiEdgeConditionType,
         prompt: String,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -19,7 +19,7 @@ public struct AiEdgeCondition: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Ai.self, forKey: .type)
+        self.type = try container.decode(AiEdgeConditionType.self, forKey: .type)
         self.prompt = try container.decode(String.self, forKey: .prompt)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -29,10 +29,6 @@ public struct AiEdgeCondition: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.prompt, forKey: .prompt)
-    }
-
-    public enum Ai: String, Codable, Hashable, CaseIterable, Sendable {
-        case ai
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -2,7 +2,7 @@ import Foundation
 
 public struct S3Credential: Codable, Hashable, Sendable {
     /// Credential provider. Only allowed value is s3
-    public let provider: S3
+    public let provider: S3CredentialProvider
     /// AWS access key ID.
     public let awsAccessKeyId: String
     /// AWS access key secret. This is not returned in the API.
@@ -29,7 +29,7 @@ public struct S3Credential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: S3,
+        provider: S3CredentialProvider,
         awsAccessKeyId: String,
         awsSecretAccessKey: String,
         region: String,
@@ -60,7 +60,7 @@ public struct S3Credential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(S3.self, forKey: .provider)
+        self.provider = try container.decode(S3CredentialProvider.self, forKey: .provider)
         self.awsAccessKeyId = try container.decode(String.self, forKey: .awsAccessKeyId)
         self.awsSecretAccessKey = try container.decode(String.self, forKey: .awsSecretAccessKey)
         self.region = try container.decode(String.self, forKey: .region)
@@ -90,10 +90,6 @@ public struct S3Credential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum S3: String, Codable, Hashable, CaseIterable, Sendable {
-        case s3
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -1,0 +1,12 @@
+{
+  "cliVersion": "4.65.1",
+  "generatorName": "fernapi/fern-swift-sdk",
+  "generatorVersion": "0.31.0",
+  "generatorConfig": {
+    "clientClassName": "VapiClient",
+    "moduleName": "Vapi",
+    "environmentEnumName": "VapiEnvironment"
+  },
+  "originGitCommit": "46b109d88752307f8952db91eaa642f61c3875b4",
+  "sdkVersion": "0.0.1"
+}

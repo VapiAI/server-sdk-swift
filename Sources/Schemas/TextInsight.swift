@@ -1,0 +1,96 @@
+import Foundation
+
+public struct TextInsight: Codable, Hashable, Sendable {
+    /// This is the name of the Insight.
+    public let name: String?
+    /// Formulas are mathematical expressions applied on the data returned by the queries to transform them before being used to create the insight.
+    /// The formulas needs to be a valid mathematical expression, supported by MathJS - https://mathjs.org/docs/expressions/syntax.html
+    /// A formula is created by using the query names as the variable.
+    /// The formulas must contain at least one query name in the LiquidJS format {{query_name}} or {{['query name']}} which will be substituted with the query result.
+    /// For example, if you have 2 queries, 'Was Booking Made' and 'Average Call Duration', you can create a formula like this:
+    /// ```
+    /// {{['Query 1']}} / {{['Query 2']}} * 100
+    /// ```
+    /// 
+    /// ```
+    /// ({{[Query 1]}} * 10) + {{[Query 2]}}
+    /// ```
+    /// This will take the
+    /// 
+    /// You can also use the query names as the variable in the formula.
+    public let formula: [String: JSONValue]?
+    public let timeRange: InsightTimeRange?
+    /// These are the queries to run to generate the insight.
+    /// For Text Insights, we only allow a single query, or require a formula if multiple queries are provided
+    public let queries: [TextInsightQueriesItem]
+    /// This is the unique identifier for the Insight.
+    public let id: String
+    /// This is the unique identifier for the org that this Insight belongs to.
+    public let orgId: String
+    /// This is the ISO 8601 date-time string of when the Insight was created.
+    public let createdAt: Date
+    /// This is the ISO 8601 date-time string of when the Insight was last updated.
+    public let updatedAt: Date
+    /// Additional properties that are not explicitly defined in the schema
+    public let additionalProperties: [String: JSONValue]
+
+    public init(
+        name: String? = nil,
+        formula: [String: JSONValue]? = nil,
+        timeRange: InsightTimeRange? = nil,
+        queries: [TextInsightQueriesItem],
+        id: String,
+        orgId: String,
+        createdAt: Date,
+        updatedAt: Date,
+        additionalProperties: [String: JSONValue] = .init()
+    ) {
+        self.name = name
+        self.formula = formula
+        self.timeRange = timeRange
+        self.queries = queries
+        self.id = id
+        self.orgId = orgId
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.additionalProperties = additionalProperties
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.formula = try container.decodeIfPresent([String: JSONValue].self, forKey: .formula)
+        self.timeRange = try container.decodeIfPresent(InsightTimeRange.self, forKey: .timeRange)
+        self.queries = try container.decode([TextInsightQueriesItem].self, forKey: .queries)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.orgId = try container.decode(String.self, forKey: .orgId)
+        self.createdAt = try container.decode(Date.self, forKey: .createdAt)
+        self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.formula, forKey: .formula)
+        try container.encodeIfPresent(self.timeRange, forKey: .timeRange)
+        try container.encode(self.queries, forKey: .queries)
+        try container.encode(self.id, forKey: .id)
+        try container.encode(self.orgId, forKey: .orgId)
+        try container.encode(self.createdAt, forKey: .createdAt)
+        try container.encode(self.updatedAt, forKey: .updatedAt)
+    }
+
+    /// Keys for encoding/decoding struct properties.
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case name
+        case formula
+        case timeRange
+        case queries
+        case id
+        case orgId
+        case createdAt
+        case updatedAt
+    }
+}

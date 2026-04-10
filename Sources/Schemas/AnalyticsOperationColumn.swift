@@ -14,6 +14,7 @@ public enum AnalyticsOperationColumn: String, Codable, Hashable, CaseIterable, S
     case costBreakdownTtsCharacters = "costBreakdown.ttsCharacters"
     case costBreakdownLlmPromptTokens = "costBreakdown.llmPromptTokens"
     case costBreakdownLlmCompletionTokens = "costBreakdown.llmCompletionTokens"
+    case costBreakdownLlmCachedPromptTokens = "costBreakdown.llmCachedPromptTokens"
     case duration
     case concurrency
     case minutesUsed

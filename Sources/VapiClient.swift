@@ -12,7 +12,9 @@ public final class VapiClient: Sendable {
     public let tools: ToolsClient
     public let files: FilesClient
     public let structuredOutputs: StructuredOutputsClient
+    public let insight: InsightClient
     public let eval: EvalClient
+    public let observabilityScorecard: ObservabilityScorecardClient
     public let providerResources: ProviderResourcesClient
     public let analytics: AnalyticsClient
     private let httpClient: HTTPClient
@@ -31,7 +33,7 @@ public final class VapiClient: Sendable {
         headers: [String: String]? = nil,
         timeout: Int? = nil,
         maxRetries: Int? = nil,
-        urlSession: URLSession? = nil
+        urlSession: Networking.URLSession? = nil
     ) {
         self.init(
             baseURL: baseURL,
@@ -59,7 +61,7 @@ public final class VapiClient: Sendable {
         headers: [String: String]? = nil,
         timeout: Int? = nil,
         maxRetries: Int? = nil,
-        urlSession: URLSession? = nil
+        urlSession: Networking.URLSession? = nil
     ) {
         self.init(
             baseURL: baseURL,
@@ -81,7 +83,7 @@ public final class VapiClient: Sendable {
         headers: [String: String]? = nil,
         timeout: Int? = nil,
         maxRetries: Int? = nil,
-        urlSession: URLSession? = nil
+        urlSession: Networking.URLSession? = nil
     ) {
         let config = ClientConfig(
             baseURL: baseURL,
@@ -103,7 +105,9 @@ public final class VapiClient: Sendable {
         self.tools = ToolsClient(config: config)
         self.files = FilesClient(config: config)
         self.structuredOutputs = StructuredOutputsClient(config: config)
+        self.insight = InsightClient(config: config)
         self.eval = EvalClient(config: config)
+        self.observabilityScorecard = ObservabilityScorecardClient(config: config)
         self.providerResources = ProviderResourcesClient(config: config)
         self.analytics = AnalyticsClient(config: config)
         self.httpClient = HTTPClient(config: config)

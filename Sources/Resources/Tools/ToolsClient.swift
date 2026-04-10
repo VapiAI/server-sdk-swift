@@ -7,61 +7,61 @@ public final class ToolsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func list(limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> [ToolsListResponseItem] {
+    public func list(limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> [ListToolsResponseItem] {
         return try await httpClient.performRequest(
             method: .get,
             path: "/tool",
             queryParams: [
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
-            responseType: [ToolsListResponseItem].self
+            responseType: [ListToolsResponseItem].self
         )
     }
 
-    public func create(request: ToolsCreateRequest, requestOptions: RequestOptions? = nil) async throws -> ToolsCreateResponse {
+    public func create(request: CreateToolsRequest, requestOptions: RequestOptions? = nil) async throws -> CreateToolsResponse {
         return try await httpClient.performRequest(
             method: .post,
             path: "/tool",
             body: request,
             requestOptions: requestOptions,
-            responseType: ToolsCreateResponse.self
+            responseType: CreateToolsResponse.self
         )
     }
 
-    public func get(id: String, requestOptions: RequestOptions? = nil) async throws -> ToolsGetResponse {
+    public func get(id: String, requestOptions: RequestOptions? = nil) async throws -> GetToolsResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/tool/\(id)",
             requestOptions: requestOptions,
-            responseType: ToolsGetResponse.self
+            responseType: GetToolsResponse.self
         )
     }
 
-    public func delete(id: String, requestOptions: RequestOptions? = nil) async throws -> ToolsDeleteResponse {
+    public func delete(id: String, requestOptions: RequestOptions? = nil) async throws -> DeleteToolsResponse {
         return try await httpClient.performRequest(
             method: .delete,
             path: "/tool/\(id)",
             requestOptions: requestOptions,
-            responseType: ToolsDeleteResponse.self
+            responseType: DeleteToolsResponse.self
         )
     }
 
-    public func update(id: String, request: ToolsUpdateRequest, requestOptions: RequestOptions? = nil) async throws -> ToolsUpdateResponse {
+    public func update(id: String, request: UpdateToolsRequestBody, requestOptions: RequestOptions? = nil) async throws -> UpdateToolsResponse {
         return try await httpClient.performRequest(
             method: .patch,
             path: "/tool/\(id)",
             body: request,
             requestOptions: requestOptions,
-            responseType: ToolsUpdateResponse.self
+            responseType: UpdateToolsResponse.self
         )
     }
 }

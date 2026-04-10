@@ -15,6 +15,8 @@ public struct McpTool: Codable, Hashable, Sendable {
     ///   - Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.
     ///   - Webhook expects a response with tool call result.
     public let server: Server?
+    /// Per-tool message overrides for individual tools loaded from the MCP server. Set messages to an empty array to suppress messages for a specific tool. Tools not listed here will use the default messages from the parent tool.
+    public let toolMessages: [McpToolMessages]?
     /// This is the unique identifier for the tool.
     public let id: String
     /// This is the unique identifier for the organization that this tool belongs to.
@@ -109,6 +111,7 @@ public struct McpTool: Codable, Hashable, Sendable {
     public init(
         messages: [McpToolMessagesItem]? = nil,
         server: Server? = nil,
+        toolMessages: [McpToolMessages]? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -119,6 +122,7 @@ public struct McpTool: Codable, Hashable, Sendable {
     ) {
         self.messages = messages
         self.server = server
+        self.toolMessages = toolMessages
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -132,6 +136,7 @@ public struct McpTool: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([McpToolMessagesItem].self, forKey: .messages)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
+        self.toolMessages = try container.decodeIfPresent([McpToolMessages].self, forKey: .toolMessages)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -146,6 +151,7 @@ public struct McpTool: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.server, forKey: .server)
+        try container.encodeIfPresent(self.toolMessages, forKey: .toolMessages)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -158,6 +164,7 @@ public struct McpTool: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
         case server
+        case toolMessages
         case id
         case orgId
         case createdAt

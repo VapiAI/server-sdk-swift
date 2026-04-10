@@ -4,7 +4,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageTransferUpdatePhoneNumber?
     /// This is the type of the message. "transfer-update" is sent whenever a transfer happens.
-    public let type: TransferUpdate
+    public let type: ClientMessageTransferUpdateType
     /// This is the destination of the transfer.
     public let destination: ClientMessageTransferUpdateDestination?
     /// This is the timestamp of the message.
@@ -28,7 +28,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageTransferUpdatePhoneNumber? = nil,
-        type: TransferUpdate,
+        type: ClientMessageTransferUpdateType,
         destination: ClientMessageTransferUpdateDestination? = nil,
         timestamp: Double? = nil,
         call: Call? = nil,
@@ -57,7 +57,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageTransferUpdatePhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(TransferUpdate.self, forKey: .type)
+        self.type = try container.decode(ClientMessageTransferUpdateType.self, forKey: .type)
         self.destination = try container.decodeIfPresent(ClientMessageTransferUpdateDestination.self, forKey: .destination)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
@@ -84,10 +84,6 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.fromAssistant, forKey: .fromAssistant)
         try container.encodeIfPresent(self.toStepRecord, forKey: .toStepRecord)
         try container.encodeIfPresent(self.fromStepRecord, forKey: .fromStepRecord)
-    }
-
-    public enum TransferUpdate: String, Codable, Hashable, CaseIterable, Sendable {
-        case transferUpdate = "transfer-update"
     }
 
     /// Keys for encoding/decoding struct properties.

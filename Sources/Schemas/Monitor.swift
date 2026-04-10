@@ -1,6 +1,7 @@
 import Foundation
 
 public struct Monitor: Codable, Hashable, Sendable {
+    public let monitors: [MonitorResult]?
     /// This is the URL where the assistant's calls can be listened to in real-time. To enable, set `assistant.monitorPlan.listenEnabled` to `true`.
     public let listenUrl: String?
     /// This is the URL where the assistant's calls can be controlled in real-time. To enable, set `assistant.monitorPlan.controlEnabled` to `true`.
@@ -9,10 +10,12 @@ public struct Monitor: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        monitors: [MonitorResult]? = nil,
         listenUrl: String? = nil,
         controlUrl: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.monitors = monitors
         self.listenUrl = listenUrl
         self.controlUrl = controlUrl
         self.additionalProperties = additionalProperties
@@ -20,6 +23,7 @@ public struct Monitor: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.monitors = try container.decodeIfPresent([MonitorResult].self, forKey: .monitors)
         self.listenUrl = try container.decodeIfPresent(String.self, forKey: .listenUrl)
         self.controlUrl = try container.decodeIfPresent(String.self, forKey: .controlUrl)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -28,12 +32,14 @@ public struct Monitor: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.monitors, forKey: .monitors)
         try container.encodeIfPresent(self.listenUrl, forKey: .listenUrl)
         try container.encodeIfPresent(self.controlUrl, forKey: .controlUrl)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case monitors
         case listenUrl
         case controlUrl
     }

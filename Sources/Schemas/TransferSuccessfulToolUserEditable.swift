@@ -6,7 +6,7 @@ public struct TransferSuccessfulToolUserEditable: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [TransferSuccessfulToolUserEditableMessagesItem]?
     /// The type of tool. "transferSuccessful" for Transfer Successful tool. This tool can only be used during warm-transfer-experimental by the transfer assistant to confirm that the transfer should proceed and finalize the handoff to the destination.
-    public let type: TransferSuccessful
+    public let type: TransferSuccessfulToolUserEditableType
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -91,7 +91,7 @@ public struct TransferSuccessfulToolUserEditable: Codable, Hashable, Sendable {
 
     public init(
         messages: [TransferSuccessfulToolUserEditableMessagesItem]? = nil,
-        type: TransferSuccessful,
+        type: TransferSuccessfulToolUserEditableType,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -104,7 +104,7 @@ public struct TransferSuccessfulToolUserEditable: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([TransferSuccessfulToolUserEditableMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(TransferSuccessful.self, forKey: .type)
+        self.type = try container.decode(TransferSuccessfulToolUserEditableType.self, forKey: .type)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -115,10 +115,6 @@ public struct TransferSuccessfulToolUserEditable: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum TransferSuccessful: String, Codable, Hashable, CaseIterable, Sendable {
-        case transferSuccessful
     }
 
     /// Keys for encoding/decoding struct properties.

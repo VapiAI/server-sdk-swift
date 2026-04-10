@@ -4,13 +4,13 @@ public struct ResponseCompletedEvent: Codable, Hashable, Sendable {
     /// The completed response
     public let response: ResponseObject
     /// Event type
-    public let type: ResponseCompleted
+    public let type: ResponseCompletedEventType
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         response: ResponseObject,
-        type: ResponseCompleted,
+        type: ResponseCompletedEventType,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.response = response
@@ -21,7 +21,7 @@ public struct ResponseCompletedEvent: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.response = try container.decode(ResponseObject.self, forKey: .response)
-        self.type = try container.decode(ResponseCompleted.self, forKey: .type)
+        self.type = try container.decode(ResponseCompletedEventType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -30,10 +30,6 @@ public struct ResponseCompletedEvent: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.response, forKey: .response)
         try container.encode(self.type, forKey: .type)
-    }
-
-    public enum ResponseCompleted: String, Codable, Hashable, CaseIterable, Sendable {
-        case responseCompleted = "response.completed"
     }
 
     /// Keys for encoding/decoding struct properties.

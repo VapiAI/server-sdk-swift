@@ -4,7 +4,10 @@ public struct ClientMessageModelOutput: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageModelOutputPhoneNumber?
     /// This is the type of the message. "model-output" is sent as the model outputs tokens.
-    public let type: ModelOutput
+    public let type: ClientMessageModelOutputType
+    /// This is the unique identifier for the current LLM turn. All tokens from the same
+    /// LLM response share the same turnId. Use this to group tokens and discard on interruption.
+    public let turnId: String?
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is the call that the message is associated with.
@@ -20,7 +23,8 @@ public struct ClientMessageModelOutput: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageModelOutputPhoneNumber? = nil,
-        type: ModelOutput,
+        type: ClientMessageModelOutputType,
+        turnId: String? = nil,
         timestamp: Double? = nil,
         call: Call? = nil,
         customer: CreateCustomerDto? = nil,
@@ -30,6 +34,7 @@ public struct ClientMessageModelOutput: Codable, Hashable, Sendable {
     ) {
         self.phoneNumber = phoneNumber
         self.type = type
+        self.turnId = turnId
         self.timestamp = timestamp
         self.call = call
         self.customer = customer
@@ -41,7 +46,8 @@ public struct ClientMessageModelOutput: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageModelOutputPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(ModelOutput.self, forKey: .type)
+        self.type = try container.decode(ClientMessageModelOutputType.self, forKey: .type)
+        self.turnId = try container.decodeIfPresent(String.self, forKey: .turnId)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
         self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
@@ -55,6 +61,7 @@ public struct ClientMessageModelOutput: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
         try container.encode(self.type, forKey: .type)
+        try container.encodeIfPresent(self.turnId, forKey: .turnId)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.customer, forKey: .customer)
@@ -62,14 +69,11 @@ public struct ClientMessageModelOutput: Codable, Hashable, Sendable {
         try container.encode(self.output, forKey: .output)
     }
 
-    public enum ModelOutput: String, Codable, Hashable, CaseIterable, Sendable {
-        case modelOutput = "model-output"
-    }
-
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
         case type
+        case turnId
         case timestamp
         case call
         case customer

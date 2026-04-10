@@ -4,7 +4,7 @@ public struct ServerMessageChatCreated: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageChatCreatedPhoneNumber?
     /// This is the type of the message. "chat.created" is sent when a new chat is created.
-    public let type: ChatCreated
+    public let type: ServerMessageChatCreatedType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -24,7 +24,7 @@ public struct ServerMessageChatCreated: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageChatCreatedPhoneNumber? = nil,
-        type: ChatCreated,
+        type: ServerMessageChatCreatedType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -47,7 +47,7 @@ public struct ServerMessageChatCreated: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageChatCreatedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(ChatCreated.self, forKey: .type)
+        self.type = try container.decode(ServerMessageChatCreatedType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -68,10 +68,6 @@ public struct ServerMessageChatCreated: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encode(self.chat, forKey: .chat)
-    }
-
-    public enum ChatCreated: String, Codable, Hashable, CaseIterable, Sendable {
-        case chatCreated = "chat.created"
     }
 
     /// Keys for encoding/decoding struct properties.

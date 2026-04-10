@@ -4,7 +4,7 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
     /// This is the voice provider that will be used.
-    public let provider: Minimax
+    public let provider: FallbackMinimaxVoiceProvider
     /// This is the provider-specific ID that will be used. Use a voice from MINIMAX_PREDEFINED_VOICES or a custom cloned voice ID.
     public let voiceId: String
     /// This is the model that will be used. Options are 'speech-02-hd' and 'speech-02-turbo'.
@@ -16,6 +16,12 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
     /// The emotion to use for the voice. If not provided, will use auto-detect mode.
     /// Options include: 'happy', 'sad', 'angry', 'fearful', 'surprised', 'disgusted', 'neutral'
     public let emotion: String?
+    /// Controls the granularity of subtitle/timing data returned by Minimax
+    /// during synthesis. Set to 'word' to receive per-word timestamps in
+    /// assistant.speechStarted events for karaoke-style caption rendering.
+    /// 
+    /// @default "sentence"
+    public let subtitleType: FallbackMinimaxVoiceSubtitleType?
     /// Voice pitch adjustment. Range from -12 to 12 semitones.
     /// @default 0
     public let pitch: Double?
@@ -38,10 +44,11 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
 
     public init(
         cachingEnabled: Bool? = nil,
-        provider: Minimax,
+        provider: FallbackMinimaxVoiceProvider,
         voiceId: String,
         model: FallbackMinimaxVoiceModel? = nil,
         emotion: String? = nil,
+        subtitleType: FallbackMinimaxVoiceSubtitleType? = nil,
         pitch: Double? = nil,
         speed: Double? = nil,
         volume: Double? = nil,
@@ -56,6 +63,7 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
         self.voiceId = voiceId
         self.model = model
         self.emotion = emotion
+        self.subtitleType = subtitleType
         self.pitch = pitch
         self.speed = speed
         self.volume = volume
@@ -69,10 +77,11 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
-        self.provider = try container.decode(Minimax.self, forKey: .provider)
+        self.provider = try container.decode(FallbackMinimaxVoiceProvider.self, forKey: .provider)
         self.voiceId = try container.decode(String.self, forKey: .voiceId)
         self.model = try container.decodeIfPresent(FallbackMinimaxVoiceModel.self, forKey: .model)
         self.emotion = try container.decodeIfPresent(String.self, forKey: .emotion)
+        self.subtitleType = try container.decodeIfPresent(FallbackMinimaxVoiceSubtitleType.self, forKey: .subtitleType)
         self.pitch = try container.decodeIfPresent(Double.self, forKey: .pitch)
         self.speed = try container.decodeIfPresent(Double.self, forKey: .speed)
         self.volume = try container.decodeIfPresent(Double.self, forKey: .volume)
@@ -91,6 +100,7 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
         try container.encode(self.voiceId, forKey: .voiceId)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.emotion, forKey: .emotion)
+        try container.encodeIfPresent(self.subtitleType, forKey: .subtitleType)
         try container.encodeIfPresent(self.pitch, forKey: .pitch)
         try container.encodeIfPresent(self.speed, forKey: .speed)
         try container.encodeIfPresent(self.volume, forKey: .volume)
@@ -100,10 +110,6 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
     }
 
-    public enum Minimax: String, Codable, Hashable, CaseIterable, Sendable {
-        case minimax
-    }
-
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case cachingEnabled
@@ -111,6 +117,7 @@ public struct FallbackMinimaxVoice: Codable, Hashable, Sendable {
         case voiceId
         case model
         case emotion
+        case subtitleType
         case pitch
         case speed
         case volume

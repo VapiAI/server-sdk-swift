@@ -6,7 +6,7 @@ public struct TextEditorToolWithToolCall: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [TextEditorToolWithToolCallMessagesItem]?
     /// The sub type of tool.
-    public let subType: TextEditor20241022
+    public let subType: TextEditorToolWithToolCallSubType
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
     /// 
@@ -19,7 +19,7 @@ public struct TextEditorToolWithToolCall: Codable, Hashable, Sendable {
     public let server: Server?
     public let toolCall: ToolCall
     /// The name of the tool, fixed to 'str_replace_editor'
-    public let name: StrReplaceEditor
+    public let name: TextEditorToolWithToolCallName
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -104,10 +104,10 @@ public struct TextEditorToolWithToolCall: Codable, Hashable, Sendable {
 
     public init(
         messages: [TextEditorToolWithToolCallMessagesItem]? = nil,
-        subType: TextEditor20241022,
+        subType: TextEditorToolWithToolCallSubType,
         server: Server? = nil,
         toolCall: ToolCall,
-        name: StrReplaceEditor,
+        name: TextEditorToolWithToolCallName,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -123,10 +123,10 @@ public struct TextEditorToolWithToolCall: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([TextEditorToolWithToolCallMessagesItem].self, forKey: .messages)
-        self.subType = try container.decode(TextEditor20241022.self, forKey: .subType)
+        self.subType = try container.decode(TextEditorToolWithToolCallSubType.self, forKey: .subType)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.toolCall = try container.decode(ToolCall.self, forKey: .toolCall)
-        self.name = try container.decode(StrReplaceEditor.self, forKey: .name)
+        self.name = try container.decode(TextEditorToolWithToolCallName.self, forKey: .name)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -140,14 +140,6 @@ public struct TextEditorToolWithToolCall: Codable, Hashable, Sendable {
         try container.encode(self.toolCall, forKey: .toolCall)
         try container.encode(self.name, forKey: .name)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum TextEditor20241022: String, Codable, Hashable, CaseIterable, Sendable {
-        case textEditor20241022 = "text_editor_20241022"
-    }
-
-    public enum StrReplaceEditor: String, Codable, Hashable, CaseIterable, Sendable {
-        case strReplaceEditor = "str_replace_editor"
     }
 
     /// Keys for encoding/decoding struct properties.

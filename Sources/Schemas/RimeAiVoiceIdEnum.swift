@@ -1,95 +1,55 @@
 import Foundation
 
+/// Popular Rime AI voices across mist, mistv2, and arcana models. Any valid Rime AI voice ID is accepted, not just these suggestions.
 public enum RimeAiVoiceIdEnum: String, Codable, Hashable, CaseIterable, Sendable {
-    case abbie
-    case allison
-    case ally
-    case alona
-    case amber
-    case ana
-    case antoine
-    case armon
-    case brenda
-    case brittany
-    case carol
-    case colin
-    case courtney
-    case elena
-    case elliot
-    case eva
-    case geoff
-    case gerald
-    case hank
-    case helen
-    case hera
-    case jen
-    case joe
-    case joy
-    case juan
-    case kendra
-    case kendrick
-    case kenneth
-    case kevin
-    case kris
-    case linda
-    case madison
-    case marge
-    case marina
-    case marissa
-    case marta
-    case maya
-    case nicholas
-    case nyles
-    case phil
-    case reba
-    case rex
-    case rick
-    case ritu
-    case rob
-    case rodney
-    case rohan
-    case rosco
-    case samantha
-    case sandy
-    case selena
-    case seth
-    case sharon
-    case stan
-    case tamra
-    case tanya
-    case tibur
-    case tj
-    case tyler
-    case viv
-    case yadira
-    case marsh
-    case bayou
-    case creek
-    case brook
-    case flower
-    case spore
-    case glacier
-    case gulch
-    case alpine
     case cove
-    case lagoon
-    case tundra
-    case steppe
-    case mesa
-    case grove
-    case rainforest
-    case moraine
+    case moon
     case wildflower
+    case eva
+    case amber
+    case maya
+    case lagoon
+    case breeze
+    case helen
+    case joy
+    case marsh
+    case creek
+    case cedar
+    case alpine
+    case summit
+    case nicholas
+    case tyler
+    case colin
+    case hank
+    case thunder
+    case astra
+    case eucalyptus
+    case moraine
     case peak
-    case boulder
-    case gypsum
-    case zest
+    case tundra
+    case mesaExtra = "mesa_extra"
+    case talon
+    case marlu
+    case glacier
+    case falcon
     case luna
     case celeste
-    case orion
-    case ursa
-    case astra
-    case esther
     case estelle
     case andromeda
+    case esther
+    case lyra
+    case lintel
+    case oculus
+    case vespera
+    case transom
+    case bond
+    case arcade
+    case atrium
+    case cupola
+    case fern
+    case sirius
+    case orion
+    case masonry
+    case albion
+    case parapet
 }

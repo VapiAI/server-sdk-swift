@@ -2,17 +2,17 @@ import Foundation
 
 public struct PhoneNumberCallEndingHookFilter: Codable, Hashable, Sendable {
     /// This is the type of filter - currently only "oneOf" is supported
-    public let type: OneOf
+    public let type: PhoneNumberCallEndingHookFilterType
     /// This is the key to filter on - only "call.endedReason" is allowed for phone number call ending hooks
-    public let key: CallEndedReason
+    public let key: PhoneNumberCallEndingHookFilterKey
     /// This is the array of assistant-request related ended reasons to match against
     public let oneOf: [PhoneNumberCallEndingHookFilterOneOfItem]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: OneOf,
-        key: CallEndedReason,
+        type: PhoneNumberCallEndingHookFilterType,
+        key: PhoneNumberCallEndingHookFilterKey,
         oneOf: [PhoneNumberCallEndingHookFilterOneOfItem],
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -24,8 +24,8 @@ public struct PhoneNumberCallEndingHookFilter: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(OneOf.self, forKey: .type)
-        self.key = try container.decode(CallEndedReason.self, forKey: .key)
+        self.type = try container.decode(PhoneNumberCallEndingHookFilterType.self, forKey: .type)
+        self.key = try container.decode(PhoneNumberCallEndingHookFilterKey.self, forKey: .key)
         self.oneOf = try container.decode([PhoneNumberCallEndingHookFilterOneOfItem].self, forKey: .oneOf)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -36,14 +36,6 @@ public struct PhoneNumberCallEndingHookFilter: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encode(self.key, forKey: .key)
         try container.encode(self.oneOf, forKey: .oneOf)
-    }
-
-    public enum OneOf: String, Codable, Hashable, CaseIterable, Sendable {
-        case oneOf
-    }
-
-    public enum CallEndedReason: String, Codable, Hashable, CaseIterable, Sendable {
-        case callEndedReason = "call.endedReason"
     }
 
     /// Keys for encoding/decoding struct properties.

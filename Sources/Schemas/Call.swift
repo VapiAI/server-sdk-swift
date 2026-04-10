@@ -18,6 +18,8 @@ public struct Call: Codable, Hashable, Sendable {
     public let status: CallStatus?
     /// This is the explanation for how the call ended.
     public let endedReason: CallEndedReason?
+    /// This is the message that adds more context to the ended reason. It can be used to provide potential error messages or warnings.
+    public let endedMessage: String?
     /// This is the destination where the call ended up being transferred to. If the call was not transferred, this will be empty.
     public let destination: CallDestination?
     /// This is the unique identifier for the call.
@@ -82,6 +84,9 @@ public struct Call: Codable, Hashable, Sendable {
     /// - Squad, use `squad` or `squadId`
     /// - Workflow, use `workflow` or `workflowId`
     public let squad: CreateSquadDto?
+    /// These are the overrides for the `squad` or `squadId`'s member settings and template variables.
+    /// This will apply to all members of the squad.
+    public let squadOverrides: AssistantOverrides?
     /// This is the workflow that will be used for the call. To use a transient workflow, use `workflow` instead.
     /// 
     /// To start a call with:
@@ -131,6 +136,7 @@ public struct Call: Codable, Hashable, Sendable {
         phoneCallTransport: CallPhoneCallTransport? = nil,
         status: CallStatus? = nil,
         endedReason: CallEndedReason? = nil,
+        endedMessage: String? = nil,
         destination: CallDestination? = nil,
         id: String,
         orgId: String,
@@ -152,6 +158,7 @@ public struct Call: Codable, Hashable, Sendable {
         assistantOverrides: AssistantOverrides? = nil,
         squadId: String? = nil,
         squad: CreateSquadDto? = nil,
+        squadOverrides: AssistantOverrides? = nil,
         workflowId: String? = nil,
         workflow: CreateWorkflowDto? = nil,
         workflowOverrides: WorkflowOverrides? = nil,
@@ -171,6 +178,7 @@ public struct Call: Codable, Hashable, Sendable {
         self.phoneCallTransport = phoneCallTransport
         self.status = status
         self.endedReason = endedReason
+        self.endedMessage = endedMessage
         self.destination = destination
         self.id = id
         self.orgId = orgId
@@ -192,6 +200,7 @@ public struct Call: Codable, Hashable, Sendable {
         self.assistantOverrides = assistantOverrides
         self.squadId = squadId
         self.squad = squad
+        self.squadOverrides = squadOverrides
         self.workflowId = workflowId
         self.workflow = workflow
         self.workflowOverrides = workflowOverrides
@@ -214,6 +223,7 @@ public struct Call: Codable, Hashable, Sendable {
         self.phoneCallTransport = try container.decodeIfPresent(CallPhoneCallTransport.self, forKey: .phoneCallTransport)
         self.status = try container.decodeIfPresent(CallStatus.self, forKey: .status)
         self.endedReason = try container.decodeIfPresent(CallEndedReason.self, forKey: .endedReason)
+        self.endedMessage = try container.decodeIfPresent(String.self, forKey: .endedMessage)
         self.destination = try container.decodeIfPresent(CallDestination.self, forKey: .destination)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -235,6 +245,7 @@ public struct Call: Codable, Hashable, Sendable {
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)
+        self.squadOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .squadOverrides)
         self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
         self.workflow = try container.decodeIfPresent(CreateWorkflowDto.self, forKey: .workflow)
         self.workflowOverrides = try container.decodeIfPresent(WorkflowOverrides.self, forKey: .workflowOverrides)
@@ -258,6 +269,7 @@ public struct Call: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.phoneCallTransport, forKey: .phoneCallTransport)
         try container.encodeIfPresent(self.status, forKey: .status)
         try container.encodeIfPresent(self.endedReason, forKey: .endedReason)
+        try container.encodeIfPresent(self.endedMessage, forKey: .endedMessage)
         try container.encodeIfPresent(self.destination, forKey: .destination)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
@@ -279,6 +291,7 @@ public struct Call: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.assistantOverrides, forKey: .assistantOverrides)
         try container.encodeIfPresent(self.squadId, forKey: .squadId)
         try container.encodeIfPresent(self.squad, forKey: .squad)
+        try container.encodeIfPresent(self.squadOverrides, forKey: .squadOverrides)
         try container.encodeIfPresent(self.workflowId, forKey: .workflowId)
         try container.encodeIfPresent(self.workflow, forKey: .workflow)
         try container.encodeIfPresent(self.workflowOverrides, forKey: .workflowOverrides)
@@ -300,6 +313,7 @@ public struct Call: Codable, Hashable, Sendable {
         case phoneCallTransport
         case status
         case endedReason
+        case endedMessage
         case destination
         case id
         case orgId
@@ -321,6 +335,7 @@ public struct Call: Codable, Hashable, Sendable {
         case assistantOverrides
         case squadId
         case squad
+        case squadOverrides
         case workflowId
         case workflow
         case workflowOverrides

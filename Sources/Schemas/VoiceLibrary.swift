@@ -23,6 +23,8 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
     public let accent: String?
     /// The preview URL of the voice.
     public let previewUrl: String?
+    /// The sort order of the voice for display purposes. Lower values appear first.
+    public let sortOrder: Double?
     /// The description of the voice.
     public let description: String?
     /// The credential ID of the voice.
@@ -54,6 +56,7 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         gender: VoiceLibraryGender? = nil,
         accent: String? = nil,
         previewUrl: String? = nil,
+        sortOrder: Double? = nil,
         description: String? = nil,
         credentialId: String? = nil,
         id: String,
@@ -75,6 +78,7 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         self.gender = gender
         self.accent = accent
         self.previewUrl = previewUrl
+        self.sortOrder = sortOrder
         self.description = description
         self.credentialId = credentialId
         self.id = id
@@ -99,6 +103,7 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         self.gender = try container.decodeIfPresent(VoiceLibraryGender.self, forKey: .gender)
         self.accent = try container.decodeIfPresent(String.self, forKey: .accent)
         self.previewUrl = try container.decodeIfPresent(String.self, forKey: .previewUrl)
+        self.sortOrder = try container.decodeIfPresent(Double.self, forKey: .sortOrder)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
         self.id = try container.decode(String.self, forKey: .id)
@@ -124,6 +129,7 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.gender, forKey: .gender)
         try container.encodeIfPresent(self.accent, forKey: .accent)
         try container.encodeIfPresent(self.previewUrl, forKey: .previewUrl)
+        try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
         try container.encode(self.id, forKey: .id)
@@ -147,6 +153,7 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         case gender
         case accent
         case previewUrl
+        case sortOrder
         case description
         case credentialId
         case id

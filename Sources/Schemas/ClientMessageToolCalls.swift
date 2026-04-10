@@ -4,7 +4,7 @@ public struct ClientMessageToolCalls: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageToolCallsPhoneNumber?
     /// This is the type of the message. "tool-calls" is sent to call a tool.
-    public let type: ToolCalls?
+    public let type: ClientMessageToolCallsType?
     /// This is the list of tools calls that the model is requesting along with the original tool configuration.
     public let toolWithToolCallList: [ClientMessageToolCallsToolWithToolCallListItem]
     /// This is the timestamp of the message.
@@ -22,7 +22,7 @@ public struct ClientMessageToolCalls: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageToolCallsPhoneNumber? = nil,
-        type: ToolCalls? = nil,
+        type: ClientMessageToolCallsType? = nil,
         toolWithToolCallList: [ClientMessageToolCallsToolWithToolCallListItem],
         timestamp: Double? = nil,
         call: Call? = nil,
@@ -45,7 +45,7 @@ public struct ClientMessageToolCalls: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageToolCallsPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decodeIfPresent(ToolCalls.self, forKey: .type)
+        self.type = try container.decodeIfPresent(ClientMessageToolCallsType.self, forKey: .type)
         self.toolWithToolCallList = try container.decode([ClientMessageToolCallsToolWithToolCallListItem].self, forKey: .toolWithToolCallList)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
@@ -66,10 +66,6 @@ public struct ClientMessageToolCalls: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
         try container.encode(self.toolCallList, forKey: .toolCallList)
-    }
-
-    public enum ToolCalls: String, Codable, Hashable, CaseIterable, Sendable {
-        case toolCalls = "tool-calls"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -12,7 +12,7 @@ public struct Token: Codable, Hashable, Sendable {
     /// This is the ISO 8601 date-time string of when the token was last updated.
     public let updatedAt: Date
     /// This is the token key.
-    public let value: String
+    public let value: String?
     /// This is the name of the token. This is just for your own reference.
     public let name: String?
     /// This are the restrictions for the token.
@@ -26,7 +26,7 @@ public struct Token: Codable, Hashable, Sendable {
         orgId: String,
         createdAt: Date,
         updatedAt: Date,
-        value: String,
+        value: String? = nil,
         name: String? = nil,
         restrictions: TokenRestrictions? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -49,7 +49,7 @@ public struct Token: Codable, Hashable, Sendable {
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
-        self.value = try container.decode(String.self, forKey: .value)
+        self.value = try container.decodeIfPresent(String.self, forKey: .value)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.restrictions = try container.decodeIfPresent(TokenRestrictions.self, forKey: .restrictions)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -63,7 +63,7 @@ public struct Token: Codable, Hashable, Sendable {
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
-        try container.encode(self.value, forKey: .value)
+        try container.encodeIfPresent(self.value, forKey: .value)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.restrictions, forKey: .restrictions)
     }

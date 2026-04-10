@@ -23,12 +23,11 @@ extension Requests {
         /// @default 'assistant-speaks-first'
         public let firstMessageMode: UpdateAssistantDtoFirstMessageMode?
         /// These are the settings to configure or disable voicemail detection. Alternatively, voicemail detection can be configured using the model.tools=[VoicemailTool].
-        /// This uses Twilio's built-in detection while the VoicemailTool relies on the model to detect if a voicemail was reached.
-        /// You can use neither of them, one of them, or both of them. By default, Twilio built-in detection is enabled while VoicemailTool is not.
+        /// By default, voicemail detection is disabled.
         public let voicemailDetection: UpdateAssistantDtoVoicemailDetection?
-        /// These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started. You can check the shape of the messages in ClientMessage schema.
+        /// These are the messages that will be sent to your Client SDKs. Default is conversation-update,function-call,hang,model-output,speech-update,status-update,transfer-update,transcript,tool-calls,user-interrupted,voice-input,workflow.node.started,assistant.started. You can check the shape of the messages in ClientMessage schema.
         public let clientMessages: [UpdateAssistantDtoClientMessagesItem]?
-        /// These are the messages that will be sent to your Server URL. Default is conversation-update,end-of-call-report,function-call,hang,speech-update,status-update,tool-calls,transfer-destination-request,handoff-destination-request,user-interrupted. You can check the shape of the messages in ServerMessage schema.
+        /// These are the messages that will be sent to your Server URL. Default is conversation-update,end-of-call-report,function-call,hang,speech-update,status-update,tool-calls,transfer-destination-request,handoff-destination-request,user-interrupted,assistant.started. You can check the shape of the messages in ServerMessage schema.
         public let serverMessages: [UpdateAssistantDtoServerMessagesItem]?
         /// This is the maximum number of seconds that the call will last. When the call reaches this duration, it will be ended.
         /// 
@@ -38,8 +37,6 @@ extension Requests {
         /// You can also provide a custom sound by providing a URL to an audio file.
         public let backgroundSound: UpdateAssistantDtoBackgroundSound?
         /// This determines whether the model's output is used in conversation history rather than the transcription of assistant's speech.
-        /// 
-        /// Default `false` while in beta.
         /// 
         /// @default false
         public let modelOutputInMessagesEnabled: Bool?
@@ -107,6 +104,7 @@ extension Requests {
         /// Usage:
         /// - To enable live listening of the assistant's calls, set `monitorPlan.listenEnabled` to `true`.
         /// - To enable live control of the assistant's calls, set `monitorPlan.controlEnabled` to `true`.
+        /// - To attach monitors to the assistant, set `monitorPlan.monitorIds` to the set of monitor ids.
         public let monitorPlan: MonitorPlan?
         /// These are the credentials that will be used for the assistant calls. By default, all the credentials are available for use in the call but you can provide a subset using this.
         public let credentialIds: [String]?

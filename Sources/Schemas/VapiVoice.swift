@@ -9,6 +9,8 @@ public struct VapiVoice: Codable, Hashable, Sendable {
     /// 
     /// @default 1
     public let speed: Double?
+    /// List of pronunciation dictionary locators for custom word pronunciations.
+    public let pronunciationDictionary: [VapiPronunciationDictionaryLocator]?
     /// This is the plan for chunking the model output before it is sent to the voice provider.
     public let chunkPlan: ChunkPlan?
     /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
@@ -20,6 +22,7 @@ public struct VapiVoice: Codable, Hashable, Sendable {
         cachingEnabled: Bool? = nil,
         voiceId: VapiVoiceVoiceId,
         speed: Double? = nil,
+        pronunciationDictionary: [VapiPronunciationDictionaryLocator]? = nil,
         chunkPlan: ChunkPlan? = nil,
         fallbackPlan: FallbackPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -27,6 +30,7 @@ public struct VapiVoice: Codable, Hashable, Sendable {
         self.cachingEnabled = cachingEnabled
         self.voiceId = voiceId
         self.speed = speed
+        self.pronunciationDictionary = pronunciationDictionary
         self.chunkPlan = chunkPlan
         self.fallbackPlan = fallbackPlan
         self.additionalProperties = additionalProperties
@@ -37,6 +41,7 @@ public struct VapiVoice: Codable, Hashable, Sendable {
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
         self.voiceId = try container.decode(VapiVoiceVoiceId.self, forKey: .voiceId)
         self.speed = try container.decodeIfPresent(Double.self, forKey: .speed)
+        self.pronunciationDictionary = try container.decodeIfPresent([VapiPronunciationDictionaryLocator].self, forKey: .pronunciationDictionary)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.fallbackPlan = try container.decodeIfPresent(FallbackPlan.self, forKey: .fallbackPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -48,6 +53,7 @@ public struct VapiVoice: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.cachingEnabled, forKey: .cachingEnabled)
         try container.encode(self.voiceId, forKey: .voiceId)
         try container.encodeIfPresent(self.speed, forKey: .speed)
+        try container.encodeIfPresent(self.pronunciationDictionary, forKey: .pronunciationDictionary)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
     }
@@ -57,6 +63,7 @@ public struct VapiVoice: Codable, Hashable, Sendable {
         case cachingEnabled
         case voiceId
         case speed
+        case pronunciationDictionary
         case chunkPlan
         case fallbackPlan
     }

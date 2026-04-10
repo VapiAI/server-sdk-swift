@@ -1,7 +1,7 @@
 import Foundation
 
 public struct AnthropicThinkingConfig: Codable, Hashable, Sendable {
-    public let type: Enabled
+    public let type: AnthropicThinkingConfigType
     /// The maximum number of tokens to allocate for thinking.
     /// Must be between 1024 and 100000 tokens.
     public let budgetTokens: Double
@@ -9,7 +9,7 @@ public struct AnthropicThinkingConfig: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Enabled,
+        type: AnthropicThinkingConfigType,
         budgetTokens: Double,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -20,7 +20,7 @@ public struct AnthropicThinkingConfig: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Enabled.self, forKey: .type)
+        self.type = try container.decode(AnthropicThinkingConfigType.self, forKey: .type)
         self.budgetTokens = try container.decode(Double.self, forKey: .budgetTokens)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -30,10 +30,6 @@ public struct AnthropicThinkingConfig: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.budgetTokens, forKey: .budgetTokens)
-    }
-
-    public enum Enabled: String, Codable, Hashable, CaseIterable, Sendable {
-        case enabled
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -11,6 +11,8 @@ public struct OpenAiVoicemailDetectionPlan: Codable, Hashable, Sendable {
     /// @min 0
     /// @max 60
     public let beepMaxAwaitSeconds: Double?
+    /// This is the provider to use for voicemail detection.
+    public let provider: OpenAiVoicemailDetectionPlanProvider
     /// This is the backoff plan for the voicemail detection.
     public let backoffPlan: VoicemailDetectionBackoffPlan?
     /// This is the detection type to use for voicemail detection.
@@ -23,11 +25,13 @@ public struct OpenAiVoicemailDetectionPlan: Codable, Hashable, Sendable {
 
     public init(
         beepMaxAwaitSeconds: Double? = nil,
+        provider: OpenAiVoicemailDetectionPlanProvider,
         backoffPlan: VoicemailDetectionBackoffPlan? = nil,
         type: OpenAiVoicemailDetectionPlanType? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.beepMaxAwaitSeconds = beepMaxAwaitSeconds
+        self.provider = provider
         self.backoffPlan = backoffPlan
         self.type = type
         self.additionalProperties = additionalProperties
@@ -36,6 +40,7 @@ public struct OpenAiVoicemailDetectionPlan: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.beepMaxAwaitSeconds = try container.decodeIfPresent(Double.self, forKey: .beepMaxAwaitSeconds)
+        self.provider = try container.decode(OpenAiVoicemailDetectionPlanProvider.self, forKey: .provider)
         self.backoffPlan = try container.decodeIfPresent(VoicemailDetectionBackoffPlan.self, forKey: .backoffPlan)
         self.type = try container.decodeIfPresent(OpenAiVoicemailDetectionPlanType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -45,6 +50,7 @@ public struct OpenAiVoicemailDetectionPlan: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.beepMaxAwaitSeconds, forKey: .beepMaxAwaitSeconds)
+        try container.encode(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.backoffPlan, forKey: .backoffPlan)
         try container.encodeIfPresent(self.type, forKey: .type)
     }
@@ -52,6 +58,7 @@ public struct OpenAiVoicemailDetectionPlan: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case beepMaxAwaitSeconds
+        case provider
         case backoffPlan
         case type
     }

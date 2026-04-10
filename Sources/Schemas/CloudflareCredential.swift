@@ -2,7 +2,7 @@ import Foundation
 
 public struct CloudflareCredential: Codable, Hashable, Sendable {
     /// Credential provider. Only allowed value is cloudflare
-    public let provider: Cloudflare
+    public let provider: CloudflareCredentialProvider
     /// Cloudflare Account Id.
     public let accountId: String?
     /// Cloudflare API Key / Token.
@@ -27,7 +27,7 @@ public struct CloudflareCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Cloudflare,
+        provider: CloudflareCredentialProvider,
         accountId: String? = nil,
         apiKey: String? = nil,
         accountEmail: String? = nil,
@@ -56,7 +56,7 @@ public struct CloudflareCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Cloudflare.self, forKey: .provider)
+        self.provider = try container.decode(CloudflareCredentialProvider.self, forKey: .provider)
         self.accountId = try container.decodeIfPresent(String.self, forKey: .accountId)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
         self.accountEmail = try container.decodeIfPresent(String.self, forKey: .accountEmail)
@@ -84,10 +84,6 @@ public struct CloudflareCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.bucketPlan, forKey: .bucketPlan)
-    }
-
-    public enum Cloudflare: String, Codable, Hashable, CaseIterable, Sendable {
-        case cloudflare
     }
 
     /// Keys for encoding/decoding struct properties.

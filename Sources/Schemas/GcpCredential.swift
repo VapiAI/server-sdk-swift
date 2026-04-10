@@ -1,7 +1,7 @@
 import Foundation
 
 public struct GcpCredential: Codable, Hashable, Sendable {
-    public let provider: Gcp
+    public let provider: GcpCredentialProvider
     /// This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
     public let fallbackIndex: Double?
     /// This is the unique identifier for the credential.
@@ -25,7 +25,7 @@ public struct GcpCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Gcp,
+        provider: GcpCredentialProvider,
         fallbackIndex: Double? = nil,
         id: String,
         orgId: String,
@@ -52,7 +52,7 @@ public struct GcpCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Gcp.self, forKey: .provider)
+        self.provider = try container.decode(GcpCredentialProvider.self, forKey: .provider)
         self.fallbackIndex = try container.decodeIfPresent(Double.self, forKey: .fallbackIndex)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -78,10 +78,6 @@ public struct GcpCredential: Codable, Hashable, Sendable {
         try container.encode(self.gcpKey, forKey: .gcpKey)
         try container.encodeIfPresent(self.region, forKey: .region)
         try container.encodeIfPresent(self.bucketPlan, forKey: .bucketPlan)
-    }
-
-    public enum Gcp: String, Codable, Hashable, CaseIterable, Sendable {
-        case gcp
     }
 
     /// Keys for encoding/decoding struct properties.

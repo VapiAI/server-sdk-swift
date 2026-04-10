@@ -10,7 +10,7 @@ public struct CustomMessage: Codable, Hashable, Sendable {
     /// This will override the `content` property.
     public let contents: [TextContent]?
     /// This is a custom message.
-    public let type: CustomMessage
+    public let type: CustomMessageType
     /// This is the content that the assistant will say when this message is triggered.
     public let content: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -18,7 +18,7 @@ public struct CustomMessage: Codable, Hashable, Sendable {
 
     public init(
         contents: [TextContent]? = nil,
-        type: CustomMessage,
+        type: CustomMessageType,
         content: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -31,7 +31,7 @@ public struct CustomMessage: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.contents = try container.decodeIfPresent([TextContent].self, forKey: .contents)
-        self.type = try container.decode(CustomMessage.self, forKey: .type)
+        self.type = try container.decode(CustomMessageType.self, forKey: .type)
         self.content = try container.decodeIfPresent(String.self, forKey: .content)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -42,10 +42,6 @@ public struct CustomMessage: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.contents, forKey: .contents)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.content, forKey: .content)
-    }
-
-    public enum CustomMessage: String, Codable, Hashable, CaseIterable, Sendable {
-        case customMessage = "custom-message"
     }
 
     /// Keys for encoding/decoding struct properties.

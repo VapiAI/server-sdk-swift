@@ -2,7 +2,7 @@ import Foundation
 
 public struct TestSuiteRunScorerAi: Codable, Hashable, Sendable {
     /// This is the type of the scorer, which must be AI.
-    public let type: Ai
+    public let type: TestSuiteRunScorerAiType
     /// This is the result of the test suite.
     public let result: TestSuiteRunScorerAiResult
     /// This is the reasoning provided by the AI scorer.
@@ -13,7 +13,7 @@ public struct TestSuiteRunScorerAi: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Ai,
+        type: TestSuiteRunScorerAiType,
         result: TestSuiteRunScorerAiResult,
         reasoning: String,
         rubric: String,
@@ -28,7 +28,7 @@ public struct TestSuiteRunScorerAi: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Ai.self, forKey: .type)
+        self.type = try container.decode(TestSuiteRunScorerAiType.self, forKey: .type)
         self.result = try container.decode(TestSuiteRunScorerAiResult.self, forKey: .result)
         self.reasoning = try container.decode(String.self, forKey: .reasoning)
         self.rubric = try container.decode(String.self, forKey: .rubric)
@@ -42,10 +42,6 @@ public struct TestSuiteRunScorerAi: Codable, Hashable, Sendable {
         try container.encode(self.result, forKey: .result)
         try container.encode(self.reasoning, forKey: .reasoning)
         try container.encode(self.rubric, forKey: .rubric)
-    }
-
-    public enum Ai: String, Codable, Hashable, CaseIterable, Sendable {
-        case ai
     }
 
     /// Keys for encoding/decoding struct properties.

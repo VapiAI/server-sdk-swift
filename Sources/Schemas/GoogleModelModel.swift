@@ -2,6 +2,7 @@ import Foundation
 
 /// This is the Google model that will be used.
 public enum GoogleModelModel: String, Codable, Hashable, CaseIterable, Sendable {
+    case gemini3FlashPreview = "gemini-3-flash-preview"
     case gemini25Pro = "gemini-2.5-pro"
     case gemini25Flash = "gemini-2.5-flash"
     case gemini25FlashLite = "gemini-2.5-flash-lite"

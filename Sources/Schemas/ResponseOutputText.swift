@@ -6,14 +6,14 @@ public struct ResponseOutputText: Codable, Hashable, Sendable {
     /// The text output from the model
     public let text: String
     /// The type of the output text
-    public let type: OutputText
+    public let type: ResponseOutputTextType
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         annotations: [[String: JSONValue]],
         text: String,
-        type: OutputText,
+        type: ResponseOutputTextType,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.annotations = annotations
@@ -26,7 +26,7 @@ public struct ResponseOutputText: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.annotations = try container.decode([[String: JSONValue]].self, forKey: .annotations)
         self.text = try container.decode(String.self, forKey: .text)
-        self.type = try container.decode(OutputText.self, forKey: .type)
+        self.type = try container.decode(ResponseOutputTextType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -36,10 +36,6 @@ public struct ResponseOutputText: Codable, Hashable, Sendable {
         try container.encode(self.annotations, forKey: .annotations)
         try container.encode(self.text, forKey: .text)
         try container.encode(self.type, forKey: .type)
-    }
-
-    public enum OutputText: String, Codable, Hashable, CaseIterable, Sendable {
-        case outputText = "output_text"
     }
 
     /// Keys for encoding/decoding struct properties.

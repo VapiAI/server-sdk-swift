@@ -4,7 +4,7 @@ public struct ClientMessageSpeechUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageSpeechUpdatePhoneNumber?
     /// This is the type of the message. "speech-update" is sent whenever assistant or user start or stop speaking.
-    public let type: SpeechUpdate
+    public let type: ClientMessageSpeechUpdateType
     /// This is the status of the speech update.
     public let status: ClientMessageSpeechUpdateStatus
     /// This is the role which the speech update is for.
@@ -24,7 +24,7 @@ public struct ClientMessageSpeechUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageSpeechUpdatePhoneNumber? = nil,
-        type: SpeechUpdate,
+        type: ClientMessageSpeechUpdateType,
         status: ClientMessageSpeechUpdateStatus,
         role: ClientMessageSpeechUpdateRole,
         turn: Double? = nil,
@@ -49,7 +49,7 @@ public struct ClientMessageSpeechUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageSpeechUpdatePhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(SpeechUpdate.self, forKey: .type)
+        self.type = try container.decode(ClientMessageSpeechUpdateType.self, forKey: .type)
         self.status = try container.decode(ClientMessageSpeechUpdateStatus.self, forKey: .status)
         self.role = try container.decode(ClientMessageSpeechUpdateRole.self, forKey: .role)
         self.turn = try container.decodeIfPresent(Double.self, forKey: .turn)
@@ -72,10 +72,6 @@ public struct ClientMessageSpeechUpdate: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
-    }
-
-    public enum SpeechUpdate: String, Codable, Hashable, CaseIterable, Sendable {
-        case speechUpdate = "speech-update"
     }
 
     /// Keys for encoding/decoding struct properties.

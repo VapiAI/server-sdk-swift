@@ -42,6 +42,12 @@ public struct Subscription: Codable, Hashable, Sendable {
     /// This is the HIPAA enabled flag for the subscription. It determines whether orgs under this
     /// subscription have the option to enable HIPAA compliance.
     public let hipaaEnabled: Bool?
+    /// This is the ZDR enabled flag for the subscription. It determines whether orgs under this
+    /// subscription have the option to enable ZDR.
+    public let zdrEnabled: Bool?
+    /// This is the data retention enabled flag for the subscription. It determines whether orgs under this
+    /// subscription have the option to enable data retention.
+    public let dataRetentionEnabled: Bool?
     /// This is the ID for the Common Paper agreement outlining the HIPAA contract.
     public let hipaaCommonPaperAgreementId: String?
     /// This is the Stripe fingerprint of the payment method (card). It allows us
@@ -112,6 +118,8 @@ public struct Subscription: Codable, Hashable, Sendable {
         slackSupportEnabled: Bool? = nil,
         slackChannelId: String? = nil,
         hipaaEnabled: Bool? = nil,
+        zdrEnabled: Bool? = nil,
+        dataRetentionEnabled: Bool? = nil,
         hipaaCommonPaperAgreementId: String? = nil,
         stripePaymentMethodFingerprint: String? = nil,
         stripeCustomerEmail: String? = nil,
@@ -155,6 +163,8 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.slackSupportEnabled = slackSupportEnabled
         self.slackChannelId = slackChannelId
         self.hipaaEnabled = hipaaEnabled
+        self.zdrEnabled = zdrEnabled
+        self.dataRetentionEnabled = dataRetentionEnabled
         self.hipaaCommonPaperAgreementId = hipaaCommonPaperAgreementId
         self.stripePaymentMethodFingerprint = stripePaymentMethodFingerprint
         self.stripeCustomerEmail = stripeCustomerEmail
@@ -201,6 +211,8 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.slackSupportEnabled = try container.decodeIfPresent(Bool.self, forKey: .slackSupportEnabled)
         self.slackChannelId = try container.decodeIfPresent(String.self, forKey: .slackChannelId)
         self.hipaaEnabled = try container.decodeIfPresent(Bool.self, forKey: .hipaaEnabled)
+        self.zdrEnabled = try container.decodeIfPresent(Bool.self, forKey: .zdrEnabled)
+        self.dataRetentionEnabled = try container.decodeIfPresent(Bool.self, forKey: .dataRetentionEnabled)
         self.hipaaCommonPaperAgreementId = try container.decodeIfPresent(String.self, forKey: .hipaaCommonPaperAgreementId)
         self.stripePaymentMethodFingerprint = try container.decodeIfPresent(String.self, forKey: .stripePaymentMethodFingerprint)
         self.stripeCustomerEmail = try container.decodeIfPresent(String.self, forKey: .stripeCustomerEmail)
@@ -248,6 +260,8 @@ public struct Subscription: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.slackSupportEnabled, forKey: .slackSupportEnabled)
         try container.encodeIfPresent(self.slackChannelId, forKey: .slackChannelId)
         try container.encodeIfPresent(self.hipaaEnabled, forKey: .hipaaEnabled)
+        try container.encodeIfPresent(self.zdrEnabled, forKey: .zdrEnabled)
+        try container.encodeIfPresent(self.dataRetentionEnabled, forKey: .dataRetentionEnabled)
         try container.encodeIfPresent(self.hipaaCommonPaperAgreementId, forKey: .hipaaCommonPaperAgreementId)
         try container.encodeIfPresent(self.stripePaymentMethodFingerprint, forKey: .stripePaymentMethodFingerprint)
         try container.encodeIfPresent(self.stripeCustomerEmail, forKey: .stripeCustomerEmail)
@@ -293,6 +307,8 @@ public struct Subscription: Codable, Hashable, Sendable {
         case slackSupportEnabled
         case slackChannelId
         case hipaaEnabled
+        case zdrEnabled
+        case dataRetentionEnabled
         case hipaaCommonPaperAgreementId
         case stripePaymentMethodFingerprint
         case stripeCustomerEmail

@@ -3,6 +3,7 @@ import Foundation
 public struct AnalysisPlan: Codable, Hashable, Sendable {
     /// The minimum number of messages required to run the analysis plan.
     /// If the number of messages is less than this, analysis will be skipped.
+    /// 
     /// @default 2
     public let minMessagesThreshold: Double?
     /// This is the plan for generating the summary of the call. This outputs to `call.analysis.summary`.

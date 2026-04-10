@@ -88,6 +88,16 @@ public struct ArtifactPlan: Codable, Hashable, Sendable {
     /// This is an array of structured output IDs to be calculated during the call.
     /// The outputs will be extracted and stored in `call.artifact.structuredOutputs` after the call is ended.
     public let structuredOutputIds: [String]?
+    /// This is an array of transient structured outputs to be calculated during the call.
+    /// The outputs will be extracted and stored in `call.artifact.structuredOutputs` after the call is ended.
+    /// Use this to provide inline structured output configurations instead of referencing existing ones via structuredOutputIds.
+    public let structuredOutputs: [CreateStructuredOutputDto]?
+    /// This is an array of scorecard IDs that will be evaluated based on the structured outputs extracted during the call.
+    /// The scorecards will be evaluated and the results will be stored in `call.artifact.scorecards` after the call has ended.
+    public let scorecardIds: [String]?
+    /// This is the array of scorecards that will be evaluated based on the structured outputs extracted during the call.
+    /// The scorecards will be evaluated and the results will be stored in `call.artifact.scorecards` after the call has ended.
+    public let scorecards: [CreateScorecardDto]?
     /// This is the path where the call logs will be uploaded. This is only used if you have provided S3 or GCP credentials on the Provider Credentials page in the Dashboard.
     /// 
     /// If credential.s3PathPrefix or credential.bucketPlan.path is set, this will append to it.
@@ -115,6 +125,9 @@ public struct ArtifactPlan: Codable, Hashable, Sendable {
         transcriptPlan: TranscriptPlan? = nil,
         recordingPath: String? = nil,
         structuredOutputIds: [String]? = nil,
+        structuredOutputs: [CreateStructuredOutputDto]? = nil,
+        scorecardIds: [String]? = nil,
+        scorecards: [CreateScorecardDto]? = nil,
         loggingPath: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -131,6 +144,9 @@ public struct ArtifactPlan: Codable, Hashable, Sendable {
         self.transcriptPlan = transcriptPlan
         self.recordingPath = recordingPath
         self.structuredOutputIds = structuredOutputIds
+        self.structuredOutputs = structuredOutputs
+        self.scorecardIds = scorecardIds
+        self.scorecards = scorecards
         self.loggingPath = loggingPath
         self.additionalProperties = additionalProperties
     }
@@ -150,6 +166,9 @@ public struct ArtifactPlan: Codable, Hashable, Sendable {
         self.transcriptPlan = try container.decodeIfPresent(TranscriptPlan.self, forKey: .transcriptPlan)
         self.recordingPath = try container.decodeIfPresent(String.self, forKey: .recordingPath)
         self.structuredOutputIds = try container.decodeIfPresent([String].self, forKey: .structuredOutputIds)
+        self.structuredOutputs = try container.decodeIfPresent([CreateStructuredOutputDto].self, forKey: .structuredOutputs)
+        self.scorecardIds = try container.decodeIfPresent([String].self, forKey: .scorecardIds)
+        self.scorecards = try container.decodeIfPresent([CreateScorecardDto].self, forKey: .scorecards)
         self.loggingPath = try container.decodeIfPresent(String.self, forKey: .loggingPath)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -170,6 +189,9 @@ public struct ArtifactPlan: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.transcriptPlan, forKey: .transcriptPlan)
         try container.encodeIfPresent(self.recordingPath, forKey: .recordingPath)
         try container.encodeIfPresent(self.structuredOutputIds, forKey: .structuredOutputIds)
+        try container.encodeIfPresent(self.structuredOutputs, forKey: .structuredOutputs)
+        try container.encodeIfPresent(self.scorecardIds, forKey: .scorecardIds)
+        try container.encodeIfPresent(self.scorecards, forKey: .scorecards)
         try container.encodeIfPresent(self.loggingPath, forKey: .loggingPath)
     }
 
@@ -188,6 +210,9 @@ public struct ArtifactPlan: Codable, Hashable, Sendable {
         case transcriptPlan
         case recordingPath
         case structuredOutputIds
+        case structuredOutputs
+        case scorecardIds
+        case scorecards
         case loggingPath
     }
 }

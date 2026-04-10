@@ -8,7 +8,7 @@ public struct ServerMessageHang: Codable, Hashable, Sendable {
     /// - the voice is too slow to respond
     /// - the tool call is still waiting for a response from your server
     /// - etc.
-    public let type: Hang
+    public let type: ServerMessageHangType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -28,7 +28,7 @@ public struct ServerMessageHang: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageHangPhoneNumber? = nil,
-        type: Hang,
+        type: ServerMessageHangType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -51,7 +51,7 @@ public struct ServerMessageHang: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageHangPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(Hang.self, forKey: .type)
+        self.type = try container.decode(ServerMessageHangType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -72,10 +72,6 @@ public struct ServerMessageHang: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum Hang: String, Codable, Hashable, CaseIterable, Sendable {
-        case hang
     }
 
     /// Keys for encoding/decoding struct properties.

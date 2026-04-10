@@ -19,6 +19,8 @@ public struct CostBreakdown: Codable, Hashable, Sendable {
     public let llmPromptTokens: Double?
     /// This is the LLM completion tokens used for the call.
     public let llmCompletionTokens: Double?
+    /// This is the LLM cached prompt tokens used for the call.
+    public let llmCachedPromptTokens: Double?
     /// This is the TTS characters used for the call.
     public let ttsCharacters: Double?
     /// This is the cost of the analysis.
@@ -36,6 +38,7 @@ public struct CostBreakdown: Codable, Hashable, Sendable {
         total: Double? = nil,
         llmPromptTokens: Double? = nil,
         llmCompletionTokens: Double? = nil,
+        llmCachedPromptTokens: Double? = nil,
         ttsCharacters: Double? = nil,
         analysisCostBreakdown: AnalysisCostBreakdown? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -49,6 +52,7 @@ public struct CostBreakdown: Codable, Hashable, Sendable {
         self.total = total
         self.llmPromptTokens = llmPromptTokens
         self.llmCompletionTokens = llmCompletionTokens
+        self.llmCachedPromptTokens = llmCachedPromptTokens
         self.ttsCharacters = ttsCharacters
         self.analysisCostBreakdown = analysisCostBreakdown
         self.additionalProperties = additionalProperties
@@ -65,6 +69,7 @@ public struct CostBreakdown: Codable, Hashable, Sendable {
         self.total = try container.decodeIfPresent(Double.self, forKey: .total)
         self.llmPromptTokens = try container.decodeIfPresent(Double.self, forKey: .llmPromptTokens)
         self.llmCompletionTokens = try container.decodeIfPresent(Double.self, forKey: .llmCompletionTokens)
+        self.llmCachedPromptTokens = try container.decodeIfPresent(Double.self, forKey: .llmCachedPromptTokens)
         self.ttsCharacters = try container.decodeIfPresent(Double.self, forKey: .ttsCharacters)
         self.analysisCostBreakdown = try container.decodeIfPresent(AnalysisCostBreakdown.self, forKey: .analysisCostBreakdown)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -82,6 +87,7 @@ public struct CostBreakdown: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.total, forKey: .total)
         try container.encodeIfPresent(self.llmPromptTokens, forKey: .llmPromptTokens)
         try container.encodeIfPresent(self.llmCompletionTokens, forKey: .llmCompletionTokens)
+        try container.encodeIfPresent(self.llmCachedPromptTokens, forKey: .llmCachedPromptTokens)
         try container.encodeIfPresent(self.ttsCharacters, forKey: .ttsCharacters)
         try container.encodeIfPresent(self.analysisCostBreakdown, forKey: .analysisCostBreakdown)
     }
@@ -97,6 +103,7 @@ public struct CostBreakdown: Codable, Hashable, Sendable {
         case total
         case llmPromptTokens
         case llmCompletionTokens
+        case llmCachedPromptTokens
         case ttsCharacters
         case analysisCostBreakdown
     }

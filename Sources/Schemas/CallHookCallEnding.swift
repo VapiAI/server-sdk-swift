@@ -2,17 +2,17 @@ import Foundation
 
 public struct CallHookCallEnding: Codable, Hashable, Sendable {
     /// This is the event that triggers this hook
-    public let on: CallEnding
+    public let on: CallHookCallEndingOn
     /// This is the set of actions to perform when the hook triggers
-    public let `do`: [ToolCallHookAction]
+    public let `do`: [CallHookCallEndingDoItem]
     /// This is the set of filters that must match for the hook to trigger
     public let filters: [CallHookFilter]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        on: CallEnding,
-        do: [ToolCallHookAction],
+        on: CallHookCallEndingOn,
+        do: [CallHookCallEndingDoItem],
         filters: [CallHookFilter]? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -24,8 +24,8 @@ public struct CallHookCallEnding: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.on = try container.decode(CallEnding.self, forKey: .on)
-        self.do = try container.decode([ToolCallHookAction].self, forKey: .do)
+        self.on = try container.decode(CallHookCallEndingOn.self, forKey: .on)
+        self.do = try container.decode([CallHookCallEndingDoItem].self, forKey: .do)
         self.filters = try container.decodeIfPresent([CallHookFilter].self, forKey: .filters)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -36,10 +36,6 @@ public struct CallHookCallEnding: Codable, Hashable, Sendable {
         try container.encode(self.on, forKey: .on)
         try container.encode(self.do, forKey: .do)
         try container.encodeIfPresent(self.filters, forKey: .filters)
-    }
-
-    public enum CallEnding: String, Codable, Hashable, CaseIterable, Sendable {
-        case callEnding = "call.ending"
     }
 
     /// Keys for encoding/decoding struct properties.

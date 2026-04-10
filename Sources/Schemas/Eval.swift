@@ -19,7 +19,7 @@ public struct Eval: Codable, Hashable, Sendable {
     public let description: String?
     /// This is the type of the eval.
     /// Currently it is fixed to `chat.mockConversation`.
-    public let type: ChatMockConversation
+    public let type: EvalType
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -31,7 +31,7 @@ public struct Eval: Codable, Hashable, Sendable {
         updatedAt: Date,
         name: String? = nil,
         description: String? = nil,
-        type: ChatMockConversation,
+        type: EvalType,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
@@ -54,7 +54,7 @@ public struct Eval: Codable, Hashable, Sendable {
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
-        self.type = try container.decode(ChatMockConversation.self, forKey: .type)
+        self.type = try container.decode(EvalType.self, forKey: .type)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -69,10 +69,6 @@ public struct Eval: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encode(self.type, forKey: .type)
-    }
-
-    public enum ChatMockConversation: String, Codable, Hashable, CaseIterable, Sendable {
-        case chatMockConversation = "chat.mockConversation"
     }
 
     /// Keys for encoding/decoding struct properties.

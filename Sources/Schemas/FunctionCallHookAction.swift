@@ -6,7 +6,7 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [FunctionCallHookActionMessagesItem]?
     /// The type of tool. "function" for Function tool.
-    public let type: Function
+    public let type: FunctionCallHookActionType
     /// This determines if the tool is async.
     /// 
     ///   If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.
@@ -25,6 +25,10 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
     ///   - Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.
     ///   - Webhook expects a response with tool call result.
     public let server: Server?
+    /// Plan to extract variables from the tool response
+    public let variableExtractionPlan: VariableExtractionPlan?
+    /// Static key-value pairs merged into the request body. Values support Liquid templates.
+    public let parameters: [ToolParameter]?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -111,9 +115,11 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
 
     public init(
         messages: [FunctionCallHookActionMessagesItem]? = nil,
-        type: Function,
+        type: FunctionCallHookActionType,
         async: Bool? = nil,
         server: Server? = nil,
+        variableExtractionPlan: VariableExtractionPlan? = nil,
+        parameters: [ToolParameter]? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         function: OpenAiFunction? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -122,6 +128,8 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
         self.type = type
         self.async = async
         self.server = server
+        self.variableExtractionPlan = variableExtractionPlan
+        self.parameters = parameters
         self.rejectionPlan = rejectionPlan
         self.function = function
         self.additionalProperties = additionalProperties
@@ -130,9 +138,11 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([FunctionCallHookActionMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(Function.self, forKey: .type)
+        self.type = try container.decode(FunctionCallHookActionType.self, forKey: .type)
         self.async = try container.decodeIfPresent(Bool.self, forKey: .async)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
+        self.variableExtractionPlan = try container.decodeIfPresent(VariableExtractionPlan.self, forKey: .variableExtractionPlan)
+        self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.function = try container.decodeIfPresent(OpenAiFunction.self, forKey: .function)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -145,12 +155,10 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.async, forKey: .async)
         try container.encodeIfPresent(self.server, forKey: .server)
+        try container.encodeIfPresent(self.variableExtractionPlan, forKey: .variableExtractionPlan)
+        try container.encodeIfPresent(self.parameters, forKey: .parameters)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encodeIfPresent(self.function, forKey: .function)
-    }
-
-    public enum Function: String, Codable, Hashable, CaseIterable, Sendable {
-        case function
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -159,6 +167,8 @@ public struct FunctionCallHookAction: Codable, Hashable, Sendable {
         case type
         case async
         case server
+        case variableExtractionPlan
+        case parameters
         case rejectionPlan
         case function
     }

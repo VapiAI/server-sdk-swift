@@ -8,4 +8,5 @@ public enum ElevenLabsVoiceModel: String, Codable, Hashable, CaseIterable, Senda
     case elevenFlashV2 = "eleven_flash_v2"
     case elevenFlashV25 = "eleven_flash_v2_5"
     case elevenMonolingualV1 = "eleven_monolingual_v1"
+    case elevenV3 = "eleven_v3"
 }

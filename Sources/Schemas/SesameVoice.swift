@@ -6,7 +6,7 @@ public struct SesameVoice: Codable, Hashable, Sendable {
     /// This is the provider-specific ID that will be used.
     public let voiceId: String
     /// This is the model that will be used.
-    public let model: Csm1B
+    public let model: SesameVoiceModel
     /// This is the plan for chunking the model output before it is sent to the voice provider.
     public let chunkPlan: ChunkPlan?
     /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
@@ -17,7 +17,7 @@ public struct SesameVoice: Codable, Hashable, Sendable {
     public init(
         cachingEnabled: Bool? = nil,
         voiceId: String,
-        model: Csm1B,
+        model: SesameVoiceModel,
         chunkPlan: ChunkPlan? = nil,
         fallbackPlan: FallbackPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -34,7 +34,7 @@ public struct SesameVoice: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
         self.voiceId = try container.decode(String.self, forKey: .voiceId)
-        self.model = try container.decode(Csm1B.self, forKey: .model)
+        self.model = try container.decode(SesameVoiceModel.self, forKey: .model)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.fallbackPlan = try container.decodeIfPresent(FallbackPlan.self, forKey: .fallbackPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -48,10 +48,6 @@ public struct SesameVoice: Codable, Hashable, Sendable {
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
-    }
-
-    public enum Csm1B: String, Codable, Hashable, CaseIterable, Sendable {
-        case csm1B = "csm-1b"
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -10,16 +10,22 @@ extension Requests {
         /// This is the workflow ID that will be used for the campaign calls.
         /// Can only be updated if campaign is not in progress or has ended.
         public let workflowId: String?
+        /// This is the squad ID that will be used for the campaign calls.
+        /// Can only be updated if campaign is not in progress or has ended.
+        public let squadId: String?
         /// This is the phone number ID that will be used for the campaign calls.
         /// Can only be updated if campaign is not in progress or has ended.
+        /// Note: `phoneNumberId` and `dialPlan` are mutually exclusive.
         public let phoneNumberId: String?
+        /// This is a list of dial entries, each specifying a phone number and the customers to call using that number. Can only be updated if campaign is not in progress or has ended. Note: phoneNumberId and dialPlan are mutually exclusive.
+        public let dialPlan: [DialPlanEntry]?
         /// This is the schedule plan for the campaign.
         /// Can only be updated if campaign is not in progress or has ended.
         public let schedulePlan: SchedulePlan?
         /// This is the status of the campaign.
         /// Can only be updated to 'ended' if you want to end the campaign.
         /// When set to 'ended', it will delete all scheduled calls. Calls in progress will be allowed to complete.
-        public let status: Ended?
+        public let status: UpdateCampaignDtoStatus?
         /// Additional properties that are not explicitly defined in the schema
         public let additionalProperties: [String: JSONValue]
 
@@ -27,15 +33,19 @@ extension Requests {
             name: String? = nil,
             assistantId: String? = nil,
             workflowId: String? = nil,
+            squadId: String? = nil,
             phoneNumberId: String? = nil,
+            dialPlan: [DialPlanEntry]? = nil,
             schedulePlan: SchedulePlan? = nil,
-            status: Ended? = nil,
+            status: UpdateCampaignDtoStatus? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
             self.name = name
             self.assistantId = assistantId
             self.workflowId = workflowId
+            self.squadId = squadId
             self.phoneNumberId = phoneNumberId
+            self.dialPlan = dialPlan
             self.schedulePlan = schedulePlan
             self.status = status
             self.additionalProperties = additionalProperties
@@ -46,9 +56,11 @@ extension Requests {
             self.name = try container.decodeIfPresent(String.self, forKey: .name)
             self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
             self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
+            self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
             self.phoneNumberId = try container.decodeIfPresent(String.self, forKey: .phoneNumberId)
+            self.dialPlan = try container.decodeIfPresent([DialPlanEntry].self, forKey: .dialPlan)
             self.schedulePlan = try container.decodeIfPresent(SchedulePlan.self, forKey: .schedulePlan)
-            self.status = try container.decodeIfPresent(Ended.self, forKey: .status)
+            self.status = try container.decodeIfPresent(UpdateCampaignDtoStatus.self, forKey: .status)
             self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
         }
 
@@ -58,13 +70,11 @@ extension Requests {
             try container.encodeIfPresent(self.name, forKey: .name)
             try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
             try container.encodeIfPresent(self.workflowId, forKey: .workflowId)
+            try container.encodeIfPresent(self.squadId, forKey: .squadId)
             try container.encodeIfPresent(self.phoneNumberId, forKey: .phoneNumberId)
+            try container.encodeIfPresent(self.dialPlan, forKey: .dialPlan)
             try container.encodeIfPresent(self.schedulePlan, forKey: .schedulePlan)
             try container.encodeIfPresent(self.status, forKey: .status)
-        }
-
-        public enum Ended: String, Codable, Hashable, CaseIterable, Sendable {
-            case ended
         }
 
         /// Keys for encoding/decoding struct properties.
@@ -72,7 +82,9 @@ extension Requests {
             case name
             case assistantId
             case workflowId
+            case squadId
             case phoneNumberId
+            case dialPlan
             case schedulePlan
             case status
         }

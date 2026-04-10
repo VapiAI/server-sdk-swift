@@ -23,6 +23,10 @@ public struct UpdateFunctionToolDto: Codable, Hashable, Sendable {
     ///   - Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.
     ///   - Webhook expects a response with tool call result.
     public let server: Server?
+    /// Plan to extract variables from the tool response
+    public let variableExtractionPlan: VariableExtractionPlan?
+    /// Static key-value pairs merged into the request body. Values support Liquid templates.
+    public let parameters: [ToolParameter]?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -111,6 +115,8 @@ public struct UpdateFunctionToolDto: Codable, Hashable, Sendable {
         messages: [UpdateFunctionToolDtoMessagesItem]? = nil,
         async: Bool? = nil,
         server: Server? = nil,
+        variableExtractionPlan: VariableExtractionPlan? = nil,
+        parameters: [ToolParameter]? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         function: OpenAiFunction? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -118,6 +124,8 @@ public struct UpdateFunctionToolDto: Codable, Hashable, Sendable {
         self.messages = messages
         self.async = async
         self.server = server
+        self.variableExtractionPlan = variableExtractionPlan
+        self.parameters = parameters
         self.rejectionPlan = rejectionPlan
         self.function = function
         self.additionalProperties = additionalProperties
@@ -128,6 +136,8 @@ public struct UpdateFunctionToolDto: Codable, Hashable, Sendable {
         self.messages = try container.decodeIfPresent([UpdateFunctionToolDtoMessagesItem].self, forKey: .messages)
         self.async = try container.decodeIfPresent(Bool.self, forKey: .async)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
+        self.variableExtractionPlan = try container.decodeIfPresent(VariableExtractionPlan.self, forKey: .variableExtractionPlan)
+        self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.function = try container.decodeIfPresent(OpenAiFunction.self, forKey: .function)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -139,6 +149,8 @@ public struct UpdateFunctionToolDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.async, forKey: .async)
         try container.encodeIfPresent(self.server, forKey: .server)
+        try container.encodeIfPresent(self.variableExtractionPlan, forKey: .variableExtractionPlan)
+        try container.encodeIfPresent(self.parameters, forKey: .parameters)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encodeIfPresent(self.function, forKey: .function)
     }
@@ -148,6 +160,8 @@ public struct UpdateFunctionToolDto: Codable, Hashable, Sendable {
         case messages
         case async
         case server
+        case variableExtractionPlan
+        case parameters
         case rejectionPlan
         case function
     }

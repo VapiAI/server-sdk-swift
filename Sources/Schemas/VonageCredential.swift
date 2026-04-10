@@ -3,7 +3,7 @@ import Foundation
 public struct VonageCredential: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let vonageApplicationPrivateKey: String
-    public let provider: Vonage
+    public let provider: VonageCredentialProvider
     /// This is not returned in the API.
     public let apiSecret: String
     /// This is the unique identifier for the credential.
@@ -26,7 +26,7 @@ public struct VonageCredential: Codable, Hashable, Sendable {
 
     public init(
         vonageApplicationPrivateKey: String,
-        provider: Vonage,
+        provider: VonageCredentialProvider,
         apiSecret: String,
         id: String,
         orgId: String,
@@ -53,7 +53,7 @@ public struct VonageCredential: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.vonageApplicationPrivateKey = try container.decode(String.self, forKey: .vonageApplicationPrivateKey)
-        self.provider = try container.decode(Vonage.self, forKey: .provider)
+        self.provider = try container.decode(VonageCredentialProvider.self, forKey: .provider)
         self.apiSecret = try container.decode(String.self, forKey: .apiSecret)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -78,10 +78,6 @@ public struct VonageCredential: Codable, Hashable, Sendable {
         try container.encode(self.vonageApplicationId, forKey: .vonageApplicationId)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.apiKey, forKey: .apiKey)
-    }
-
-    public enum Vonage: String, Codable, Hashable, CaseIterable, Sendable {
-        case vonage
     }
 
     /// Keys for encoding/decoding struct properties.

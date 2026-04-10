@@ -5,7 +5,7 @@ public struct CreateToolTemplateDto: Codable, Hashable, Sendable {
     public let providerDetails: CreateToolTemplateDtoProviderDetails?
     public let metadata: ToolTemplateMetadata?
     public let visibility: CreateToolTemplateDtoVisibility?
-    public let type: Tool
+    public let type: CreateToolTemplateDtoType
     /// The name of the template. This is just for your own reference.
     public let name: String?
     public let provider: CreateToolTemplateDtoProvider?
@@ -17,7 +17,7 @@ public struct CreateToolTemplateDto: Codable, Hashable, Sendable {
         providerDetails: CreateToolTemplateDtoProviderDetails? = nil,
         metadata: ToolTemplateMetadata? = nil,
         visibility: CreateToolTemplateDtoVisibility? = nil,
-        type: Tool,
+        type: CreateToolTemplateDtoType,
         name: String? = nil,
         provider: CreateToolTemplateDtoProvider? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -38,7 +38,7 @@ public struct CreateToolTemplateDto: Codable, Hashable, Sendable {
         self.providerDetails = try container.decodeIfPresent(CreateToolTemplateDtoProviderDetails.self, forKey: .providerDetails)
         self.metadata = try container.decodeIfPresent(ToolTemplateMetadata.self, forKey: .metadata)
         self.visibility = try container.decodeIfPresent(CreateToolTemplateDtoVisibility.self, forKey: .visibility)
-        self.type = try container.decode(Tool.self, forKey: .type)
+        self.type = try container.decode(CreateToolTemplateDtoType.self, forKey: .type)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.provider = try container.decodeIfPresent(CreateToolTemplateDtoProvider.self, forKey: .provider)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -54,10 +54,6 @@ public struct CreateToolTemplateDto: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.provider, forKey: .provider)
-    }
-
-    public enum Tool: String, Codable, Hashable, CaseIterable, Sendable {
-        case tool
     }
 
     /// Keys for encoding/decoding struct properties.

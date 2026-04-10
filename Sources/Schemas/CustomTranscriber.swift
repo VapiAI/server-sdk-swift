@@ -40,7 +40,7 @@ public struct CustomTranscriber: Codable, Hashable, Sendable {
     ///  }
     /// ```
     public let server: Server
-    /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+    /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

@@ -2,6 +2,11 @@ import Foundation
 
 /// The voices provided by Vapi
 public enum VapiVoiceVoiceId: String, Codable, Hashable, CaseIterable, Sendable {
+    case clara = "Clara"
+    case godfrey = "Godfrey"
+    case layla = "Layla"
+    case sid = "Sid"
+    case gustavo = "Gustavo"
     case elliot = "Elliot"
     case kylie = "Kylie"
     case rohan = "Rohan"
@@ -13,4 +18,18 @@ public enum VapiVoiceVoiceId: String, Codable, Hashable, CaseIterable, Sendable 
     case harry = "Harry"
     case paige = "Paige"
     case spencer = "Spencer"
+    case nico = "Nico"
+    case kai = "Kai"
+    case emma = "Emma"
+    case sagar = "Sagar"
+    case neil = "Neil"
+    case naina = "Naina"
+    case leah = "Leah"
+    case tara = "Tara"
+    case jess = "Jess"
+    case leo = "Leo"
+    case dan = "Dan"
+    case mia = "Mia"
+    case zac = "Zac"
+    case zoe = "Zoe"
 }

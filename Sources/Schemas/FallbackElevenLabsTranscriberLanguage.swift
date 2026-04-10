@@ -1,5 +1,6 @@
 import Foundation
 
+/// This is the language that will be used for the transcription.
 public enum FallbackElevenLabsTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case aa
     case ab

@@ -2,7 +2,7 @@ import Foundation
 
 public struct DeveloperMessage: Codable, Hashable, Sendable {
     /// This is the role of the message author
-    public let role: Developer
+    public let role: DeveloperMessageRole
     /// This is the content of the developer message
     public let content: String
     /// This is an optional name for the participant
@@ -13,7 +13,7 @@ public struct DeveloperMessage: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        role: Developer,
+        role: DeveloperMessageRole,
         content: String,
         name: String? = nil,
         metadata: [String: JSONValue]? = nil,
@@ -28,7 +28,7 @@ public struct DeveloperMessage: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.role = try container.decode(Developer.self, forKey: .role)
+        self.role = try container.decode(DeveloperMessageRole.self, forKey: .role)
         self.content = try container.decode(String.self, forKey: .content)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.metadata = try container.decodeIfPresent([String: JSONValue].self, forKey: .metadata)
@@ -42,10 +42,6 @@ public struct DeveloperMessage: Codable, Hashable, Sendable {
         try container.encode(self.content, forKey: .content)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
-    }
-
-    public enum Developer: String, Codable, Hashable, CaseIterable, Sendable {
-        case developer
     }
 
     /// Keys for encoding/decoding struct properties.

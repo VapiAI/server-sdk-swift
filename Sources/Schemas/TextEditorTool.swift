@@ -6,7 +6,7 @@ public struct TextEditorTool: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [TextEditorToolMessagesItem]?
     /// The sub type of tool.
-    public let subType: TextEditor20241022
+    public let subType: TextEditorToolSubType
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
     /// 
@@ -105,20 +105,20 @@ public struct TextEditorTool: Codable, Hashable, Sendable {
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
     /// The name of the tool, fixed to 'str_replace_editor'
-    public let name: StrReplaceEditor
+    public let name: TextEditorToolName
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         messages: [TextEditorToolMessagesItem]? = nil,
-        subType: TextEditor20241022,
+        subType: TextEditorToolSubType,
         server: Server? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
         updatedAt: Date,
         rejectionPlan: ToolRejectionPlan? = nil,
-        name: StrReplaceEditor,
+        name: TextEditorToolName,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
@@ -136,14 +136,14 @@ public struct TextEditorTool: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([TextEditorToolMessagesItem].self, forKey: .messages)
-        self.subType = try container.decode(TextEditor20241022.self, forKey: .subType)
+        self.subType = try container.decode(TextEditorToolSubType.self, forKey: .subType)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
-        self.name = try container.decode(StrReplaceEditor.self, forKey: .name)
+        self.name = try container.decode(TextEditorToolName.self, forKey: .name)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -159,14 +159,6 @@ public struct TextEditorTool: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encode(self.name, forKey: .name)
-    }
-
-    public enum TextEditor20241022: String, Codable, Hashable, CaseIterable, Sendable {
-        case textEditor20241022 = "text_editor_20241022"
-    }
-
-    public enum StrReplaceEditor: String, Codable, Hashable, CaseIterable, Sendable {
-        case strReplaceEditor = "str_replace_editor"
     }
 
     /// Keys for encoding/decoding struct properties.

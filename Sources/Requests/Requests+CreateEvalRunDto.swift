@@ -8,7 +8,7 @@ extension Requests {
         public let target: CreateEvalRunDtoTarget
         /// This is the type of the run.
         /// Currently it is fixed to `eval`.
-        public let type: Eval
+        public let type: CreateEvalRunDtoType
         /// This is the id of the eval that will be run.
         public let evalId: String?
         /// Additional properties that are not explicitly defined in the schema
@@ -17,7 +17,7 @@ extension Requests {
         public init(
             eval: CreateEvalDto? = nil,
             target: CreateEvalRunDtoTarget,
-            type: Eval,
+            type: CreateEvalRunDtoType,
             evalId: String? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
@@ -32,7 +32,7 @@ extension Requests {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.eval = try container.decodeIfPresent(CreateEvalDto.self, forKey: .eval)
             self.target = try container.decode(CreateEvalRunDtoTarget.self, forKey: .target)
-            self.type = try container.decode(Eval.self, forKey: .type)
+            self.type = try container.decode(CreateEvalRunDtoType.self, forKey: .type)
             self.evalId = try container.decodeIfPresent(String.self, forKey: .evalId)
             self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
         }
@@ -44,10 +44,6 @@ extension Requests {
             try container.encode(self.target, forKey: .target)
             try container.encode(self.type, forKey: .type)
             try container.encodeIfPresent(self.evalId, forKey: .evalId)
-        }
-
-        public enum Eval: String, Codable, Hashable, CaseIterable, Sendable {
-            case eval
         }
 
         /// Keys for encoding/decoding struct properties.

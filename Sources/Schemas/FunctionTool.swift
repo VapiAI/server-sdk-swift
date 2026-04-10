@@ -23,6 +23,10 @@ public struct FunctionTool: Codable, Hashable, Sendable {
     ///   - Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.
     ///   - Webhook expects a response with tool call result.
     public let server: Server?
+    /// Plan to extract variables from the tool response
+    public let variableExtractionPlan: VariableExtractionPlan?
+    /// Static key-value pairs merged into the request body. Values support Liquid templates.
+    public let parameters: [ToolParameter]?
     /// This is the unique identifier for the tool.
     public let id: String
     /// This is the unique identifier for the organization that this tool belongs to.
@@ -119,6 +123,8 @@ public struct FunctionTool: Codable, Hashable, Sendable {
         messages: [FunctionToolMessagesItem]? = nil,
         async: Bool? = nil,
         server: Server? = nil,
+        variableExtractionPlan: VariableExtractionPlan? = nil,
+        parameters: [ToolParameter]? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -130,6 +136,8 @@ public struct FunctionTool: Codable, Hashable, Sendable {
         self.messages = messages
         self.async = async
         self.server = server
+        self.variableExtractionPlan = variableExtractionPlan
+        self.parameters = parameters
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -144,6 +152,8 @@ public struct FunctionTool: Codable, Hashable, Sendable {
         self.messages = try container.decodeIfPresent([FunctionToolMessagesItem].self, forKey: .messages)
         self.async = try container.decodeIfPresent(Bool.self, forKey: .async)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
+        self.variableExtractionPlan = try container.decodeIfPresent(VariableExtractionPlan.self, forKey: .variableExtractionPlan)
+        self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -159,6 +169,8 @@ public struct FunctionTool: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.async, forKey: .async)
         try container.encodeIfPresent(self.server, forKey: .server)
+        try container.encodeIfPresent(self.variableExtractionPlan, forKey: .variableExtractionPlan)
+        try container.encodeIfPresent(self.parameters, forKey: .parameters)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -172,6 +184,8 @@ public struct FunctionTool: Codable, Hashable, Sendable {
         case messages
         case async
         case server
+        case variableExtractionPlan
+        case parameters
         case id
         case orgId
         case createdAt

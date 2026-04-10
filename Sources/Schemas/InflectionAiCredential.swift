@@ -2,7 +2,7 @@ import Foundation
 
 public struct InflectionAiCredential: Codable, Hashable, Sendable {
     /// This is the api key for Pi in InflectionAI's console. Get it from here: https://developers.inflection.ai/keys, billing will need to be setup
-    public let provider: InflectionAi
+    public let provider: InflectionAiCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
     /// This is the unique identifier for the credential.
@@ -19,7 +19,7 @@ public struct InflectionAiCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: InflectionAi,
+        provider: InflectionAiCredentialProvider,
         apiKey: String,
         id: String,
         orgId: String,
@@ -40,7 +40,7 @@ public struct InflectionAiCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(InflectionAi.self, forKey: .provider)
+        self.provider = try container.decode(InflectionAiCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -60,10 +60,6 @@ public struct InflectionAiCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum InflectionAi: String, Codable, Hashable, CaseIterable, Sendable {
-        case inflectionAi = "inflection-ai"
     }
 
     /// Keys for encoding/decoding struct properties.

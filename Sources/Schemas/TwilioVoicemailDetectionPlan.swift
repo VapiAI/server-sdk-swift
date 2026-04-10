@@ -1,6 +1,8 @@
 import Foundation
 
 public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
+    /// This is the provider to use for voicemail detection.
+    public let provider: TwilioVoicemailDetectionPlanProvider
     /// These are the AMD messages from Twilio that are considered as voicemail. Default is ['machine_end_beep', 'machine_end_silence'].
     /// 
     /// @default {Array} ['machine_end_beep', 'machine_end_silence']
@@ -55,6 +57,7 @@ public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: TwilioVoicemailDetectionPlanProvider,
         voicemailDetectionTypes: [TwilioVoicemailDetectionPlanVoicemailDetectionTypesItem]? = nil,
         enabled: Bool? = nil,
         machineDetectionTimeout: Double? = nil,
@@ -63,6 +66,7 @@ public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
         machineDetectionSilenceTimeout: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.voicemailDetectionTypes = voicemailDetectionTypes
         self.enabled = enabled
         self.machineDetectionTimeout = machineDetectionTimeout
@@ -74,6 +78,7 @@ public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decode(TwilioVoicemailDetectionPlanProvider.self, forKey: .provider)
         self.voicemailDetectionTypes = try container.decodeIfPresent([TwilioVoicemailDetectionPlanVoicemailDetectionTypesItem].self, forKey: .voicemailDetectionTypes)
         self.enabled = try container.decodeIfPresent(Bool.self, forKey: .enabled)
         self.machineDetectionTimeout = try container.decodeIfPresent(Double.self, forKey: .machineDetectionTimeout)
@@ -86,6 +91,7 @@ public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encode(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.voicemailDetectionTypes, forKey: .voicemailDetectionTypes)
         try container.encodeIfPresent(self.enabled, forKey: .enabled)
         try container.encodeIfPresent(self.machineDetectionTimeout, forKey: .machineDetectionTimeout)
@@ -96,6 +102,7 @@ public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case voicemailDetectionTypes
         case enabled
         case machineDetectionTimeout

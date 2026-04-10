@@ -2,7 +2,7 @@ import Foundation
 
 public struct CustomKnowledgeBase: Codable, Hashable, Sendable {
     /// This knowledge base is bring your own knowledge base implementation.
-    public let provider: CustomKnowledgeBase
+    public let provider: CustomKnowledgeBaseProvider
     /// This is where the knowledge base request will be sent.
     /// 
     /// Request Example:
@@ -51,7 +51,7 @@ public struct CustomKnowledgeBase: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: CustomKnowledgeBase,
+        provider: CustomKnowledgeBaseProvider,
         server: Server,
         id: String,
         orgId: String,
@@ -66,7 +66,7 @@ public struct CustomKnowledgeBase: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(CustomKnowledgeBase.self, forKey: .provider)
+        self.provider = try container.decode(CustomKnowledgeBaseProvider.self, forKey: .provider)
         self.server = try container.decode(Server.self, forKey: .server)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -80,10 +80,6 @@ public struct CustomKnowledgeBase: Codable, Hashable, Sendable {
         try container.encode(self.server, forKey: .server)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
-    }
-
-    public enum CustomKnowledgeBase: String, Codable, Hashable, CaseIterable, Sendable {
-        case customKnowledgeBase = "custom-knowledge-base"
     }
 
     /// Keys for encoding/decoding struct properties.

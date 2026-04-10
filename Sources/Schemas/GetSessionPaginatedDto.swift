@@ -1,14 +1,26 @@
 import Foundation
 
 public struct GetSessionPaginatedDto: Codable, Hashable, Sendable {
+    /// This is the unique identifier for the session to filter by.
+    public let id: String?
     /// This is the name of the session to filter by.
     public let name: String?
     /// This is the ID of the assistant to filter sessions by.
     public let assistantId: String?
+    /// Filter by multiple assistant IDs. Provide as comma-separated values.
+    public let assistantIdAny: String?
     /// This is the ID of the squad to filter sessions by.
     public let squadId: String?
     /// This is the ID of the workflow to filter sessions by.
     public let workflowId: String?
+    /// This is the customer information to filter by.
+    public let customer: CreateCustomerDto?
+    /// Filter by any of the specified customer phone numbers (comma-separated).
+    public let customerNumberAny: String?
+    /// This will return sessions with the specified phoneNumberId.
+    public let phoneNumberId: String?
+    /// This will return sessions with any of the specified phoneNumberIds.
+    public let phoneNumberIdAny: [String]?
     /// This is the page number to return. Defaults to 1.
     public let page: Double?
     /// This is the sort order for pagination. Defaults to 'DESC'.
@@ -35,10 +47,16 @@ public struct GetSessionPaginatedDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        id: String? = nil,
         name: String? = nil,
         assistantId: String? = nil,
+        assistantIdAny: String? = nil,
         squadId: String? = nil,
         workflowId: String? = nil,
+        customer: CreateCustomerDto? = nil,
+        customerNumberAny: String? = nil,
+        phoneNumberId: String? = nil,
+        phoneNumberIdAny: [String]? = nil,
         page: Double? = nil,
         sortOrder: GetSessionPaginatedDtoSortOrder? = nil,
         limit: Double? = nil,
@@ -52,10 +70,16 @@ public struct GetSessionPaginatedDto: Codable, Hashable, Sendable {
         updatedAtLe: Date? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.id = id
         self.name = name
         self.assistantId = assistantId
+        self.assistantIdAny = assistantIdAny
         self.squadId = squadId
         self.workflowId = workflowId
+        self.customer = customer
+        self.customerNumberAny = customerNumberAny
+        self.phoneNumberId = phoneNumberId
+        self.phoneNumberIdAny = phoneNumberIdAny
         self.page = page
         self.sortOrder = sortOrder
         self.limit = limit
@@ -72,10 +96,16 @@ public struct GetSessionPaginatedDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(String.self, forKey: .id)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
+        self.assistantIdAny = try container.decodeIfPresent(String.self, forKey: .assistantIdAny)
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
+        self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
+        self.customerNumberAny = try container.decodeIfPresent(String.self, forKey: .customerNumberAny)
+        self.phoneNumberId = try container.decodeIfPresent(String.self, forKey: .phoneNumberId)
+        self.phoneNumberIdAny = try container.decodeIfPresent([String].self, forKey: .phoneNumberIdAny)
         self.page = try container.decodeIfPresent(Double.self, forKey: .page)
         self.sortOrder = try container.decodeIfPresent(GetSessionPaginatedDtoSortOrder.self, forKey: .sortOrder)
         self.limit = try container.decodeIfPresent(Double.self, forKey: .limit)
@@ -93,10 +123,16 @@ public struct GetSessionPaginatedDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.id, forKey: .id)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
+        try container.encodeIfPresent(self.assistantIdAny, forKey: .assistantIdAny)
         try container.encodeIfPresent(self.squadId, forKey: .squadId)
         try container.encodeIfPresent(self.workflowId, forKey: .workflowId)
+        try container.encodeIfPresent(self.customer, forKey: .customer)
+        try container.encodeIfPresent(self.customerNumberAny, forKey: .customerNumberAny)
+        try container.encodeIfPresent(self.phoneNumberId, forKey: .phoneNumberId)
+        try container.encodeIfPresent(self.phoneNumberIdAny, forKey: .phoneNumberIdAny)
         try container.encodeIfPresent(self.page, forKey: .page)
         try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
         try container.encodeIfPresent(self.limit, forKey: .limit)
@@ -112,10 +148,16 @@ public struct GetSessionPaginatedDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case id
         case name
         case assistantId
+        case assistantIdAny
         case squadId
         case workflowId
+        case customer
+        case customerNumberAny
+        case phoneNumberId
+        case phoneNumberIdAny
         case page
         case sortOrder
         case limit

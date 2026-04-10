@@ -4,7 +4,7 @@ public struct ServerMessageCallDeleted: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageCallDeletedPhoneNumber?
     /// This is the type of the message. "call.deleted" is sent when a call is deleted.
-    public let type: CallDeleted
+    public let type: ServerMessageCallDeletedType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -24,7 +24,7 @@ public struct ServerMessageCallDeleted: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageCallDeletedPhoneNumber? = nil,
-        type: CallDeleted,
+        type: ServerMessageCallDeletedType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -47,7 +47,7 @@ public struct ServerMessageCallDeleted: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageCallDeletedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(CallDeleted.self, forKey: .type)
+        self.type = try container.decode(ServerMessageCallDeletedType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -68,10 +68,6 @@ public struct ServerMessageCallDeleted: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum CallDeleted: String, Codable, Hashable, CaseIterable, Sendable {
-        case callDeleted = "call.deleted"
     }
 
     /// Keys for encoding/decoding struct properties.

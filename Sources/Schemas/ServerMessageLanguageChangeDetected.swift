@@ -4,7 +4,7 @@ public struct ServerMessageLanguageChangeDetected: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageLanguageChangeDetectedPhoneNumber?
     /// This is the type of the message. "language-change-detected" is sent when the transcriber is automatically switched based on the detected language.
-    public let type: LanguageChangeDetected
+    public let type: ServerMessageLanguageChangeDetectedType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -26,7 +26,7 @@ public struct ServerMessageLanguageChangeDetected: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageLanguageChangeDetectedPhoneNumber? = nil,
-        type: LanguageChangeDetected,
+        type: ServerMessageLanguageChangeDetectedType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -51,7 +51,7 @@ public struct ServerMessageLanguageChangeDetected: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageLanguageChangeDetectedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(LanguageChangeDetected.self, forKey: .type)
+        self.type = try container.decode(ServerMessageLanguageChangeDetectedType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -74,10 +74,6 @@ public struct ServerMessageLanguageChangeDetected: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
         try container.encode(self.language, forKey: .language)
-    }
-
-    public enum LanguageChangeDetected: String, Codable, Hashable, CaseIterable, Sendable {
-        case languageChangeDetected = "language-change-detected"
     }
 
     /// Keys for encoding/decoding struct properties.

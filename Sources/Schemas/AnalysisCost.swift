@@ -9,6 +9,8 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
     public let promptTokens: Double
     /// This is the number of completion tokens generated in the analysis.
     public let completionTokens: Double
+    /// This is the number of cached prompt tokens used in the analysis. This is only applicable to certain providers (e.g., OpenAI, Azure OpenAI) that support prompt caching. Cached tokens are billed at a discounted rate.
+    public let cachedPromptTokens: Double?
     /// This is the cost of the component in USD.
     public let cost: Double
     /// Additional properties that are not explicitly defined in the schema
@@ -19,6 +21,7 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         model: [String: JSONValue],
         promptTokens: Double,
         completionTokens: Double,
+        cachedPromptTokens: Double? = nil,
         cost: Double,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -26,6 +29,7 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         self.model = model
         self.promptTokens = promptTokens
         self.completionTokens = completionTokens
+        self.cachedPromptTokens = cachedPromptTokens
         self.cost = cost
         self.additionalProperties = additionalProperties
     }
@@ -36,6 +40,7 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         self.model = try container.decode([String: JSONValue].self, forKey: .model)
         self.promptTokens = try container.decode(Double.self, forKey: .promptTokens)
         self.completionTokens = try container.decode(Double.self, forKey: .completionTokens)
+        self.cachedPromptTokens = try container.decodeIfPresent(Double.self, forKey: .cachedPromptTokens)
         self.cost = try container.decode(Double.self, forKey: .cost)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -47,6 +52,7 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         try container.encode(self.model, forKey: .model)
         try container.encode(self.promptTokens, forKey: .promptTokens)
         try container.encode(self.completionTokens, forKey: .completionTokens)
+        try container.encodeIfPresent(self.cachedPromptTokens, forKey: .cachedPromptTokens)
         try container.encode(self.cost, forKey: .cost)
     }
 
@@ -56,6 +62,7 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         case model
         case promptTokens
         case completionTokens
+        case cachedPromptTokens
         case cost
     }
 }

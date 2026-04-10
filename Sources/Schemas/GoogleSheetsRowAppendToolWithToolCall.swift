@@ -6,7 +6,7 @@ public struct GoogleSheetsRowAppendToolWithToolCall: Codable, Hashable, Sendable
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [GoogleSheetsRowAppendToolWithToolCallMessagesItem]?
     /// The type of tool. "google.sheets.row.append" for Google Sheets Row Append tool.
-    public let type: GoogleSheetsRowAppend
+    public let type: GoogleSheetsRowAppendToolWithToolCallType
     public let toolCall: ToolCall
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
@@ -92,7 +92,7 @@ public struct GoogleSheetsRowAppendToolWithToolCall: Codable, Hashable, Sendable
 
     public init(
         messages: [GoogleSheetsRowAppendToolWithToolCallMessagesItem]? = nil,
-        type: GoogleSheetsRowAppend,
+        type: GoogleSheetsRowAppendToolWithToolCallType,
         toolCall: ToolCall,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -107,7 +107,7 @@ public struct GoogleSheetsRowAppendToolWithToolCall: Codable, Hashable, Sendable
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([GoogleSheetsRowAppendToolWithToolCallMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(GoogleSheetsRowAppend.self, forKey: .type)
+        self.type = try container.decode(GoogleSheetsRowAppendToolWithToolCallType.self, forKey: .type)
         self.toolCall = try container.decode(ToolCall.self, forKey: .toolCall)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -120,10 +120,6 @@ public struct GoogleSheetsRowAppendToolWithToolCall: Codable, Hashable, Sendable
         try container.encode(self.type, forKey: .type)
         try container.encode(self.toolCall, forKey: .toolCall)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum GoogleSheetsRowAppend: String, Codable, Hashable, CaseIterable, Sendable {
-        case googleSheetsRowAppend = "google.sheets.row.append"
     }
 
     /// Keys for encoding/decoding struct properties.

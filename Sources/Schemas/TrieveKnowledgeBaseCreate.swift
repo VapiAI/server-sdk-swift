@@ -2,14 +2,14 @@ import Foundation
 
 public struct TrieveKnowledgeBaseCreate: Codable, Hashable, Sendable {
     /// This is to create a new dataset on Trieve.
-    public let type: Create
+    public let type: TrieveKnowledgeBaseCreateType
     /// These are the chunk plans used to create the dataset.
     public let chunkPlans: [TrieveKnowledgeBaseChunkPlan]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Create,
+        type: TrieveKnowledgeBaseCreateType,
         chunkPlans: [TrieveKnowledgeBaseChunkPlan],
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -20,7 +20,7 @@ public struct TrieveKnowledgeBaseCreate: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Create.self, forKey: .type)
+        self.type = try container.decode(TrieveKnowledgeBaseCreateType.self, forKey: .type)
         self.chunkPlans = try container.decode([TrieveKnowledgeBaseChunkPlan].self, forKey: .chunkPlans)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -30,10 +30,6 @@ public struct TrieveKnowledgeBaseCreate: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.chunkPlans, forKey: .chunkPlans)
-    }
-
-    public enum Create: String, Codable, Hashable, CaseIterable, Sendable {
-        case create
     }
 
     /// Keys for encoding/decoding struct properties.

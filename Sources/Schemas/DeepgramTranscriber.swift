@@ -17,6 +17,10 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
     /// 
     /// @default false
     public let numerals: Bool?
+    /// If set to true, Deepgram will replace profanity in transcripts with surrounding asterisks, e.g. "f***".
+    /// 
+    /// @default false
+    public let profanityFilter: Bool?
     /// Transcripts below this confidence threshold will be discarded.
     /// 
     /// @default 0.4
@@ -44,7 +48,7 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
     /// 
     /// @default 10
     public let endpointing: Double?
-    /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+    /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
@@ -55,6 +59,7 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         smartFormat: Bool? = nil,
         mipOptOut: Bool? = nil,
         numerals: Bool? = nil,
+        profanityFilter: Bool? = nil,
         confidenceThreshold: Double? = nil,
         eagerEotThreshold: Double? = nil,
         eotThreshold: Double? = nil,
@@ -70,6 +75,7 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         self.smartFormat = smartFormat
         self.mipOptOut = mipOptOut
         self.numerals = numerals
+        self.profanityFilter = profanityFilter
         self.confidenceThreshold = confidenceThreshold
         self.eagerEotThreshold = eagerEotThreshold
         self.eotThreshold = eotThreshold
@@ -88,6 +94,7 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         self.smartFormat = try container.decodeIfPresent(Bool.self, forKey: .smartFormat)
         self.mipOptOut = try container.decodeIfPresent(Bool.self, forKey: .mipOptOut)
         self.numerals = try container.decodeIfPresent(Bool.self, forKey: .numerals)
+        self.profanityFilter = try container.decodeIfPresent(Bool.self, forKey: .profanityFilter)
         self.confidenceThreshold = try container.decodeIfPresent(Double.self, forKey: .confidenceThreshold)
         self.eagerEotThreshold = try container.decodeIfPresent(Double.self, forKey: .eagerEotThreshold)
         self.eotThreshold = try container.decodeIfPresent(Double.self, forKey: .eotThreshold)
@@ -107,6 +114,7 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.smartFormat, forKey: .smartFormat)
         try container.encodeIfPresent(self.mipOptOut, forKey: .mipOptOut)
         try container.encodeIfPresent(self.numerals, forKey: .numerals)
+        try container.encodeIfPresent(self.profanityFilter, forKey: .profanityFilter)
         try container.encodeIfPresent(self.confidenceThreshold, forKey: .confidenceThreshold)
         try container.encodeIfPresent(self.eagerEotThreshold, forKey: .eagerEotThreshold)
         try container.encodeIfPresent(self.eotThreshold, forKey: .eotThreshold)
@@ -124,6 +132,7 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         case smartFormat
         case mipOptOut
         case numerals
+        case profanityFilter
         case confidenceThreshold
         case eagerEotThreshold
         case eotThreshold

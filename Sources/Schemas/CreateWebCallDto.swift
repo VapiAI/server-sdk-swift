@@ -1,6 +1,7 @@
 import Foundation
 
 public struct CreateWebCallDto: Codable, Hashable, Sendable {
+    public let roomDeleteOnUserLeaveEnabled: Bool?
     /// This is the assistant ID that will be used for the call. To use a transient assistant, use `assistant` instead.
     /// 
     /// To start a call with:
@@ -31,6 +32,9 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     /// - Squad, use `squad` or `squadId`
     /// - Workflow, use `workflow` or `workflowId`
     public let squad: CreateSquadDto?
+    /// These are the overrides for the `squad` or `squadId`'s member settings and template variables.
+    /// This will apply to all members of the squad.
+    public let squadOverrides: AssistantOverrides?
     /// This is the workflow that will be used for the call. To use a transient workflow, use `workflow` instead.
     /// 
     /// To start a call with:
@@ -51,21 +55,25 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        roomDeleteOnUserLeaveEnabled: Bool? = nil,
         assistantId: String? = nil,
         assistant: CreateAssistantDto? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         squadId: String? = nil,
         squad: CreateSquadDto? = nil,
+        squadOverrides: AssistantOverrides? = nil,
         workflowId: String? = nil,
         workflow: CreateWorkflowDto? = nil,
         workflowOverrides: WorkflowOverrides? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.roomDeleteOnUserLeaveEnabled = roomDeleteOnUserLeaveEnabled
         self.assistantId = assistantId
         self.assistant = assistant
         self.assistantOverrides = assistantOverrides
         self.squadId = squadId
         self.squad = squad
+        self.squadOverrides = squadOverrides
         self.workflowId = workflowId
         self.workflow = workflow
         self.workflowOverrides = workflowOverrides
@@ -74,11 +82,13 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.roomDeleteOnUserLeaveEnabled = try container.decodeIfPresent(Bool.self, forKey: .roomDeleteOnUserLeaveEnabled)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)
+        self.squadOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .squadOverrides)
         self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
         self.workflow = try container.decodeIfPresent(CreateWorkflowDto.self, forKey: .workflow)
         self.workflowOverrides = try container.decodeIfPresent(WorkflowOverrides.self, forKey: .workflowOverrides)
@@ -88,11 +98,13 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.roomDeleteOnUserLeaveEnabled, forKey: .roomDeleteOnUserLeaveEnabled)
         try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
         try container.encodeIfPresent(self.assistantOverrides, forKey: .assistantOverrides)
         try container.encodeIfPresent(self.squadId, forKey: .squadId)
         try container.encodeIfPresent(self.squad, forKey: .squad)
+        try container.encodeIfPresent(self.squadOverrides, forKey: .squadOverrides)
         try container.encodeIfPresent(self.workflowId, forKey: .workflowId)
         try container.encodeIfPresent(self.workflow, forKey: .workflow)
         try container.encodeIfPresent(self.workflowOverrides, forKey: .workflowOverrides)
@@ -100,11 +112,13 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case roomDeleteOnUserLeaveEnabled
         case assistantId
         case assistant
         case assistantOverrides
         case squadId
         case squad
+        case squadOverrides
         case workflowId
         case workflow
         case workflowOverrides

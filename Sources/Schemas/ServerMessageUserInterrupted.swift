@@ -4,7 +4,10 @@ public struct ServerMessageUserInterrupted: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageUserInterruptedPhoneNumber?
     /// This is the type of the message. "user-interrupted" is sent when the user interrupts the assistant.
-    public let type: UserInterrupted
+    public let type: ServerMessageUserInterruptedType
+    /// This is the turnId of the LLM response that was interrupted. Matches the turnId
+    /// on model-output messages so clients can discard the interrupted turn's tokens.
+    public let turnId: String?
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -24,7 +27,8 @@ public struct ServerMessageUserInterrupted: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageUserInterruptedPhoneNumber? = nil,
-        type: UserInterrupted,
+        type: ServerMessageUserInterruptedType,
+        turnId: String? = nil,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -35,6 +39,7 @@ public struct ServerMessageUserInterrupted: Codable, Hashable, Sendable {
     ) {
         self.phoneNumber = phoneNumber
         self.type = type
+        self.turnId = turnId
         self.timestamp = timestamp
         self.artifact = artifact
         self.assistant = assistant
@@ -47,7 +52,8 @@ public struct ServerMessageUserInterrupted: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageUserInterruptedPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(UserInterrupted.self, forKey: .type)
+        self.type = try container.decode(ServerMessageUserInterruptedType.self, forKey: .type)
+        self.turnId = try container.decodeIfPresent(String.self, forKey: .turnId)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -62,6 +68,7 @@ public struct ServerMessageUserInterrupted: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
         try container.encode(self.type, forKey: .type)
+        try container.encodeIfPresent(self.turnId, forKey: .turnId)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encodeIfPresent(self.artifact, forKey: .artifact)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
@@ -70,14 +77,11 @@ public struct ServerMessageUserInterrupted: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.chat, forKey: .chat)
     }
 
-    public enum UserInterrupted: String, Codable, Hashable, CaseIterable, Sendable {
-        case userInterrupted = "user-interrupted"
-    }
-
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
         case type
+        case turnId
         case timestamp
         case artifact
         case assistant

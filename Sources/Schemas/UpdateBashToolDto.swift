@@ -6,7 +6,7 @@ public struct UpdateBashToolDto: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [UpdateBashToolDtoMessagesItem]?
     /// The sub type of tool.
-    public let subType: Bash20241022?
+    public let subType: UpdateBashToolDtoSubType?
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
     /// 
@@ -97,16 +97,16 @@ public struct UpdateBashToolDto: Codable, Hashable, Sendable {
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
     /// The name of the tool, fixed to 'bash'
-    public let name: Bash?
+    public let name: UpdateBashToolDtoName?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         messages: [UpdateBashToolDtoMessagesItem]? = nil,
-        subType: Bash20241022? = nil,
+        subType: UpdateBashToolDtoSubType? = nil,
         server: Server? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
-        name: Bash? = nil,
+        name: UpdateBashToolDtoName? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
@@ -120,10 +120,10 @@ public struct UpdateBashToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateBashToolDtoMessagesItem].self, forKey: .messages)
-        self.subType = try container.decodeIfPresent(Bash20241022.self, forKey: .subType)
+        self.subType = try container.decodeIfPresent(UpdateBashToolDtoSubType.self, forKey: .subType)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
-        self.name = try container.decodeIfPresent(Bash.self, forKey: .name)
+        self.name = try container.decodeIfPresent(UpdateBashToolDtoName.self, forKey: .name)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -135,14 +135,6 @@ public struct UpdateBashToolDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.server, forKey: .server)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encodeIfPresent(self.name, forKey: .name)
-    }
-
-    public enum Bash20241022: String, Codable, Hashable, CaseIterable, Sendable {
-        case bash20241022 = "bash_20241022"
-    }
-
-    public enum Bash: String, Codable, Hashable, CaseIterable, Sendable {
-        case bash
     }
 
     /// Keys for encoding/decoding struct properties.

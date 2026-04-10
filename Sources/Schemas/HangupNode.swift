@@ -1,7 +1,7 @@
 import Foundation
 
 public struct HangupNode: Codable, Hashable, Sendable {
-    public let type: Hangup
+    public let type: HangupNodeType
     public let name: String
     /// This is whether or not the node is the start of the workflow.
     public let isStart: Bool?
@@ -11,7 +11,7 @@ public struct HangupNode: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: Hangup,
+        type: HangupNodeType,
         name: String,
         isStart: Bool? = nil,
         metadata: [String: JSONValue]? = nil,
@@ -26,7 +26,7 @@ public struct HangupNode: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode(Hangup.self, forKey: .type)
+        self.type = try container.decode(HangupNodeType.self, forKey: .type)
         self.name = try container.decode(String.self, forKey: .name)
         self.isStart = try container.decodeIfPresent(Bool.self, forKey: .isStart)
         self.metadata = try container.decodeIfPresent([String: JSONValue].self, forKey: .metadata)
@@ -40,10 +40,6 @@ public struct HangupNode: Codable, Hashable, Sendable {
         try container.encode(self.name, forKey: .name)
         try container.encodeIfPresent(self.isStart, forKey: .isStart)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
-    }
-
-    public enum Hangup: String, Codable, Hashable, CaseIterable, Sendable {
-        case hangup
     }
 
     /// Keys for encoding/decoding struct properties.

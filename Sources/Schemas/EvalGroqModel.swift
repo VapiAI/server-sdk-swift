@@ -2,7 +2,7 @@ import Foundation
 
 public struct EvalGroqModel: Codable, Hashable, Sendable {
     /// This is the provider of the model (`groq`).
-    public let provider: Groq
+    public let provider: EvalGroqModelProvider
     /// This is the name of the model. Ex. gpt-4o
     public let model: EvalGroqModelModel
     /// This is the temperature of the model. For LLM-as-a-judge, it's recommended to set it between 0 - 0.3 to avoid hallucinations and ensure the model judges the output correctly based on the instructions.
@@ -10,29 +10,40 @@ public struct EvalGroqModel: Codable, Hashable, Sendable {
     /// This is the max tokens of the model.
     /// If your Judge instructions return `true` or `false` takes only 1 token (as per the OpenAI Tokenizer), and therefore is recommended to set it to a low number to force the model to return a short response.
     public let maxTokens: Double?
+    /// These are the messages which will instruct the AI Judge on how to evaluate the assistant message.
+    /// The LLM-Judge must respond with "pass" or "fail" to indicate if the assistant message passes the eval.
+    /// 
+    /// To access the messages in the mock conversation, use the LiquidJS variable `{{messages}}`.
+    /// The assistant message to be evaluated will be passed as the last message in the `messages` array and can be accessed using `{{messages[-1]}}`.
+    /// 
+    /// It is recommended to use the system message to instruct the LLM how to evaluate the assistant message, and then use the first user message to pass the assistant message to be evaluated.
+    public let messages: [[String: JSONValue]]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Groq,
+        provider: EvalGroqModelProvider,
         model: EvalGroqModelModel,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
+        messages: [[String: JSONValue]],
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.provider = provider
         self.model = model
         self.temperature = temperature
         self.maxTokens = maxTokens
+        self.messages = messages
         self.additionalProperties = additionalProperties
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Groq.self, forKey: .provider)
+        self.provider = try container.decode(EvalGroqModelProvider.self, forKey: .provider)
         self.model = try container.decode(EvalGroqModelModel.self, forKey: .model)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
+        self.messages = try container.decode([[String: JSONValue]].self, forKey: .messages)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -43,10 +54,7 @@ public struct EvalGroqModel: Codable, Hashable, Sendable {
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
-    }
-
-    public enum Groq: String, Codable, Hashable, CaseIterable, Sendable {
-        case groq
+        try container.encode(self.messages, forKey: .messages)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -55,5 +63,6 @@ public struct EvalGroqModel: Codable, Hashable, Sendable {
         case model
         case temperature
         case maxTokens
+        case messages
     }
 }

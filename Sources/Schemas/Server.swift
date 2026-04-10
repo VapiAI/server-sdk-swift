@@ -7,6 +7,12 @@ public struct Server: Codable, Hashable, Sendable {
     public let timeoutSeconds: Double?
     /// The credential ID for server authentication
     public let credentialId: String?
+    /// If enabled, requests will originate from a static set of IPs owned and managed by Vapi.
+    /// 
+    /// @default false
+    public let staticIpAddressesEnabled: Bool?
+    /// This is the paths to encrypt in the request body if credentialId and encryptionPlan are defined.
+    public let encryptedPaths: [String]?
     /// This is where the request will be sent.
     public let url: String?
     /// These are the headers to include in the request.
@@ -25,6 +31,8 @@ public struct Server: Codable, Hashable, Sendable {
     public init(
         timeoutSeconds: Double? = nil,
         credentialId: String? = nil,
+        staticIpAddressesEnabled: Bool? = nil,
+        encryptedPaths: [String]? = nil,
         url: String? = nil,
         headers: [String: JSONValue]? = nil,
         backoffPlan: BackoffPlan? = nil,
@@ -32,6 +40,8 @@ public struct Server: Codable, Hashable, Sendable {
     ) {
         self.timeoutSeconds = timeoutSeconds
         self.credentialId = credentialId
+        self.staticIpAddressesEnabled = staticIpAddressesEnabled
+        self.encryptedPaths = encryptedPaths
         self.url = url
         self.headers = headers
         self.backoffPlan = backoffPlan
@@ -42,6 +52,8 @@ public struct Server: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.timeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .timeoutSeconds)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
+        self.staticIpAddressesEnabled = try container.decodeIfPresent(Bool.self, forKey: .staticIpAddressesEnabled)
+        self.encryptedPaths = try container.decodeIfPresent([String].self, forKey: .encryptedPaths)
         self.url = try container.decodeIfPresent(String.self, forKey: .url)
         self.headers = try container.decodeIfPresent([String: JSONValue].self, forKey: .headers)
         self.backoffPlan = try container.decodeIfPresent(BackoffPlan.self, forKey: .backoffPlan)
@@ -53,6 +65,8 @@ public struct Server: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.timeoutSeconds, forKey: .timeoutSeconds)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
+        try container.encodeIfPresent(self.staticIpAddressesEnabled, forKey: .staticIpAddressesEnabled)
+        try container.encodeIfPresent(self.encryptedPaths, forKey: .encryptedPaths)
         try container.encodeIfPresent(self.url, forKey: .url)
         try container.encodeIfPresent(self.headers, forKey: .headers)
         try container.encodeIfPresent(self.backoffPlan, forKey: .backoffPlan)
@@ -62,6 +76,8 @@ public struct Server: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case timeoutSeconds
         case credentialId
+        case staticIpAddressesEnabled
+        case encryptedPaths
         case url
         case headers
         case backoffPlan

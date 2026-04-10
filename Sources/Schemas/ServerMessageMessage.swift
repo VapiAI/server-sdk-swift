@@ -10,36 +10,49 @@ import Foundation
 /// 4. `org.serverUrl` (if configured)
 public enum ServerMessageMessage: Codable, Hashable, Sendable {
     case serverMessageAssistantRequest(ServerMessageAssistantRequest)
+    case serverMessageAssistantSpeech(ServerMessageAssistantSpeech)
+    case serverMessageCallDeleted(ServerMessageCallDeleted)
+    case serverMessageCallDeleteFailed(ServerMessageCallDeleteFailed)
+    case serverMessageCallEndpointingRequest(ServerMessageCallEndpointingRequest)
+    case serverMessageChatCreated(ServerMessageChatCreated)
+    case serverMessageChatDeleted(ServerMessageChatDeleted)
     case serverMessageConversationUpdate(ServerMessageConversationUpdate)
     case serverMessageEndOfCallReport(ServerMessageEndOfCallReport)
     case serverMessageHandoffDestinationRequest(ServerMessageHandoffDestinationRequest)
     case serverMessageHang(ServerMessageHang)
     case serverMessageKnowledgeBaseRequest(ServerMessageKnowledgeBaseRequest)
+    case serverMessageLanguageChangeDetected(ServerMessageLanguageChangeDetected)
     case serverMessageModelOutput(ServerMessageModelOutput)
     case serverMessagePhoneCallControl(ServerMessagePhoneCallControl)
+    case serverMessageSessionCreated(ServerMessageSessionCreated)
+    case serverMessageSessionDeleted(ServerMessageSessionDeleted)
+    case serverMessageSessionUpdated(ServerMessageSessionUpdated)
     case serverMessageSpeechUpdate(ServerMessageSpeechUpdate)
     case serverMessageStatusUpdate(ServerMessageStatusUpdate)
     case serverMessageToolCalls(ServerMessageToolCalls)
+    case serverMessageTranscript(ServerMessageTranscript)
     case serverMessageTransferDestinationRequest(ServerMessageTransferDestinationRequest)
     case serverMessageTransferUpdate(ServerMessageTransferUpdate)
-    case serverMessageTranscript(ServerMessageTranscript)
     case serverMessageUserInterrupted(ServerMessageUserInterrupted)
-    case serverMessageLanguageChangeDetected(ServerMessageLanguageChangeDetected)
     case serverMessageVoiceInput(ServerMessageVoiceInput)
     case serverMessageVoiceRequest(ServerMessageVoiceRequest)
-    case serverMessageCallEndpointingRequest(ServerMessageCallEndpointingRequest)
-    case serverMessageChatCreated(ServerMessageChatCreated)
-    case serverMessageChatDeleted(ServerMessageChatDeleted)
-    case serverMessageSessionCreated(ServerMessageSessionCreated)
-    case serverMessageSessionUpdated(ServerMessageSessionUpdated)
-    case serverMessageSessionDeleted(ServerMessageSessionDeleted)
-    case serverMessageCallDeleted(ServerMessageCallDeleted)
-    case serverMessageCallDeleteFailed(ServerMessageCallDeleteFailed)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let value = try? container.decode(ServerMessageAssistantRequest.self) {
             self = .serverMessageAssistantRequest(value)
+        } else if let value = try? container.decode(ServerMessageAssistantSpeech.self) {
+            self = .serverMessageAssistantSpeech(value)
+        } else if let value = try? container.decode(ServerMessageCallDeleted.self) {
+            self = .serverMessageCallDeleted(value)
+        } else if let value = try? container.decode(ServerMessageCallDeleteFailed.self) {
+            self = .serverMessageCallDeleteFailed(value)
+        } else if let value = try? container.decode(ServerMessageCallEndpointingRequest.self) {
+            self = .serverMessageCallEndpointingRequest(value)
+        } else if let value = try? container.decode(ServerMessageChatCreated.self) {
+            self = .serverMessageChatCreated(value)
+        } else if let value = try? container.decode(ServerMessageChatDeleted.self) {
+            self = .serverMessageChatDeleted(value)
         } else if let value = try? container.decode(ServerMessageConversationUpdate.self) {
             self = .serverMessageConversationUpdate(value)
         } else if let value = try? container.decode(ServerMessageEndOfCallReport.self) {
@@ -50,46 +63,36 @@ public enum ServerMessageMessage: Codable, Hashable, Sendable {
             self = .serverMessageHang(value)
         } else if let value = try? container.decode(ServerMessageKnowledgeBaseRequest.self) {
             self = .serverMessageKnowledgeBaseRequest(value)
+        } else if let value = try? container.decode(ServerMessageLanguageChangeDetected.self) {
+            self = .serverMessageLanguageChangeDetected(value)
         } else if let value = try? container.decode(ServerMessageModelOutput.self) {
             self = .serverMessageModelOutput(value)
         } else if let value = try? container.decode(ServerMessagePhoneCallControl.self) {
             self = .serverMessagePhoneCallControl(value)
+        } else if let value = try? container.decode(ServerMessageSessionCreated.self) {
+            self = .serverMessageSessionCreated(value)
+        } else if let value = try? container.decode(ServerMessageSessionDeleted.self) {
+            self = .serverMessageSessionDeleted(value)
+        } else if let value = try? container.decode(ServerMessageSessionUpdated.self) {
+            self = .serverMessageSessionUpdated(value)
         } else if let value = try? container.decode(ServerMessageSpeechUpdate.self) {
             self = .serverMessageSpeechUpdate(value)
         } else if let value = try? container.decode(ServerMessageStatusUpdate.self) {
             self = .serverMessageStatusUpdate(value)
         } else if let value = try? container.decode(ServerMessageToolCalls.self) {
             self = .serverMessageToolCalls(value)
+        } else if let value = try? container.decode(ServerMessageTranscript.self) {
+            self = .serverMessageTranscript(value)
         } else if let value = try? container.decode(ServerMessageTransferDestinationRequest.self) {
             self = .serverMessageTransferDestinationRequest(value)
         } else if let value = try? container.decode(ServerMessageTransferUpdate.self) {
             self = .serverMessageTransferUpdate(value)
-        } else if let value = try? container.decode(ServerMessageTranscript.self) {
-            self = .serverMessageTranscript(value)
         } else if let value = try? container.decode(ServerMessageUserInterrupted.self) {
             self = .serverMessageUserInterrupted(value)
-        } else if let value = try? container.decode(ServerMessageLanguageChangeDetected.self) {
-            self = .serverMessageLanguageChangeDetected(value)
         } else if let value = try? container.decode(ServerMessageVoiceInput.self) {
             self = .serverMessageVoiceInput(value)
         } else if let value = try? container.decode(ServerMessageVoiceRequest.self) {
             self = .serverMessageVoiceRequest(value)
-        } else if let value = try? container.decode(ServerMessageCallEndpointingRequest.self) {
-            self = .serverMessageCallEndpointingRequest(value)
-        } else if let value = try? container.decode(ServerMessageChatCreated.self) {
-            self = .serverMessageChatCreated(value)
-        } else if let value = try? container.decode(ServerMessageChatDeleted.self) {
-            self = .serverMessageChatDeleted(value)
-        } else if let value = try? container.decode(ServerMessageSessionCreated.self) {
-            self = .serverMessageSessionCreated(value)
-        } else if let value = try? container.decode(ServerMessageSessionUpdated.self) {
-            self = .serverMessageSessionUpdated(value)
-        } else if let value = try? container.decode(ServerMessageSessionDeleted.self) {
-            self = .serverMessageSessionDeleted(value)
-        } else if let value = try? container.decode(ServerMessageCallDeleted.self) {
-            self = .serverMessageCallDeleted(value)
-        } else if let value = try? container.decode(ServerMessageCallDeleteFailed.self) {
-            self = .serverMessageCallDeleteFailed(value)
         } else {
             throw DecodingError.dataCorruptedError(
                 in: container,
@@ -103,6 +106,18 @@ public enum ServerMessageMessage: Codable, Hashable, Sendable {
         switch self {
         case .serverMessageAssistantRequest(let value):
             try container.encode(value)
+        case .serverMessageAssistantSpeech(let value):
+            try container.encode(value)
+        case .serverMessageCallDeleted(let value):
+            try container.encode(value)
+        case .serverMessageCallDeleteFailed(let value):
+            try container.encode(value)
+        case .serverMessageCallEndpointingRequest(let value):
+            try container.encode(value)
+        case .serverMessageChatCreated(let value):
+            try container.encode(value)
+        case .serverMessageChatDeleted(let value):
+            try container.encode(value)
         case .serverMessageConversationUpdate(let value):
             try container.encode(value)
         case .serverMessageEndOfCallReport(let value):
@@ -113,9 +128,17 @@ public enum ServerMessageMessage: Codable, Hashable, Sendable {
             try container.encode(value)
         case .serverMessageKnowledgeBaseRequest(let value):
             try container.encode(value)
+        case .serverMessageLanguageChangeDetected(let value):
+            try container.encode(value)
         case .serverMessageModelOutput(let value):
             try container.encode(value)
         case .serverMessagePhoneCallControl(let value):
+            try container.encode(value)
+        case .serverMessageSessionCreated(let value):
+            try container.encode(value)
+        case .serverMessageSessionDeleted(let value):
+            try container.encode(value)
+        case .serverMessageSessionUpdated(let value):
             try container.encode(value)
         case .serverMessageSpeechUpdate(let value):
             try container.encode(value)
@@ -123,35 +146,17 @@ public enum ServerMessageMessage: Codable, Hashable, Sendable {
             try container.encode(value)
         case .serverMessageToolCalls(let value):
             try container.encode(value)
+        case .serverMessageTranscript(let value):
+            try container.encode(value)
         case .serverMessageTransferDestinationRequest(let value):
             try container.encode(value)
         case .serverMessageTransferUpdate(let value):
             try container.encode(value)
-        case .serverMessageTranscript(let value):
-            try container.encode(value)
         case .serverMessageUserInterrupted(let value):
-            try container.encode(value)
-        case .serverMessageLanguageChangeDetected(let value):
             try container.encode(value)
         case .serverMessageVoiceInput(let value):
             try container.encode(value)
         case .serverMessageVoiceRequest(let value):
-            try container.encode(value)
-        case .serverMessageCallEndpointingRequest(let value):
-            try container.encode(value)
-        case .serverMessageChatCreated(let value):
-            try container.encode(value)
-        case .serverMessageChatDeleted(let value):
-            try container.encode(value)
-        case .serverMessageSessionCreated(let value):
-            try container.encode(value)
-        case .serverMessageSessionUpdated(let value):
-            try container.encode(value)
-        case .serverMessageSessionDeleted(let value):
-            try container.encode(value)
-        case .serverMessageCallDeleted(let value):
-            try container.encode(value)
-        case .serverMessageCallDeleteFailed(let value):
             try container.encode(value)
         }
     }

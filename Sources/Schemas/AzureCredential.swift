@@ -1,7 +1,7 @@
 import Foundation
 
 public struct AzureCredential: Codable, Hashable, Sendable {
-    public let provider: Azure
+    public let provider: AzureCredentialProvider
     /// This is the service being used in Azure.
     public let service: AzureCredentialService
     /// This is the region of the Azure resource.
@@ -26,7 +26,7 @@ public struct AzureCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Azure,
+        provider: AzureCredentialProvider,
         service: AzureCredentialService,
         region: AzureCredentialRegion? = nil,
         apiKey: String? = nil,
@@ -55,7 +55,7 @@ public struct AzureCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Azure.self, forKey: .provider)
+        self.provider = try container.decode(AzureCredentialProvider.self, forKey: .provider)
         self.service = try container.decode(AzureCredentialService.self, forKey: .service)
         self.region = try container.decodeIfPresent(AzureCredentialRegion.self, forKey: .region)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
@@ -83,10 +83,6 @@ public struct AzureCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.bucketPlan, forKey: .bucketPlan)
-    }
-
-    public enum Azure: String, Codable, Hashable, CaseIterable, Sendable {
-        case azure
     }
 
     /// Keys for encoding/decoding struct properties.

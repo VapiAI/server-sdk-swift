@@ -9,6 +9,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
     /// 
     /// This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the `contents` field.
     public let message: TransferDestinationAssistantMessage?
+    public let type: TransferDestinationAssistantType
     /// This is the mode to use for the transfer. Defaults to `rolling-history`.
     /// 
     /// - `rolling-history`: This is the default mode. It keeps the entire conversation history and appends the new assistant's system message on transfer.
@@ -107,12 +108,14 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
 
     public init(
         message: TransferDestinationAssistantMessage? = nil,
+        type: TransferDestinationAssistantType,
         transferMode: TransferMode? = nil,
         assistantName: String,
         description: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.message = message
+        self.type = type
         self.transferMode = transferMode
         self.assistantName = assistantName
         self.description = description
@@ -122,6 +125,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.message = try container.decodeIfPresent(TransferDestinationAssistantMessage.self, forKey: .message)
+        self.type = try container.decode(TransferDestinationAssistantType.self, forKey: .type)
         self.transferMode = try container.decodeIfPresent(TransferMode.self, forKey: .transferMode)
         self.assistantName = try container.decode(String.self, forKey: .assistantName)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
@@ -132,6 +136,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.message, forKey: .message)
+        try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.transferMode, forKey: .transferMode)
         try container.encode(self.assistantName, forKey: .assistantName)
         try container.encodeIfPresent(self.description, forKey: .description)
@@ -140,6 +145,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case message
+        case type
         case transferMode
         case assistantName
         case description

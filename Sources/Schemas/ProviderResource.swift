@@ -10,13 +10,13 @@ public struct ProviderResource: Codable, Hashable, Sendable {
     /// This is the ISO 8601 date-time string of when the provider resource was last updated.
     public let updatedAt: Date
     /// This is the provider that manages this resource.
-    public let provider: Value
+    public let provider: ProviderResourceProvider
     /// This is the name/type of the resource.
-    public let resourceName: PronunciationDictionary
+    public let resourceName: ProviderResourceResourceName
     /// This is the provider-specific identifier for the resource.
     public let resourceId: String
     /// This is the full resource data from the provider's API.
-    public let resource: ElevenLabsPronunciationDictionary
+    public let resource: [String: JSONValue]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -25,10 +25,10 @@ public struct ProviderResource: Codable, Hashable, Sendable {
         orgId: String,
         createdAt: Date,
         updatedAt: Date,
-        provider: Value,
-        resourceName: PronunciationDictionary,
+        provider: ProviderResourceProvider,
+        resourceName: ProviderResourceResourceName,
         resourceId: String,
-        resource: ElevenLabsPronunciationDictionary,
+        resource: [String: JSONValue],
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.id = id
@@ -48,10 +48,10 @@ public struct ProviderResource: Codable, Hashable, Sendable {
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
-        self.provider = try container.decode(Value.self, forKey: .provider)
-        self.resourceName = try container.decode(PronunciationDictionary.self, forKey: .resourceName)
+        self.provider = try container.decode(ProviderResourceProvider.self, forKey: .provider)
+        self.resourceName = try container.decode(ProviderResourceResourceName.self, forKey: .resourceName)
         self.resourceId = try container.decode(String.self, forKey: .resourceId)
-        self.resource = try container.decode(ElevenLabsPronunciationDictionary.self, forKey: .resource)
+        self.resource = try container.decode([String: JSONValue].self, forKey: .resource)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -66,14 +66,6 @@ public struct ProviderResource: Codable, Hashable, Sendable {
         try container.encode(self.resourceName, forKey: .resourceName)
         try container.encode(self.resourceId, forKey: .resourceId)
         try container.encode(self.resource, forKey: .resource)
-    }
-
-    public enum Value: String, Codable, Hashable, CaseIterable, Sendable {
-        case value = "11labs"
-    }
-
-    public enum PronunciationDictionary: String, Codable, Hashable, CaseIterable, Sendable {
-        case pronunciationDictionary = "pronunciation-dictionary"
     }
 
     /// Keys for encoding/decoding struct properties.

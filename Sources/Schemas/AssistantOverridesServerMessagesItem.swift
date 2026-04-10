@@ -1,6 +1,8 @@
 import Foundation
 
 public enum AssistantOverridesServerMessagesItem: String, Codable, Hashable, CaseIterable, Sendable {
+    case assistantStarted = "assistant.started"
+    case assistantSpeechStarted = "assistant.speechStarted"
     case conversationUpdate = "conversation-update"
     case endOfCallReport = "end-of-call-report"
     case functionCall = "function-call"

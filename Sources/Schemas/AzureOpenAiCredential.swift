@@ -1,7 +1,7 @@
 import Foundation
 
 public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
-    public let provider: AzureOpenai
+    public let provider: AzureOpenAiCredentialProvider
     public let region: AzureOpenAiCredentialRegion
     public let models: [AzureOpenAiCredentialModelsItem]
     /// This is not returned in the API.
@@ -23,7 +23,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: AzureOpenai,
+        provider: AzureOpenAiCredentialProvider,
         region: AzureOpenAiCredentialRegion,
         models: [AzureOpenAiCredentialModelsItem],
         openAiKey: String,
@@ -52,7 +52,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(AzureOpenai.self, forKey: .provider)
+        self.provider = try container.decode(AzureOpenAiCredentialProvider.self, forKey: .provider)
         self.region = try container.decode(AzureOpenAiCredentialRegion.self, forKey: .region)
         self.models = try container.decode([AzureOpenAiCredentialModelsItem].self, forKey: .models)
         self.openAiKey = try container.decode(String.self, forKey: .openAiKey)
@@ -80,10 +80,6 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.openAiEndpoint, forKey: .openAiEndpoint)
-    }
-
-    public enum AzureOpenai: String, Codable, Hashable, CaseIterable, Sendable {
-        case azureOpenai = "azure-openai"
     }
 
     /// Keys for encoding/decoding struct properties.

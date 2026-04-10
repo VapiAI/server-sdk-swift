@@ -6,7 +6,7 @@ public struct CreateMakeToolDto: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [CreateMakeToolDtoMessagesItem]?
     /// The type of tool. "make" for Make tool.
-    public let type: Make
+    public let type: CreateMakeToolDtoType
     public let metadata: MakeToolMetadata
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
@@ -92,7 +92,7 @@ public struct CreateMakeToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [CreateMakeToolDtoMessagesItem]? = nil,
-        type: Make,
+        type: CreateMakeToolDtoType,
         metadata: MakeToolMetadata,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -107,7 +107,7 @@ public struct CreateMakeToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([CreateMakeToolDtoMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(Make.self, forKey: .type)
+        self.type = try container.decode(CreateMakeToolDtoType.self, forKey: .type)
         self.metadata = try container.decode(MakeToolMetadata.self, forKey: .metadata)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -120,10 +120,6 @@ public struct CreateMakeToolDto: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encode(self.metadata, forKey: .metadata)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum Make: String, Codable, Hashable, CaseIterable, Sendable {
-        case make
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Available voices by language:
-/// • en: Alex, Ashley, Craig, Deborah, Dennis, Edward, Elizabeth, Hades, Julia, Pixie, Mark, Olivia, Priya, Ronald, Sarah, Shaun, Theodore, Timothy, Wendy, Dominus
+/// • en: Alex, Ashley, Craig, Deborah, Dennis, Edward, Elizabeth, Hades, Julia, Pixie, Mark, Olivia, Priya, Ronald, Sarah, Shaun, Theodore, Timothy, Wendy, Dominus, Hana, Clive, Carter, Blake, Luna
 /// • zh: Yichen, Xiaoyin, Xinyi, Jing
 /// • nl: Erik, Katrien, Lennart, Lore
 /// • fr: Alain, Hélène, Mathieu, Étienne
@@ -12,6 +12,10 @@ import Foundation
 /// • pl: Szymon, Wojciech
 /// • pt: Heitor, Maitê
 /// • es: Diego, Lupita, Miguel, Rafael
+/// • ru: Svetlana, Elena, Dmitry, Nikolai
+/// • hi: Riya, Manoj
+/// • he: Yael, Oren
+/// • ar: Nour, Omar
 public enum FallbackInworldVoiceVoiceId: String, Codable, Hashable, CaseIterable, Sendable {
     case alex = "Alex"
     case ashley = "Ashley"
@@ -33,6 +37,11 @@ public enum FallbackInworldVoiceVoiceId: String, Codable, Hashable, CaseIterable
     case timothy = "Timothy"
     case wendy = "Wendy"
     case dominus = "Dominus"
+    case hana = "Hana"
+    case clive = "Clive"
+    case carter = "Carter"
+    case blake = "Blake"
+    case luna = "Luna"
     case yichen = "Yichen"
     case xiaoyin = "Xiaoyin"
     case xinyi = "Xinyi"
@@ -63,4 +72,14 @@ public enum FallbackInworldVoiceVoiceId: String, Codable, Hashable, CaseIterable
     case lupita = "Lupita"
     case miguel = "Miguel"
     case rafael = "Rafael"
+    case svetlana = "Svetlana"
+    case elena = "Elena"
+    case dmitry = "Dmitry"
+    case nikolai = "Nikolai"
+    case riya = "Riya"
+    case manoj = "Manoj"
+    case yael = "Yael"
+    case oren = "Oren"
+    case nour = "Nour"
+    case omar = "Omar"
 }

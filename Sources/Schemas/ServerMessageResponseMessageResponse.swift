@@ -5,17 +5,19 @@ import Foundation
 /// Note: Most messages don't expect a response. Only "assistant-request", "tool-calls" and "transfer-destination-request" do.
 public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
     case serverMessageResponseAssistantRequest(ServerMessageResponseAssistantRequest)
+    case serverMessageResponseCallEndpointingRequest(ServerMessageResponseCallEndpointingRequest)
     case serverMessageResponseHandoffDestinationRequest(ServerMessageResponseHandoffDestinationRequest)
     case serverMessageResponseKnowledgeBaseRequest(ServerMessageResponseKnowledgeBaseRequest)
     case serverMessageResponseToolCalls(ServerMessageResponseToolCalls)
     case serverMessageResponseTransferDestinationRequest(ServerMessageResponseTransferDestinationRequest)
     case serverMessageResponseVoiceRequest(ServerMessageResponseVoiceRequest)
-    case serverMessageResponseCallEndpointingRequest(ServerMessageResponseCallEndpointingRequest)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let value = try? container.decode(ServerMessageResponseAssistantRequest.self) {
             self = .serverMessageResponseAssistantRequest(value)
+        } else if let value = try? container.decode(ServerMessageResponseCallEndpointingRequest.self) {
+            self = .serverMessageResponseCallEndpointingRequest(value)
         } else if let value = try? container.decode(ServerMessageResponseHandoffDestinationRequest.self) {
             self = .serverMessageResponseHandoffDestinationRequest(value)
         } else if let value = try? container.decode(ServerMessageResponseKnowledgeBaseRequest.self) {
@@ -26,8 +28,6 @@ public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
             self = .serverMessageResponseTransferDestinationRequest(value)
         } else if let value = try? container.decode(ServerMessageResponseVoiceRequest.self) {
             self = .serverMessageResponseVoiceRequest(value)
-        } else if let value = try? container.decode(ServerMessageResponseCallEndpointingRequest.self) {
-            self = .serverMessageResponseCallEndpointingRequest(value)
         } else {
             throw DecodingError.dataCorruptedError(
                 in: container,
@@ -41,6 +41,8 @@ public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
         switch self {
         case .serverMessageResponseAssistantRequest(let value):
             try container.encode(value)
+        case .serverMessageResponseCallEndpointingRequest(let value):
+            try container.encode(value)
         case .serverMessageResponseHandoffDestinationRequest(let value):
             try container.encode(value)
         case .serverMessageResponseKnowledgeBaseRequest(let value):
@@ -50,8 +52,6 @@ public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
         case .serverMessageResponseTransferDestinationRequest(let value):
             try container.encode(value)
         case .serverMessageResponseVoiceRequest(let value):
-            try container.encode(value)
-        case .serverMessageResponseCallEndpointingRequest(let value):
             try container.encode(value)
         }
     }

@@ -4,7 +4,7 @@ public struct ResponseObject: Codable, Hashable, Sendable {
     /// Unique identifier for this Response
     public let id: String
     /// The object type
-    public let object: Response
+    public let object: ResponseObjectObject
     /// Unix timestamp (in seconds) of when this Response was created
     public let createdAt: Double
     /// Status of the response
@@ -18,7 +18,7 @@ public struct ResponseObject: Codable, Hashable, Sendable {
 
     public init(
         id: String,
-        object: Response,
+        object: ResponseObjectObject,
         createdAt: Double,
         status: ResponseObjectStatus,
         error: Nullable<String>? = nil,
@@ -37,7 +37,7 @@ public struct ResponseObject: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
-        self.object = try container.decode(Response.self, forKey: .object)
+        self.object = try container.decode(ResponseObjectObject.self, forKey: .object)
         self.createdAt = try container.decode(Double.self, forKey: .createdAt)
         self.status = try container.decode(ResponseObjectStatus.self, forKey: .status)
         self.error = try container.decodeNullableIfPresent(String.self, forKey: .error)
@@ -54,10 +54,6 @@ public struct ResponseObject: Codable, Hashable, Sendable {
         try container.encode(self.status, forKey: .status)
         try container.encodeNullableIfPresent(self.error, forKey: .error)
         try container.encode(self.output, forKey: .output)
-    }
-
-    public enum Response: String, Codable, Hashable, CaseIterable, Sendable {
-        case response
     }
 
     /// Keys for encoding/decoding struct properties.

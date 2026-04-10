@@ -5,7 +5,6 @@ public struct WorkflowAnthropicModel: Codable, Hashable, Sendable {
     public let model: WorkflowAnthropicModelModel
     /// This is the optional configuration for Anthropic's thinking feature.
     /// 
-    /// - Only applicable for `claude-3-7-sonnet-20250219` model.
     /// - If provided, `maxTokens` must be greater than `thinking.budgetTokens`.
     public let thinking: AnthropicThinkingConfig?
     /// This is the temperature of the model.

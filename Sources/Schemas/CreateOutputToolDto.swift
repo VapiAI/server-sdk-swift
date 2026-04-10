@@ -6,7 +6,7 @@ public struct CreateOutputToolDto: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [CreateOutputToolDtoMessagesItem]?
     /// The type of tool. "output" for Output tool.
-    public let type: Output
+    public let type: CreateOutputToolDtoType
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -91,7 +91,7 @@ public struct CreateOutputToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [CreateOutputToolDtoMessagesItem]? = nil,
-        type: Output,
+        type: CreateOutputToolDtoType,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -104,7 +104,7 @@ public struct CreateOutputToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([CreateOutputToolDtoMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(Output.self, forKey: .type)
+        self.type = try container.decode(CreateOutputToolDtoType.self, forKey: .type)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -115,10 +115,6 @@ public struct CreateOutputToolDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum Output: String, Codable, Hashable, CaseIterable, Sendable {
-        case output
     }
 
     /// Keys for encoding/decoding struct properties.

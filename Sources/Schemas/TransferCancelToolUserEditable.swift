@@ -6,7 +6,7 @@ public struct TransferCancelToolUserEditable: Codable, Hashable, Sendable {
     /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
     public let messages: [TransferCancelToolUserEditableMessagesItem]?
     /// The type of tool. "transferCancel" for Transfer Cancel tool. This tool can only be used during warm-transfer-experimental by the transfer assistant to cancel an ongoing transfer and return the call back to the original assistant when the transfer cannot be completed.
-    public let type: TransferCancel
+    public let type: TransferCancelToolUserEditableType
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -91,7 +91,7 @@ public struct TransferCancelToolUserEditable: Codable, Hashable, Sendable {
 
     public init(
         messages: [TransferCancelToolUserEditableMessagesItem]? = nil,
-        type: TransferCancel,
+        type: TransferCancelToolUserEditableType,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -104,7 +104,7 @@ public struct TransferCancelToolUserEditable: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([TransferCancelToolUserEditableMessagesItem].self, forKey: .messages)
-        self.type = try container.decode(TransferCancel.self, forKey: .type)
+        self.type = try container.decode(TransferCancelToolUserEditableType.self, forKey: .type)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -115,10 +115,6 @@ public struct TransferCancelToolUserEditable: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-    }
-
-    public enum TransferCancel: String, Codable, Hashable, CaseIterable, Sendable {
-        case transferCancel
     }
 
     /// Keys for encoding/decoding struct properties.

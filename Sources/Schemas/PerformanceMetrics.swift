@@ -13,6 +13,14 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
     public let endpointingLatencyAverage: Double?
     /// This is the average latency for complete turns.
     public let turnLatencyAverage: Double?
+    /// This is the average latency for packets received from the transport provider in milliseconds.
+    public let fromTransportLatencyAverage: Double?
+    /// This is the average latency for packets sent to the transport provider in milliseconds.
+    public let toTransportLatencyAverage: Double?
+    /// This is the number of times the user was interrupted by the assistant during the call.
+    public let numUserInterrupted: Double?
+    /// This is the number of times the assistant was interrupted by the user during the call.
+    public let numAssistantInterrupted: Double?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -23,6 +31,10 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         transcriberLatencyAverage: Double? = nil,
         endpointingLatencyAverage: Double? = nil,
         turnLatencyAverage: Double? = nil,
+        fromTransportLatencyAverage: Double? = nil,
+        toTransportLatencyAverage: Double? = nil,
+        numUserInterrupted: Double? = nil,
+        numAssistantInterrupted: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.turnLatencies = turnLatencies
@@ -31,6 +43,10 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         self.transcriberLatencyAverage = transcriberLatencyAverage
         self.endpointingLatencyAverage = endpointingLatencyAverage
         self.turnLatencyAverage = turnLatencyAverage
+        self.fromTransportLatencyAverage = fromTransportLatencyAverage
+        self.toTransportLatencyAverage = toTransportLatencyAverage
+        self.numUserInterrupted = numUserInterrupted
+        self.numAssistantInterrupted = numAssistantInterrupted
         self.additionalProperties = additionalProperties
     }
 
@@ -42,6 +58,10 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         self.transcriberLatencyAverage = try container.decodeIfPresent(Double.self, forKey: .transcriberLatencyAverage)
         self.endpointingLatencyAverage = try container.decodeIfPresent(Double.self, forKey: .endpointingLatencyAverage)
         self.turnLatencyAverage = try container.decodeIfPresent(Double.self, forKey: .turnLatencyAverage)
+        self.fromTransportLatencyAverage = try container.decodeIfPresent(Double.self, forKey: .fromTransportLatencyAverage)
+        self.toTransportLatencyAverage = try container.decodeIfPresent(Double.self, forKey: .toTransportLatencyAverage)
+        self.numUserInterrupted = try container.decodeIfPresent(Double.self, forKey: .numUserInterrupted)
+        self.numAssistantInterrupted = try container.decodeIfPresent(Double.self, forKey: .numAssistantInterrupted)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -54,6 +74,10 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.transcriberLatencyAverage, forKey: .transcriberLatencyAverage)
         try container.encodeIfPresent(self.endpointingLatencyAverage, forKey: .endpointingLatencyAverage)
         try container.encodeIfPresent(self.turnLatencyAverage, forKey: .turnLatencyAverage)
+        try container.encodeIfPresent(self.fromTransportLatencyAverage, forKey: .fromTransportLatencyAverage)
+        try container.encodeIfPresent(self.toTransportLatencyAverage, forKey: .toTransportLatencyAverage)
+        try container.encodeIfPresent(self.numUserInterrupted, forKey: .numUserInterrupted)
+        try container.encodeIfPresent(self.numAssistantInterrupted, forKey: .numAssistantInterrupted)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -64,5 +88,9 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         case transcriberLatencyAverage
         case endpointingLatencyAverage
         case turnLatencyAverage
+        case fromTransportLatencyAverage
+        case toTransportLatencyAverage
+        case numUserInterrupted
+        case numAssistantInterrupted
     }
 }

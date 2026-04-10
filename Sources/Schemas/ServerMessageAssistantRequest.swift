@@ -4,7 +4,7 @@ public struct ServerMessageAssistantRequest: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageAssistantRequestPhoneNumber?
     /// This is the type of the message. "assistant-request" is sent to fetch assistant configuration for an incoming call.
-    public let type: AssistantRequest
+    public let type: ServerMessageAssistantRequestType
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// This is a live version of the `call.artifact`.
@@ -24,7 +24,7 @@ public struct ServerMessageAssistantRequest: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageAssistantRequestPhoneNumber? = nil,
-        type: AssistantRequest,
+        type: ServerMessageAssistantRequestType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -47,7 +47,7 @@ public struct ServerMessageAssistantRequest: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageAssistantRequestPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(AssistantRequest.self, forKey: .type)
+        self.type = try container.decode(ServerMessageAssistantRequestType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -68,10 +68,6 @@ public struct ServerMessageAssistantRequest: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum AssistantRequest: String, Codable, Hashable, CaseIterable, Sendable {
-        case assistantRequest = "assistant-request"
     }
 
     /// Keys for encoding/decoding struct properties.

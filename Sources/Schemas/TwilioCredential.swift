@@ -1,7 +1,7 @@
 import Foundation
 
 public struct TwilioCredential: Codable, Hashable, Sendable {
-    public let provider: Twilio
+    public let provider: TwilioCredentialProvider
     /// This is not returned in the API.
     public let authToken: String?
     /// This is not returned in the API.
@@ -23,7 +23,7 @@ public struct TwilioCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Twilio,
+        provider: TwilioCredentialProvider,
         authToken: String? = nil,
         apiKey: String? = nil,
         apiSecret: String? = nil,
@@ -50,7 +50,7 @@ public struct TwilioCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Twilio.self, forKey: .provider)
+        self.provider = try container.decode(TwilioCredentialProvider.self, forKey: .provider)
         self.authToken = try container.decodeIfPresent(String.self, forKey: .authToken)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
         self.apiSecret = try container.decodeIfPresent(String.self, forKey: .apiSecret)
@@ -76,10 +76,6 @@ public struct TwilioCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.accountSid, forKey: .accountSid)
-    }
-
-    public enum Twilio: String, Codable, Hashable, CaseIterable, Sendable {
-        case twilio
     }
 
     /// Keys for encoding/decoding struct properties.

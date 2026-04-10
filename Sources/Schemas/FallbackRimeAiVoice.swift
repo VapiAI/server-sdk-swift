@@ -17,6 +17,8 @@ public struct FallbackRimeAiVoice: Codable, Hashable, Sendable {
     public let reduceLatency: Bool?
     /// This is a string that allows inline speed control using alpha notation. https://docs.rime.ai/api-reference/endpoint/websockets#param-inline-speed-alpha
     public let inlineSpeedAlpha: String?
+    /// Language for speech synthesis. Uses ISO 639 codes. Supported: en, es, de, fr, ar, hi, ja, he, pt, ta, si.
+    public let language: FallbackRimeAiVoiceLanguage?
     /// This is the plan for chunking the model output before it is sent to the voice provider.
     public let chunkPlan: ChunkPlan?
     /// Additional properties that are not explicitly defined in the schema
@@ -31,6 +33,7 @@ public struct FallbackRimeAiVoice: Codable, Hashable, Sendable {
         phonemizeBetweenBrackets: Bool? = nil,
         reduceLatency: Bool? = nil,
         inlineSpeedAlpha: String? = nil,
+        language: FallbackRimeAiVoiceLanguage? = nil,
         chunkPlan: ChunkPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -42,6 +45,7 @@ public struct FallbackRimeAiVoice: Codable, Hashable, Sendable {
         self.phonemizeBetweenBrackets = phonemizeBetweenBrackets
         self.reduceLatency = reduceLatency
         self.inlineSpeedAlpha = inlineSpeedAlpha
+        self.language = language
         self.chunkPlan = chunkPlan
         self.additionalProperties = additionalProperties
     }
@@ -56,6 +60,7 @@ public struct FallbackRimeAiVoice: Codable, Hashable, Sendable {
         self.phonemizeBetweenBrackets = try container.decodeIfPresent(Bool.self, forKey: .phonemizeBetweenBrackets)
         self.reduceLatency = try container.decodeIfPresent(Bool.self, forKey: .reduceLatency)
         self.inlineSpeedAlpha = try container.decodeIfPresent(String.self, forKey: .inlineSpeedAlpha)
+        self.language = try container.decodeIfPresent(FallbackRimeAiVoiceLanguage.self, forKey: .language)
         self.chunkPlan = try container.decodeIfPresent(ChunkPlan.self, forKey: .chunkPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -71,6 +76,7 @@ public struct FallbackRimeAiVoice: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.phonemizeBetweenBrackets, forKey: .phonemizeBetweenBrackets)
         try container.encodeIfPresent(self.reduceLatency, forKey: .reduceLatency)
         try container.encodeIfPresent(self.inlineSpeedAlpha, forKey: .inlineSpeedAlpha)
+        try container.encodeIfPresent(self.language, forKey: .language)
         try container.encodeIfPresent(self.chunkPlan, forKey: .chunkPlan)
     }
 
@@ -84,6 +90,7 @@ public struct FallbackRimeAiVoice: Codable, Hashable, Sendable {
         case phonemizeBetweenBrackets
         case reduceLatency
         case inlineSpeedAlpha
+        case language
         case chunkPlan
     }
 }

@@ -4,7 +4,7 @@ public struct ServerMessageStatusUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageStatusUpdatePhoneNumber?
     /// This is the type of the message. "status-update" is sent whenever the `call.status` changes.
-    public let type: StatusUpdate
+    public let type: ServerMessageStatusUpdateType
     /// This is the status of the call.
     public let status: ServerMessageStatusUpdateStatus
     /// This is the reason the call ended. This is only sent if the status is "ended".
@@ -42,7 +42,7 @@ public struct ServerMessageStatusUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageStatusUpdatePhoneNumber? = nil,
-        type: StatusUpdate,
+        type: ServerMessageStatusUpdateType,
         status: ServerMessageStatusUpdateStatus,
         endedReason: ServerMessageStatusUpdateEndedReason? = nil,
         messages: [ServerMessageStatusUpdateMessagesItem]? = nil,
@@ -81,7 +81,7 @@ public struct ServerMessageStatusUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageStatusUpdatePhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(StatusUpdate.self, forKey: .type)
+        self.type = try container.decode(ServerMessageStatusUpdateType.self, forKey: .type)
         self.status = try container.decode(ServerMessageStatusUpdateStatus.self, forKey: .status)
         self.endedReason = try container.decodeIfPresent(ServerMessageStatusUpdateEndedReason.self, forKey: .endedReason)
         self.messages = try container.decodeIfPresent([ServerMessageStatusUpdateMessagesItem].self, forKey: .messages)
@@ -118,10 +118,6 @@ public struct ServerMessageStatusUpdate: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.transcript, forKey: .transcript)
         try container.encodeIfPresent(self.summary, forKey: .summary)
         try container.encodeIfPresent(self.inboundPhoneCallDebuggingArtifacts, forKey: .inboundPhoneCallDebuggingArtifacts)
-    }
-
-    public enum StatusUpdate: String, Codable, Hashable, CaseIterable, Sendable {
-        case statusUpdate = "status-update"
     }
 
     /// Keys for encoding/decoding struct properties.

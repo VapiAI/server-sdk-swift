@@ -1,22 +1,27 @@
 import Foundation
 
 public enum UpdateAzureOpenAiCredentialDtoRegion: String, Codable, Hashable, CaseIterable, Sendable {
-    case australia
+    case australiaeast
     case canadaeast
     case canadacentral
+    case centralus
     case eastus2
     case eastus
     case france
+    case germanywestcentral
     case india
     case japaneast
     case japanwest
-    case uaenorth
     case northcentralus
     case norway
+    case polandcentral
     case southcentralus
+    case spaincentral
     case swedencentral
     case switzerland
+    case uaenorth
     case uk
+    case westeurope
     case westus
     case westus3
 }

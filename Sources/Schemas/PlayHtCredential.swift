@@ -1,7 +1,7 @@
 import Foundation
 
 public struct PlayHtCredential: Codable, Hashable, Sendable {
-    public let provider: Playht
+    public let provider: PlayHtCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
     /// This is the unique identifier for the credential.
@@ -19,7 +19,7 @@ public struct PlayHtCredential: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        provider: Playht,
+        provider: PlayHtCredentialProvider,
         apiKey: String,
         id: String,
         orgId: String,
@@ -42,7 +42,7 @@ public struct PlayHtCredential: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.provider = try container.decode(Playht.self, forKey: .provider)
+        self.provider = try container.decode(PlayHtCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
@@ -64,10 +64,6 @@ public struct PlayHtCredential: Codable, Hashable, Sendable {
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.userId, forKey: .userId)
-    }
-
-    public enum Playht: String, Codable, Hashable, CaseIterable, Sendable {
-        case playht
     }
 
     /// Keys for encoding/decoding struct properties.

@@ -4,13 +4,16 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageEndOfCallReportPhoneNumber?
     /// This is the type of the message. "end-of-call-report" is sent when the call ends and post-processing is complete.
-    public let type: EndOfCallReport
+    public let type: ServerMessageEndOfCallReportType
     /// This is the reason the call ended. This can also be found at `call.endedReason` on GET /call/:id.
     public let endedReason: ServerMessageEndOfCallReportEndedReason
     /// This is the cost of the call in USD. This can also be found at `call.cost` on GET /call/:id.
     public let cost: Double?
     /// These are the costs of individual components of the call in USD. This can also be found at `call.costs` on GET /call/:id.
     public let costs: [ServerMessageEndOfCallReportCostsItem]?
+    /// This is the destination the call was transferred to, if the call was forwarded.
+    /// This can also be found at `call.destination` on GET /call/:id.
+    public let destination: ServerMessageEndOfCallReportDestination?
     /// This is the timestamp of the message.
     public let timestamp: Double?
     /// These are the artifacts from the call. This can also be found at `call.artifact` on GET /call/:id.
@@ -36,10 +39,11 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageEndOfCallReportPhoneNumber? = nil,
-        type: EndOfCallReport,
+        type: ServerMessageEndOfCallReportType,
         endedReason: ServerMessageEndOfCallReportEndedReason,
         cost: Double? = nil,
         costs: [ServerMessageEndOfCallReportCostsItem]? = nil,
+        destination: ServerMessageEndOfCallReportDestination? = nil,
         timestamp: Double? = nil,
         artifact: Artifact,
         assistant: CreateAssistantDto? = nil,
@@ -57,6 +61,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
         self.endedReason = endedReason
         self.cost = cost
         self.costs = costs
+        self.destination = destination
         self.timestamp = timestamp
         self.artifact = artifact
         self.assistant = assistant
@@ -73,10 +78,11 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageEndOfCallReportPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(EndOfCallReport.self, forKey: .type)
+        self.type = try container.decode(ServerMessageEndOfCallReportType.self, forKey: .type)
         self.endedReason = try container.decode(ServerMessageEndOfCallReportEndedReason.self, forKey: .endedReason)
         self.cost = try container.decodeIfPresent(Double.self, forKey: .cost)
         self.costs = try container.decodeIfPresent([ServerMessageEndOfCallReportCostsItem].self, forKey: .costs)
+        self.destination = try container.decodeIfPresent(ServerMessageEndOfCallReportDestination.self, forKey: .destination)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decode(Artifact.self, forKey: .artifact)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -98,6 +104,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
         try container.encode(self.endedReason, forKey: .endedReason)
         try container.encodeIfPresent(self.cost, forKey: .cost)
         try container.encodeIfPresent(self.costs, forKey: .costs)
+        try container.encodeIfPresent(self.destination, forKey: .destination)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encode(self.artifact, forKey: .artifact)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
@@ -110,10 +117,6 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.compliance, forKey: .compliance)
     }
 
-    public enum EndOfCallReport: String, Codable, Hashable, CaseIterable, Sendable {
-        case endOfCallReport = "end-of-call-report"
-    }
-
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
@@ -121,6 +124,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
         case endedReason
         case cost
         case costs
+        case destination
         case timestamp
         case artifact
         case assistant

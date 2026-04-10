@@ -29,7 +29,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
     /// {
     ///   "timeoutSeconds": 0.5
     /// }
-    public let type: CallEndpointingRequest
+    public let type: ServerMessageCallEndpointingRequestType
     /// This is the conversation history at the time of the endpointing request.
     public let messages: [ServerMessageCallEndpointingRequestMessagesItem]?
     /// This is just `messages` formatted for OpenAI.
@@ -53,7 +53,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageCallEndpointingRequestPhoneNumber? = nil,
-        type: CallEndpointingRequest,
+        type: ServerMessageCallEndpointingRequestType,
         messages: [ServerMessageCallEndpointingRequestMessagesItem]? = nil,
         messagesOpenAiFormatted: [OpenAiMessage],
         timestamp: Double? = nil,
@@ -80,7 +80,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageCallEndpointingRequestPhoneNumber.self, forKey: .phoneNumber)
-        self.type = try container.decode(CallEndpointingRequest.self, forKey: .type)
+        self.type = try container.decode(ServerMessageCallEndpointingRequestType.self, forKey: .type)
         self.messages = try container.decodeIfPresent([ServerMessageCallEndpointingRequestMessagesItem].self, forKey: .messages)
         self.messagesOpenAiFormatted = try container.decode([OpenAiMessage].self, forKey: .messagesOpenAiFormatted)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
@@ -105,10 +105,6 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.call, forKey: .call)
         try container.encodeIfPresent(self.chat, forKey: .chat)
-    }
-
-    public enum CallEndpointingRequest: String, Codable, Hashable, CaseIterable, Sendable {
-        case callEndpointingRequest = "call.endpointing.request"
     }
 
     /// Keys for encoding/decoding struct properties.

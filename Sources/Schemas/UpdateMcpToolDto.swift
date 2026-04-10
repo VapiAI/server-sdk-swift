@@ -15,6 +15,8 @@ public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
     ///   - Webhook is sent to the first available URL in this order: {{tool.server.url}}, {{assistant.server.url}}, {{phoneNumber.server.url}}, {{org.server.url}}.
     ///   - Webhook expects a response with tool call result.
     public let server: Server?
+    /// Per-tool message overrides for individual tools loaded from the MCP server. Set messages to an empty array to suppress messages for a specific tool. Tools not listed here will use the default messages from the parent tool.
+    public let toolMessages: [McpToolMessages]?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -101,12 +103,14 @@ public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
     public init(
         messages: [UpdateMcpToolDtoMessagesItem]? = nil,
         server: Server? = nil,
+        toolMessages: [McpToolMessages]? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         metadata: McpToolMetadata? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
         self.server = server
+        self.toolMessages = toolMessages
         self.rejectionPlan = rejectionPlan
         self.metadata = metadata
         self.additionalProperties = additionalProperties
@@ -116,6 +120,7 @@ public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateMcpToolDtoMessagesItem].self, forKey: .messages)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
+        self.toolMessages = try container.decodeIfPresent([McpToolMessages].self, forKey: .toolMessages)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.metadata = try container.decodeIfPresent(McpToolMetadata.self, forKey: .metadata)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -126,6 +131,7 @@ public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.server, forKey: .server)
+        try container.encodeIfPresent(self.toolMessages, forKey: .toolMessages)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
     }
@@ -134,6 +140,7 @@ public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
         case server
+        case toolMessages
         case rejectionPlan
         case metadata
     }

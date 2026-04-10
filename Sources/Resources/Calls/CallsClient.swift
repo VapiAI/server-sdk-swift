@@ -7,71 +7,36 @@ public final class CallsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func list(id: Nullable<String>? = nil, assistantId: Nullable<String>? = nil, phoneNumberId: Nullable<String>? = nil, limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> [Call] {
+    public func list(id: String? = nil, assistantId: String? = nil, phoneNumberId: String? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> [Call] {
         return try await httpClient.performRequest(
             method: .get,
             path: "/call",
             queryParams: [
-                "id": id?.wrappedValue.map { .string($0) }, 
-                "assistantId": assistantId?.wrappedValue.map { .string($0) }, 
-                "phoneNumberId": phoneNumberId?.wrappedValue.map { .string($0) }, 
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
+                "id": id.map { .string($0) }, 
+                "assistantId": assistantId.map { .string($0) }, 
+                "phoneNumberId": phoneNumberId.map { .string($0) }, 
+                "limit": limit.map { .double($0) }, 
+                "createdAtGt": createdAtGt.map { .date($0) }, 
+                "createdAtLt": createdAtLt.map { .date($0) }, 
+                "createdAtGe": createdAtGe.map { .date($0) }, 
+                "createdAtLe": createdAtLe.map { .date($0) }, 
+                "updatedAtGt": updatedAtGt.map { .date($0) }, 
+                "updatedAtLt": updatedAtLt.map { .date($0) }, 
+                "updatedAtGe": updatedAtGe.map { .date($0) }, 
+                "updatedAtLe": updatedAtLe.map { .date($0) }
             ],
             requestOptions: requestOptions,
             responseType: [Call].self
         )
     }
 
-    public func create(request: Requests.CreateCallDto, requestOptions: RequestOptions? = nil) async throws -> CallsCreateResponse {
+    public func create(request: Requests.CreateCallDto, requestOptions: RequestOptions? = nil) async throws -> CreateCallsResponse {
         return try await httpClient.performRequest(
             method: .post,
             path: "/call",
             body: request,
             requestOptions: requestOptions,
-            responseType: CallsCreateResponse.self
-        )
-    }
-
-    public func callControllerFindAllPaginated(assistantOverrides: Nullable<[String: JSONValue]>? = nil, customer: Nullable<[String: JSONValue]>? = nil, assistantId: Nullable<String>? = nil, assistantName: Nullable<String>? = nil, id: Nullable<String>? = nil, idAny: Nullable<String>? = nil, costLe: Nullable<Double>? = nil, costGe: Nullable<Double>? = nil, cost: Nullable<Double>? = nil, successEvaluation: Nullable<String>? = nil, endedReason: Nullable<String>? = nil, phoneNumberId: Nullable<String>? = nil, structuredOutputs: Nullable<[String: Nullable<CallControllerFindAllPaginatedRequestStructuredOutputsValue>?]>? = nil, page: Nullable<Double>? = nil, sortOrder: Nullable<CallControllerFindAllPaginatedRequestSortOrder>? = nil, limit: Nullable<Double>? = nil, createdAtGt: Nullable<Date>? = nil, createdAtLt: Nullable<Date>? = nil, createdAtGe: Nullable<Date>? = nil, createdAtLe: Nullable<Date>? = nil, updatedAtGt: Nullable<Date>? = nil, updatedAtLt: Nullable<Date>? = nil, updatedAtGe: Nullable<Date>? = nil, updatedAtLe: Nullable<Date>? = nil, requestOptions: RequestOptions? = nil) async throws -> CallPaginatedResponse {
-        return try await httpClient.performRequest(
-            method: .get,
-            path: "/v2/call",
-            queryParams: [
-                "assistantOverrides": assistantOverrides?.wrappedValue.map { .unknown($0) }, 
-                "customer": customer?.wrappedValue.map { .unknown($0) }, 
-                "assistantId": assistantId?.wrappedValue.map { .string($0) }, 
-                "assistantName": assistantName?.wrappedValue.map { .string($0) }, 
-                "id": id?.wrappedValue.map { .string($0) }, 
-                "idAny": idAny?.wrappedValue.map { .string($0) }, 
-                "costLe": costLe?.wrappedValue.map { .double($0) }, 
-                "costGe": costGe?.wrappedValue.map { .double($0) }, 
-                "cost": cost?.wrappedValue.map { .double($0) }, 
-                "successEvaluation": successEvaluation?.wrappedValue.map { .string($0) }, 
-                "endedReason": endedReason?.wrappedValue.map { .string($0) }, 
-                "phoneNumberId": phoneNumberId?.wrappedValue.map { .string($0) }, 
-                "structuredOutputs": structuredOutputs?.wrappedValue.map { .unknown($0) }, 
-                "page": page?.wrappedValue.map { .double($0) }, 
-                "sortOrder": sortOrder?.wrappedValue.map { .string($0.rawValue) }, 
-                "limit": limit?.wrappedValue.map { .double($0) }, 
-                "createdAtGt": createdAtGt?.wrappedValue.map { .date($0) }, 
-                "createdAtLt": createdAtLt?.wrappedValue.map { .date($0) }, 
-                "createdAtGe": createdAtGe?.wrappedValue.map { .date($0) }, 
-                "createdAtLe": createdAtLe?.wrappedValue.map { .date($0) }, 
-                "updatedAtGt": updatedAtGt?.wrappedValue.map { .date($0) }, 
-                "updatedAtLt": updatedAtLt?.wrappedValue.map { .date($0) }, 
-                "updatedAtGe": updatedAtGe?.wrappedValue.map { .date($0) }, 
-                "updatedAtLe": updatedAtLe?.wrappedValue.map { .date($0) }
-            ],
-            requestOptions: requestOptions,
-            responseType: CallPaginatedResponse.self
+            responseType: CreateCallsResponse.self
         )
     }
 

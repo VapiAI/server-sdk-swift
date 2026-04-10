@@ -2,7 +2,7 @@ import Foundation
 
 public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
     /// This is the language that will be set for the transcription.
-    public let language: En?
+    public let language: AssemblyAiTranscriberLanguage?
     /// Transcripts below this confidence threshold will be discarded.
     /// 
     /// @default 0.4
@@ -26,6 +26,17 @@ public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
     /// Note: Only used if startSpeakingPlan.smartEndpointingPlan is not set.
     /// @default 400
     public let maxTurnSilence: Double?
+    /// Use VAD to assist with endpointing decisions from the transcriber.
+    /// When enabled, transcriber endpointing will be buffered if VAD detects the user is still speaking, preventing premature turn-taking.
+    /// When disabled, transcriber endpointing will be used immediately regardless of VAD state, allowing for quicker but more aggressive turn-taking.
+    /// Note: Only used if startSpeakingPlan.smartEndpointingPlan is not set.
+    /// 
+    /// @default true
+    public let vadAssistedEndpointingEnabled: Bool?
+    /// This is the speech model used for the streaming session.
+    /// Note: Keyterms prompting is not supported with multilingual streaming.
+    /// @default 'universal-streaming-english'
+    public let speechModel: AssemblyAiTranscriberSpeechModel?
     /// The WebSocket URL that the transcriber connects to.
     public let realtimeUrl: String?
     /// Add up to 2500 characters of custom vocabulary.
@@ -39,19 +50,21 @@ public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
     /// Disable partial transcripts.
     /// Set to `true` to not receive partial transcripts. Defaults to `false`.
     public let disablePartialTranscripts: Bool?
-    /// This is the plan for voice provider fallbacks in the event that the primary voice provider fails.
+    /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        language: En? = nil,
+        language: AssemblyAiTranscriberLanguage? = nil,
         confidenceThreshold: Double? = nil,
         formatTurns: Bool? = nil,
         endOfTurnConfidenceThreshold: Double? = nil,
         minEndOfTurnSilenceWhenConfident: Double? = nil,
         wordFinalizationMaxWaitTime: Double? = nil,
         maxTurnSilence: Double? = nil,
+        vadAssistedEndpointingEnabled: Bool? = nil,
+        speechModel: AssemblyAiTranscriberSpeechModel? = nil,
         realtimeUrl: String? = nil,
         wordBoost: [String]? = nil,
         keytermsPrompt: [String]? = nil,
@@ -67,6 +80,8 @@ public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
         self.minEndOfTurnSilenceWhenConfident = minEndOfTurnSilenceWhenConfident
         self.wordFinalizationMaxWaitTime = wordFinalizationMaxWaitTime
         self.maxTurnSilence = maxTurnSilence
+        self.vadAssistedEndpointingEnabled = vadAssistedEndpointingEnabled
+        self.speechModel = speechModel
         self.realtimeUrl = realtimeUrl
         self.wordBoost = wordBoost
         self.keytermsPrompt = keytermsPrompt
@@ -78,13 +93,15 @@ public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.language = try container.decodeIfPresent(En.self, forKey: .language)
+        self.language = try container.decodeIfPresent(AssemblyAiTranscriberLanguage.self, forKey: .language)
         self.confidenceThreshold = try container.decodeIfPresent(Double.self, forKey: .confidenceThreshold)
         self.formatTurns = try container.decodeIfPresent(Bool.self, forKey: .formatTurns)
         self.endOfTurnConfidenceThreshold = try container.decodeIfPresent(Double.self, forKey: .endOfTurnConfidenceThreshold)
         self.minEndOfTurnSilenceWhenConfident = try container.decodeIfPresent(Double.self, forKey: .minEndOfTurnSilenceWhenConfident)
         self.wordFinalizationMaxWaitTime = try container.decodeIfPresent(Double.self, forKey: .wordFinalizationMaxWaitTime)
         self.maxTurnSilence = try container.decodeIfPresent(Double.self, forKey: .maxTurnSilence)
+        self.vadAssistedEndpointingEnabled = try container.decodeIfPresent(Bool.self, forKey: .vadAssistedEndpointingEnabled)
+        self.speechModel = try container.decodeIfPresent(AssemblyAiTranscriberSpeechModel.self, forKey: .speechModel)
         self.realtimeUrl = try container.decodeIfPresent(String.self, forKey: .realtimeUrl)
         self.wordBoost = try container.decodeIfPresent([String].self, forKey: .wordBoost)
         self.keytermsPrompt = try container.decodeIfPresent([String].self, forKey: .keytermsPrompt)
@@ -104,16 +121,14 @@ public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.minEndOfTurnSilenceWhenConfident, forKey: .minEndOfTurnSilenceWhenConfident)
         try container.encodeIfPresent(self.wordFinalizationMaxWaitTime, forKey: .wordFinalizationMaxWaitTime)
         try container.encodeIfPresent(self.maxTurnSilence, forKey: .maxTurnSilence)
+        try container.encodeIfPresent(self.vadAssistedEndpointingEnabled, forKey: .vadAssistedEndpointingEnabled)
+        try container.encodeIfPresent(self.speechModel, forKey: .speechModel)
         try container.encodeIfPresent(self.realtimeUrl, forKey: .realtimeUrl)
         try container.encodeIfPresent(self.wordBoost, forKey: .wordBoost)
         try container.encodeIfPresent(self.keytermsPrompt, forKey: .keytermsPrompt)
         try container.encodeIfPresent(self.endUtteranceSilenceThreshold, forKey: .endUtteranceSilenceThreshold)
         try container.encodeIfPresent(self.disablePartialTranscripts, forKey: .disablePartialTranscripts)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
-    }
-
-    public enum En: String, Codable, Hashable, CaseIterable, Sendable {
-        case en
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -125,6 +140,8 @@ public struct AssemblyAiTranscriber: Codable, Hashable, Sendable {
         case minEndOfTurnSilenceWhenConfident
         case wordFinalizationMaxWaitTime
         case maxTurnSilence
+        case vadAssistedEndpointingEnabled
+        case speechModel
         case realtimeUrl
         case wordBoost
         case keytermsPrompt

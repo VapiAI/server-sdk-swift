@@ -125,6 +125,8 @@ public struct Call: Codable, Hashable, Sendable {
     public let schedulePlan: SchedulePlan?
     /// This is the transport of the call.
     public let transport: [String: JSONValue]?
+    /// These are the subscription limits for the org at the time of the call. Includes concurrency limit information.
+    public let subscriptionLimits: SubscriptionLimits?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -169,6 +171,7 @@ public struct Call: Codable, Hashable, Sendable {
         name: String? = nil,
         schedulePlan: SchedulePlan? = nil,
         transport: [String: JSONValue]? = nil,
+        subscriptionLimits: SubscriptionLimits? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.type = type
@@ -211,6 +214,7 @@ public struct Call: Codable, Hashable, Sendable {
         self.name = name
         self.schedulePlan = schedulePlan
         self.transport = transport
+        self.subscriptionLimits = subscriptionLimits
         self.additionalProperties = additionalProperties
     }
 
@@ -256,6 +260,7 @@ public struct Call: Codable, Hashable, Sendable {
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.schedulePlan = try container.decodeIfPresent(SchedulePlan.self, forKey: .schedulePlan)
         self.transport = try container.decodeIfPresent([String: JSONValue].self, forKey: .transport)
+        self.subscriptionLimits = try container.decodeIfPresent(SubscriptionLimits.self, forKey: .subscriptionLimits)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -302,6 +307,7 @@ public struct Call: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.schedulePlan, forKey: .schedulePlan)
         try container.encodeIfPresent(self.transport, forKey: .transport)
+        try container.encodeIfPresent(self.subscriptionLimits, forKey: .subscriptionLimits)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -346,5 +352,6 @@ public struct Call: Codable, Hashable, Sendable {
         case name
         case schedulePlan
         case transport
+        case subscriptionLimits
     }
 }

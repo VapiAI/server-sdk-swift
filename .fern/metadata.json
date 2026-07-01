@@ -1,5 +1,5 @@
 {
-  "cliVersion": "5.51.2",
+  "cliVersion": "5.63.0",
   "generatorName": "fernapi/fern-swift-sdk",
   "generatorVersion": "0.31.0",
   "generatorConfig": {
@@ -7,6 +7,6 @@
     "moduleName": "Vapi",
     "environmentEnumName": "VapiEnvironment"
   },
-  "originGitCommit": "5a015aa01196915bea6110904c69d5804f457ff5",
-  "sdkVersion": "1.0.0"
+  "originGitCommit": "2c66caa46a7889ac44f77d16914eb96a3641e6af",
+  "sdkVersion": "1.0.1"
 }

@@ -1,1 +1,1 @@
-public let sdkVersion = "0.0.0-fern-placeholder"
+public let sdkVersion = "1.0.1"

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for using LiveKit smart endpointing, including provider selection and wait-function behavior.
 public struct LivekitSmartEndpointingPlan: Codable, Hashable, Sendable {
     /// This is the provider for the smart endpointing plan.
     public let provider: LivekitSmartEndpointingPlanProvider

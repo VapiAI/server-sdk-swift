@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for storing call artifacts in Amazon S3, including access keys, region, bucket, path prefix, and upload fallback order.
 public struct CreateS3CredentialDto: Codable, Hashable, Sendable {
     /// AWS access key ID.
     public let awsAccessKeyId: String

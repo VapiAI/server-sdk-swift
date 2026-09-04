@@ -34,6 +34,8 @@ extension Requests {
         public let model: UpdateStructuredOutputDtoModel?
         /// Compliance configuration for this output. Only enable overrides if no sensitive data will be stored.
         public let compliancePlan: ComplianceOverride?
+        /// These are the conditions that gate the execution of this structured output. Every condition must pass for the structured output to run (AND semantics). When omitted or empty, no user-defined conditions gate this output. Send null to clear a previously saved gate.
+        public let conditions: Nullable<[UpdateStructuredOutputDtoConditionsItem]>?
         /// This is the name of the structured output.
         public let name: String?
         /// This is the description of what the structured output extracts.
@@ -66,6 +68,7 @@ extension Requests {
             regex: String? = nil,
             model: UpdateStructuredOutputDtoModel? = nil,
             compliancePlan: ComplianceOverride? = nil,
+            conditions: Nullable<[UpdateStructuredOutputDtoConditionsItem]>? = nil,
             name: String? = nil,
             description: String? = nil,
             assistantIds: [String]? = nil,
@@ -77,6 +80,7 @@ extension Requests {
             self.regex = regex
             self.model = model
             self.compliancePlan = compliancePlan
+            self.conditions = conditions
             self.name = name
             self.description = description
             self.assistantIds = assistantIds
@@ -91,6 +95,7 @@ extension Requests {
             self.regex = try container.decodeIfPresent(String.self, forKey: .regex)
             self.model = try container.decodeIfPresent(UpdateStructuredOutputDtoModel.self, forKey: .model)
             self.compliancePlan = try container.decodeIfPresent(ComplianceOverride.self, forKey: .compliancePlan)
+            self.conditions = try container.decodeNullableIfPresent([UpdateStructuredOutputDtoConditionsItem].self, forKey: .conditions)
             self.name = try container.decodeIfPresent(String.self, forKey: .name)
             self.description = try container.decodeIfPresent(String.self, forKey: .description)
             self.assistantIds = try container.decodeIfPresent([String].self, forKey: .assistantIds)
@@ -106,6 +111,7 @@ extension Requests {
             try container.encodeIfPresent(self.regex, forKey: .regex)
             try container.encodeIfPresent(self.model, forKey: .model)
             try container.encodeIfPresent(self.compliancePlan, forKey: .compliancePlan)
+            try container.encodeNullableIfPresent(self.conditions, forKey: .conditions)
             try container.encodeIfPresent(self.name, forKey: .name)
             try container.encodeIfPresent(self.description, forKey: .description)
             try container.encodeIfPresent(self.assistantIds, forKey: .assistantIds)
@@ -119,6 +125,7 @@ extension Requests {
             case regex
             case model
             case compliancePlan
+            case conditions
             case name
             case description
             case assistantIds

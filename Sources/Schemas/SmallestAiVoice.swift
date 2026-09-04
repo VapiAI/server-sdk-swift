@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with Smallest AI, including voice and model selection, speed, chunking, caching, and fallback settings.
 public struct SmallestAiVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

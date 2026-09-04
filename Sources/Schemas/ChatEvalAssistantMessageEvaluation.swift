@@ -1,5 +1,6 @@
 import Foundation
 
+/// An expected assistant turn in an evaluation, including the judge plan and how the evaluation should continue afterward.
 public struct ChatEvalAssistantMessageEvaluation: Codable, Hashable, Sendable {
     /// This is the role of the message author.
     /// For an assistant message evaluation, the role is always 'assistant'

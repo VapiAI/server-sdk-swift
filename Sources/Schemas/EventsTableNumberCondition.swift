@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters event data by comparing a numeric field with a value.
 public struct EventsTableNumberCondition: Codable, Hashable, Sendable {
     /// The number field name from the event data
     public let column: String

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with Google, including model and language.
 public struct FallbackGoogleTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: FallbackGoogleTranscriberModel?

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Reusable custom credentials for authenticating outbound requests, with optional public-key encryption for sensitive request data.
 public struct CreateCustomCredentialDto: Codable, Hashable, Sendable {
     /// This is the authentication plan. Supports OAuth2 RFC 6749, HMAC signing, and Bearer authentication.
     public let authenticationPlan: CreateCustomCredentialDtoAuthenticationPlan

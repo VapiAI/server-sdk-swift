@@ -1,5 +1,6 @@
 import Foundation
 
+/// Defines structured variables to extract and optional aliases made available during and after a call.
 public struct VariableExtractionPlan: Codable, Hashable, Sendable {
     /// This is the schema to extract.
     /// 

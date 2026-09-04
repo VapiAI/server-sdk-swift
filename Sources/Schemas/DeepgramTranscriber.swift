@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with Deepgram, including model, language, formatting, endpointing, vocabulary, and fallback settings.
 public struct DeepgramTranscriber: Codable, Hashable, Sendable {
     /// This is the Deepgram model that will be used. A list of models can be found here: https://developers.deepgram.com/docs/models-languages-overview
     public let model: DeepgramTranscriberModel?
@@ -21,12 +22,23 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
     /// 
     /// @default false
     public let profanityFilter: Bool?
+    /// Enables redaction of sensitive information from transcripts.
+    /// 
+    /// Options include:
+    /// - "pci": Redacts credit card numbers, expiration dates, and CVV.
+    /// - "pii": Redacts personally identifiable information (names, locations, identifying numbers, etc.).
+    /// - "phi": Redacts protected health information (medical conditions, drugs, injuries, etc.).
+    /// - "numbers": Redacts numerical and identifying entities (dates, account numbers, SSNs, etc.).
+    /// 
+    /// Multiple values can be provided to redact different categories simultaneously.
+    /// Redacted content is replaced with entity labels like [CREDIT_CARD_1], [SSN_1], etc.
+    /// 
+    /// See https://developers.deepgram.com/docs/redaction for details.
+    public let redaction: [DeepgramTranscriberRedactionItem]?
     /// Transcripts below this confidence threshold will be discarded.
     /// 
     /// @default 0.4
     public let confidenceThreshold: Double?
-    /// Eager end-of-turn confidence required to fire a eager end-of-turn event. Setting a value here will enable EagerEndOfTurn and SpeechResumed events. It is disabled by default. Only used with Flux models.
-    public let eagerEotThreshold: Double?
     /// End-of-turn confidence required to finish a turn. Only used with Flux models.
     /// 
     /// @default 0.7
@@ -35,6 +47,10 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
     /// 
     /// @default 5000
     public let eotTimeoutMs: Double?
+    /// Language hints to bias Flux Multilingual (`flux-general-multi`) toward specific languages.
+    /// Provide BCP-47 language codes (e.g. "en", "es", "fr"). Multiple hints can be given for
+    /// multilingual or code-switching scenarios. Omit for auto-detection. Only used with `flux-general-multi`.
+    public let languages: [String]?
     /// These keywords are passed to the transcription model to help it pick up use-case specific words. Anything that may not be a common word, like your company name, should be added here.
     public let keywords: [String]?
     /// Keyterm Prompting allows you improve Keyword Recall Rate (KRR) for important keyterms or phrases up to 90%.
@@ -60,10 +76,11 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         mipOptOut: Bool? = nil,
         numerals: Bool? = nil,
         profanityFilter: Bool? = nil,
+        redaction: [DeepgramTranscriberRedactionItem]? = nil,
         confidenceThreshold: Double? = nil,
-        eagerEotThreshold: Double? = nil,
         eotThreshold: Double? = nil,
         eotTimeoutMs: Double? = nil,
+        languages: [String]? = nil,
         keywords: [String]? = nil,
         keyterm: [String]? = nil,
         endpointing: Double? = nil,
@@ -76,10 +93,11 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         self.mipOptOut = mipOptOut
         self.numerals = numerals
         self.profanityFilter = profanityFilter
+        self.redaction = redaction
         self.confidenceThreshold = confidenceThreshold
-        self.eagerEotThreshold = eagerEotThreshold
         self.eotThreshold = eotThreshold
         self.eotTimeoutMs = eotTimeoutMs
+        self.languages = languages
         self.keywords = keywords
         self.keyterm = keyterm
         self.endpointing = endpointing
@@ -95,10 +113,11 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         self.mipOptOut = try container.decodeIfPresent(Bool.self, forKey: .mipOptOut)
         self.numerals = try container.decodeIfPresent(Bool.self, forKey: .numerals)
         self.profanityFilter = try container.decodeIfPresent(Bool.self, forKey: .profanityFilter)
+        self.redaction = try container.decodeIfPresent([DeepgramTranscriberRedactionItem].self, forKey: .redaction)
         self.confidenceThreshold = try container.decodeIfPresent(Double.self, forKey: .confidenceThreshold)
-        self.eagerEotThreshold = try container.decodeIfPresent(Double.self, forKey: .eagerEotThreshold)
         self.eotThreshold = try container.decodeIfPresent(Double.self, forKey: .eotThreshold)
         self.eotTimeoutMs = try container.decodeIfPresent(Double.self, forKey: .eotTimeoutMs)
+        self.languages = try container.decodeIfPresent([String].self, forKey: .languages)
         self.keywords = try container.decodeIfPresent([String].self, forKey: .keywords)
         self.keyterm = try container.decodeIfPresent([String].self, forKey: .keyterm)
         self.endpointing = try container.decodeIfPresent(Double.self, forKey: .endpointing)
@@ -115,10 +134,11 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.mipOptOut, forKey: .mipOptOut)
         try container.encodeIfPresent(self.numerals, forKey: .numerals)
         try container.encodeIfPresent(self.profanityFilter, forKey: .profanityFilter)
+        try container.encodeIfPresent(self.redaction, forKey: .redaction)
         try container.encodeIfPresent(self.confidenceThreshold, forKey: .confidenceThreshold)
-        try container.encodeIfPresent(self.eagerEotThreshold, forKey: .eagerEotThreshold)
         try container.encodeIfPresent(self.eotThreshold, forKey: .eotThreshold)
         try container.encodeIfPresent(self.eotTimeoutMs, forKey: .eotTimeoutMs)
+        try container.encodeIfPresent(self.languages, forKey: .languages)
         try container.encodeIfPresent(self.keywords, forKey: .keywords)
         try container.encodeIfPresent(self.keyterm, forKey: .keyterm)
         try container.encodeIfPresent(self.endpointing, forKey: .endpointing)
@@ -133,10 +153,11 @@ public struct DeepgramTranscriber: Codable, Hashable, Sendable {
         case mipOptOut
         case numerals
         case profanityFilter
+        case redaction
         case confidenceThreshold
-        case eagerEotThreshold
         case eotThreshold
         case eotTimeoutMs
+        case languages
         case keywords
         case keyterm
         case endpointing

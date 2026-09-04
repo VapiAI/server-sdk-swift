@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fields used to update a bar-chart insight, including its queries, formulas, grouping, time range, metadata, and name.
 public struct UpdateBarInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -21,6 +22,7 @@ public struct UpdateBarInsightFromCallTableDto: Codable, Hashable, Sendable {
     public let formulas: [InsightFormula]?
     /// This is the metadata for the insight.
     public let metadata: BarInsightMetadata?
+    /// The time range and interval used to aggregate the bar-chart data.
     public let timeRange: InsightTimeRangeWithStep?
     /// This is the group by column for the insight when table is `call`.
     /// These are the columns to group the results by.

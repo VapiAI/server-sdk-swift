@@ -1,5 +1,6 @@
 import Foundation
 
+/// Analysis costs and token usage grouped by summary, structured data, success evaluation, and structured-output generation.
 public struct AnalysisCostBreakdown: Codable, Hashable, Sendable {
     /// This is the cost to summarize the call.
     public let summary: Double?

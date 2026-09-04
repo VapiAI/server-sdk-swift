@@ -1,5 +1,6 @@
 import Foundation
 
+/// A word or phrase to prioritize during Speechmatics transcription, with optional phonetic alternatives.
 public struct SpeechmaticsCustomVocabularyItem: Codable, Hashable, Sendable {
     /// The word or phrase to add to the custom vocabulary.
     public let content: String

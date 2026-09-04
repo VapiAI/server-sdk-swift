@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for generating assistant responses with Anthropic models through Amazon Bedrock, including model, prompts, tools, knowledge-base access, reasoning, and generation settings.
 public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
     /// This is the starting state for the conversation.
     public let messages: [OpenAiMessage]?
@@ -11,6 +12,11 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
     /// 
     /// Both `tools` and `toolIds` can be used together.
     public let toolIds: [String]?
+    /// These are version-pinned references to tools. Each entry pins a specific
+    /// version of a tool by `(toolId, version)`. When the same `toolId` appears
+    /// in both `toolIds` and `toolRefs[]`, the `toolRefs` pin wins (the
+    /// `toolIds` entry is dropped at write time).
+    public let toolRefs: [ToolRef]?
     /// These are the options for the knowledge base.
     public let knowledgeBase: CreateCustomKnowledgeBaseDto?
     /// The specific Anthropic/Claude model that will be used via Bedrock.
@@ -19,7 +25,7 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
     /// Only applicable for claude-3-7-sonnet-20250219 model.
     /// If provided, maxTokens must be greater than thinking.budgetTokens.
     public let thinking: AnthropicThinkingConfig?
-    /// This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
+    /// This is the temperature that will be used for calls. Default is 0.5.
     public let temperature: Double?
     /// This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.
     public let maxTokens: Double?
@@ -42,6 +48,7 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
         messages: [OpenAiMessage]? = nil,
         tools: [AnthropicBedrockModelToolsItem]? = nil,
         toolIds: [String]? = nil,
+        toolRefs: [ToolRef]? = nil,
         knowledgeBase: CreateCustomKnowledgeBaseDto? = nil,
         model: AnthropicBedrockModelModel,
         thinking: AnthropicThinkingConfig? = nil,
@@ -54,6 +61,7 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
         self.messages = messages
         self.tools = tools
         self.toolIds = toolIds
+        self.toolRefs = toolRefs
         self.knowledgeBase = knowledgeBase
         self.model = model
         self.thinking = thinking
@@ -69,6 +77,7 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
         self.messages = try container.decodeIfPresent([OpenAiMessage].self, forKey: .messages)
         self.tools = try container.decodeIfPresent([AnthropicBedrockModelToolsItem].self, forKey: .tools)
         self.toolIds = try container.decodeIfPresent([String].self, forKey: .toolIds)
+        self.toolRefs = try container.decodeIfPresent([ToolRef].self, forKey: .toolRefs)
         self.knowledgeBase = try container.decodeIfPresent(CreateCustomKnowledgeBaseDto.self, forKey: .knowledgeBase)
         self.model = try container.decode(AnthropicBedrockModelModel.self, forKey: .model)
         self.thinking = try container.decodeIfPresent(AnthropicThinkingConfig.self, forKey: .thinking)
@@ -85,6 +94,7 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.tools, forKey: .tools)
         try container.encodeIfPresent(self.toolIds, forKey: .toolIds)
+        try container.encodeIfPresent(self.toolRefs, forKey: .toolRefs)
         try container.encodeIfPresent(self.knowledgeBase, forKey: .knowledgeBase)
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.thinking, forKey: .thinking)
@@ -99,6 +109,7 @@ public struct AnthropicBedrockModel: Codable, Hashable, Sendable {
         case messages
         case tools
         case toolIds
+        case toolRefs
         case knowledgeBase
         case model
         case thinking

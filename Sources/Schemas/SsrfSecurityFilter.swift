@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters potential server-side request forgery (SSRF) patterns from transcripts.
 public struct SsrfSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
     public let type: SsrfSecurityFilterType

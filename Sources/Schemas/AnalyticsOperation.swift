@@ -1,5 +1,6 @@
 import Foundation
 
+/// An aggregation or history operation applied to an analytics column, with an optional response alias.
 public struct AnalyticsOperation: Codable, Hashable, Sendable {
     /// This is the aggregation operation you want to perform.
     public let operation: AnalyticsOperationOperation

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating voice synthesis requests with Neuphonic.
 public struct CreateNeuphonicCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

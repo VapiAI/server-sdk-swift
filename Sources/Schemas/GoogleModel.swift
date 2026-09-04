@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for generating assistant responses with Google, including model, prompts, tools, knowledge-base access, realtime settings, and generation settings.
 public struct GoogleModel: Codable, Hashable, Sendable {
     /// This is the starting state for the conversation.
     public let messages: [OpenAiMessage]?
@@ -11,6 +12,11 @@ public struct GoogleModel: Codable, Hashable, Sendable {
     /// 
     /// Both `tools` and `toolIds` can be used together.
     public let toolIds: [String]?
+    /// These are version-pinned references to tools. Each entry pins a specific
+    /// version of a tool by `(toolId, version)`. When the same `toolId` appears
+    /// in both `toolIds` and `toolRefs[]`, the `toolRefs` pin wins (the
+    /// `toolIds` entry is dropped at write time).
+    public let toolRefs: [ToolRef]?
     /// These are the options for the knowledge base.
     public let knowledgeBase: CreateCustomKnowledgeBaseDto?
     /// This is the Google model that will be used.
@@ -18,7 +24,7 @@ public struct GoogleModel: Codable, Hashable, Sendable {
     /// This is the session configuration for the Gemini Flash 2.0 Multimodal Live API.
     /// Only applicable if the model `gemini-2.0-flash-realtime-exp` is selected.
     public let realtimeConfig: GoogleRealtimeConfig?
-    /// This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
+    /// This is the temperature that will be used for calls. Default is 0.5.
     public let temperature: Double?
     /// This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.
     public let maxTokens: Double?
@@ -41,6 +47,7 @@ public struct GoogleModel: Codable, Hashable, Sendable {
         messages: [OpenAiMessage]? = nil,
         tools: [GoogleModelToolsItem]? = nil,
         toolIds: [String]? = nil,
+        toolRefs: [ToolRef]? = nil,
         knowledgeBase: CreateCustomKnowledgeBaseDto? = nil,
         model: GoogleModelModel,
         realtimeConfig: GoogleRealtimeConfig? = nil,
@@ -53,6 +60,7 @@ public struct GoogleModel: Codable, Hashable, Sendable {
         self.messages = messages
         self.tools = tools
         self.toolIds = toolIds
+        self.toolRefs = toolRefs
         self.knowledgeBase = knowledgeBase
         self.model = model
         self.realtimeConfig = realtimeConfig
@@ -68,6 +76,7 @@ public struct GoogleModel: Codable, Hashable, Sendable {
         self.messages = try container.decodeIfPresent([OpenAiMessage].self, forKey: .messages)
         self.tools = try container.decodeIfPresent([GoogleModelToolsItem].self, forKey: .tools)
         self.toolIds = try container.decodeIfPresent([String].self, forKey: .toolIds)
+        self.toolRefs = try container.decodeIfPresent([ToolRef].self, forKey: .toolRefs)
         self.knowledgeBase = try container.decodeIfPresent(CreateCustomKnowledgeBaseDto.self, forKey: .knowledgeBase)
         self.model = try container.decode(GoogleModelModel.self, forKey: .model)
         self.realtimeConfig = try container.decodeIfPresent(GoogleRealtimeConfig.self, forKey: .realtimeConfig)
@@ -84,6 +93,7 @@ public struct GoogleModel: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.tools, forKey: .tools)
         try container.encodeIfPresent(self.toolIds, forKey: .toolIds)
+        try container.encodeIfPresent(self.toolRefs, forKey: .toolRefs)
         try container.encodeIfPresent(self.knowledgeBase, forKey: .knowledgeBase)
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.realtimeConfig, forKey: .realtimeConfig)
@@ -98,6 +108,7 @@ public struct GoogleModel: Codable, Hashable, Sendable {
         case messages
         case tools
         case toolIds
+        case toolRefs
         case knowledgeBase
         case model
         case realtimeConfig

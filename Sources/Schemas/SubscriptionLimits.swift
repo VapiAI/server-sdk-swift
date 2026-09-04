@@ -1,5 +1,6 @@
 import Foundation
 
+/// Organization concurrency limits and remaining concurrent call capacity.
 public struct SubscriptionLimits: Codable, Hashable, Sendable {
     /// True if this call was blocked by the Call Concurrency limit
     public let concurrencyBlocked: Bool?

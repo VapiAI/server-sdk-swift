@@ -1,5 +1,6 @@
 import Foundation
 
+/// A hook action that adds an OpenAI-format message to the conversation and can trigger an assistant response.
 public struct MessageAddHookAction: Codable, Hashable, Sendable {
     /// The message to add to the conversation in OpenAI format
     public let message: OpenAiMessage

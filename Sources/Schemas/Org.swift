@@ -5,6 +5,11 @@ public struct Org: Codable, Hashable, Sendable {
     /// When HIPAA is enabled, only HIPAA-compliant providers will be available for LLM, Voice, and Transcriber respectively.
     /// This is due to the compliance requirements of HIPAA. Other providers may not meet these requirements.
     public let hipaaEnabled: Bool?
+    /// The org was created locally, but WorkOS access is still being repaired.
+    /// Clients should keep the current session/org and refresh the org list.
+    public let workosRepairPending: Bool?
+    /// Whether the pending WorkOS repair was accepted by Kafka.
+    public let workosRepairQueued: Bool?
     public let subscription: Subscription?
     /// This is the ID of the subscription the org belongs to.
     public let subscriptionId: String?
@@ -54,6 +59,8 @@ public struct Org: Codable, Hashable, Sendable {
 
     public init(
         hipaaEnabled: Bool? = nil,
+        workosRepairPending: Bool? = nil,
+        workosRepairQueued: Bool? = nil,
         subscription: Subscription? = nil,
         subscriptionId: String? = nil,
         id: String,
@@ -74,6 +81,8 @@ public struct Org: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.hipaaEnabled = hipaaEnabled
+        self.workosRepairPending = workosRepairPending
+        self.workosRepairQueued = workosRepairQueued
         self.subscription = subscription
         self.subscriptionId = subscriptionId
         self.id = id
@@ -97,6 +106,8 @@ public struct Org: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.hipaaEnabled = try container.decodeIfPresent(Bool.self, forKey: .hipaaEnabled)
+        self.workosRepairPending = try container.decodeIfPresent(Bool.self, forKey: .workosRepairPending)
+        self.workosRepairQueued = try container.decodeIfPresent(Bool.self, forKey: .workosRepairQueued)
         self.subscription = try container.decodeIfPresent(Subscription.self, forKey: .subscription)
         self.subscriptionId = try container.decodeIfPresent(String.self, forKey: .subscriptionId)
         self.id = try container.decode(String.self, forKey: .id)
@@ -121,6 +132,8 @@ public struct Org: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.hipaaEnabled, forKey: .hipaaEnabled)
+        try container.encodeIfPresent(self.workosRepairPending, forKey: .workosRepairPending)
+        try container.encodeIfPresent(self.workosRepairQueued, forKey: .workosRepairQueued)
         try container.encodeIfPresent(self.subscription, forKey: .subscription)
         try container.encodeIfPresent(self.subscriptionId, forKey: .subscriptionId)
         try container.encode(self.id, forKey: .id)
@@ -143,6 +156,8 @@ public struct Org: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case hipaaEnabled
+        case workosRepairPending
+        case workosRepairQueued
         case subscription
         case subscriptionId
         case id

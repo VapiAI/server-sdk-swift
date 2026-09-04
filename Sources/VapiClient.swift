@@ -11,8 +11,15 @@ public final class VapiClient: Sendable {
     public let phoneNumbers: PhoneNumbersClient
     public let tools: ToolsClient
     public let files: FilesClient
+    public let knowledgeBasesV2: KnowledgeBasesV2Client
     public let structuredOutputs: StructuredOutputsClient
+    public let simulationPersonalities: SimulationPersonalitiesClient
+    public let simulationScenarios: SimulationScenariosClient
+    public let simulationRuns: SimulationRunsClient
+    public let simulationSuites: SimulationSuitesClient
+    public let simulations: SimulationsClient
     public let insight: InsightClient
+    public let board: BoardClient
     public let eval: EvalClient
     public let observabilityScorecard: ObservabilityScorecardClient
     public let providerResources: ProviderResourcesClient
@@ -104,8 +111,15 @@ public final class VapiClient: Sendable {
         self.phoneNumbers = PhoneNumbersClient(config: config)
         self.tools = ToolsClient(config: config)
         self.files = FilesClient(config: config)
+        self.knowledgeBasesV2 = KnowledgeBasesV2Client(config: config)
         self.structuredOutputs = StructuredOutputsClient(config: config)
+        self.simulationPersonalities = SimulationPersonalitiesClient(config: config)
+        self.simulationScenarios = SimulationScenariosClient(config: config)
+        self.simulationRuns = SimulationRunsClient(config: config)
+        self.simulationSuites = SimulationSuitesClient(config: config)
+        self.simulations = SimulationsClient(config: config)
         self.insight = InsightClient(config: config)
+        self.board = BoardClient(config: config)
         self.eval = EvalClient(config: config)
         self.observabilityScorecard = ObservabilityScorecardClient(config: config)
         self.providerResources = ProviderResourcesClient(config: config)

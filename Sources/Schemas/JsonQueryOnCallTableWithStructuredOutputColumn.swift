@@ -1,5 +1,6 @@
 import Foundation
 
+/// VapiQL JSON query that aggregates or counts a structured-output value stored on call records.
 public struct JsonQueryOnCallTableWithStructuredOutputColumn: Codable, Hashable, Sendable {
     /// This is the type of query. Only allowed type is "vapiql-json".
     public let type: JsonQueryOnCallTableWithStructuredOutputColumnType

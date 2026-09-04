@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for generating assistant responses with OpenAI, including model selection, fallback models, prompts, tools, prompt caching, and generation settings.
 public struct OpenAiModel: Codable, Hashable, Sendable {
     /// This is the starting state for the conversation.
     public let messages: [OpenAiMessage]?
@@ -11,6 +12,11 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
     /// 
     /// Both `tools` and `toolIds` can be used together.
     public let toolIds: [String]?
+    /// These are version-pinned references to tools. Each entry pins a specific
+    /// version of a tool by `(toolId, version)`. When the same `toolId` appears
+    /// in both `toolIds` and `toolRefs[]`, the `toolRefs` pin wins (the
+    /// `toolIds` entry is dropped at write time).
+    public let toolRefs: [ToolRef]?
     /// These are the options for the knowledge base.
     public let knowledgeBase: CreateCustomKnowledgeBaseDto?
     /// This is the OpenAI model that will be used.
@@ -34,7 +40,7 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
     /// - `in_memory`: Default behavior, cache retained in GPU memory only
     /// - `24h`: Extended caching, keeps cached prefixes active for up to 24 hours by offloading to GPU-local storage
     /// 
-    /// Only applies to models: gpt-5.4, gpt-5.4-mini, gpt-5.4-nano, gpt-5.2, gpt-5.1, gpt-5.1-codex, gpt-5.1-codex-mini, gpt-5.1-chat-latest, gpt-5, gpt-5-codex, gpt-4.1
+    /// Only applies to models: gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5, chat-latest, gpt-5.4, gpt-5.4-mini, gpt-5.4-nano, gpt-5.2, gpt-5.1, gpt-5.1-codex, gpt-5.1-codex-mini, gpt-5.1-chat-latest, gpt-5, gpt-5-codex, gpt-4.1
     /// 
     /// @default undefined (uses API default which is 'in_memory')
     public let promptCacheRetention: OpenAiModelPromptCacheRetention?
@@ -44,7 +50,12 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
     /// 
     /// @default undefined
     public let promptCacheKey: String?
-    /// This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
+    /// Reasoning effort for reasoning-capable OpenAI models.
+    /// For `gpt-realtime-2`: forwarded to V2 stream's session.update as `reasoning.effort`.
+    /// For non-realtime OpenAI models, model-aware validation limits newly public
+    /// values while preserving the existing four-value storage contract.
+    public let reasoningEffort: OpenAiModelReasoningEffort?
+    /// This is the temperature that will be used for calls. Default is 0.5.
     public let temperature: Double?
     /// This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.
     public let maxTokens: Double?
@@ -67,12 +78,14 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         messages: [OpenAiMessage]? = nil,
         tools: [OpenAiModelToolsItem]? = nil,
         toolIds: [String]? = nil,
+        toolRefs: [ToolRef]? = nil,
         knowledgeBase: CreateCustomKnowledgeBaseDto? = nil,
         model: OpenAiModelModel,
         fallbackModels: [OpenAiModelFallbackModelsItem]? = nil,
         toolStrictCompatibilityMode: OpenAiModelToolStrictCompatibilityMode? = nil,
         promptCacheRetention: OpenAiModelPromptCacheRetention? = nil,
         promptCacheKey: String? = nil,
+        reasoningEffort: OpenAiModelReasoningEffort? = nil,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
         emotionRecognitionEnabled: Bool? = nil,
@@ -82,12 +95,14 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         self.messages = messages
         self.tools = tools
         self.toolIds = toolIds
+        self.toolRefs = toolRefs
         self.knowledgeBase = knowledgeBase
         self.model = model
         self.fallbackModels = fallbackModels
         self.toolStrictCompatibilityMode = toolStrictCompatibilityMode
         self.promptCacheRetention = promptCacheRetention
         self.promptCacheKey = promptCacheKey
+        self.reasoningEffort = reasoningEffort
         self.temperature = temperature
         self.maxTokens = maxTokens
         self.emotionRecognitionEnabled = emotionRecognitionEnabled
@@ -100,12 +115,14 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         self.messages = try container.decodeIfPresent([OpenAiMessage].self, forKey: .messages)
         self.tools = try container.decodeIfPresent([OpenAiModelToolsItem].self, forKey: .tools)
         self.toolIds = try container.decodeIfPresent([String].self, forKey: .toolIds)
+        self.toolRefs = try container.decodeIfPresent([ToolRef].self, forKey: .toolRefs)
         self.knowledgeBase = try container.decodeIfPresent(CreateCustomKnowledgeBaseDto.self, forKey: .knowledgeBase)
         self.model = try container.decode(OpenAiModelModel.self, forKey: .model)
         self.fallbackModels = try container.decodeIfPresent([OpenAiModelFallbackModelsItem].self, forKey: .fallbackModels)
         self.toolStrictCompatibilityMode = try container.decodeIfPresent(OpenAiModelToolStrictCompatibilityMode.self, forKey: .toolStrictCompatibilityMode)
         self.promptCacheRetention = try container.decodeIfPresent(OpenAiModelPromptCacheRetention.self, forKey: .promptCacheRetention)
         self.promptCacheKey = try container.decodeIfPresent(String.self, forKey: .promptCacheKey)
+        self.reasoningEffort = try container.decodeIfPresent(OpenAiModelReasoningEffort.self, forKey: .reasoningEffort)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
         self.emotionRecognitionEnabled = try container.decodeIfPresent(Bool.self, forKey: .emotionRecognitionEnabled)
@@ -119,12 +136,14 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.tools, forKey: .tools)
         try container.encodeIfPresent(self.toolIds, forKey: .toolIds)
+        try container.encodeIfPresent(self.toolRefs, forKey: .toolRefs)
         try container.encodeIfPresent(self.knowledgeBase, forKey: .knowledgeBase)
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.fallbackModels, forKey: .fallbackModels)
         try container.encodeIfPresent(self.toolStrictCompatibilityMode, forKey: .toolStrictCompatibilityMode)
         try container.encodeIfPresent(self.promptCacheRetention, forKey: .promptCacheRetention)
         try container.encodeIfPresent(self.promptCacheKey, forKey: .promptCacheKey)
+        try container.encodeIfPresent(self.reasoningEffort, forKey: .reasoningEffort)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
         try container.encodeIfPresent(self.emotionRecognitionEnabled, forKey: .emotionRecognitionEnabled)
@@ -136,12 +155,14 @@ public struct OpenAiModel: Codable, Hashable, Sendable {
         case messages
         case tools
         case toolIds
+        case toolRefs
         case knowledgeBase
         case model
         case fallbackModels
         case toolStrictCompatibilityMode
         case promptCacheRetention
         case promptCacheKey
+        case reasoningEffort
         case temperature
         case maxTokens
         case emotionRecognitionEnabled

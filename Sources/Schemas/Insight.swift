@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved insight returned by the API, including its visualization type, identity, organization, and lifecycle timestamps.
 public struct Insight: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -13,6 +14,8 @@ public struct Insight: Codable, Hashable, Sendable {
     public let createdAt: Date
     /// This is the ISO 8601 date-time string of when the Insight was last updated.
     public let updatedAt: Date
+    /// Stable server-owned identifier for system-created insights.
+    public let systemKey: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -23,6 +26,7 @@ public struct Insight: Codable, Hashable, Sendable {
         orgId: String,
         createdAt: Date,
         updatedAt: Date,
+        systemKey: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.name = name
@@ -31,6 +35,7 @@ public struct Insight: Codable, Hashable, Sendable {
         self.orgId = orgId
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.systemKey = systemKey
         self.additionalProperties = additionalProperties
     }
 
@@ -42,6 +47,7 @@ public struct Insight: Codable, Hashable, Sendable {
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        self.systemKey = try container.decodeIfPresent(String.self, forKey: .systemKey)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -54,6 +60,7 @@ public struct Insight: Codable, Hashable, Sendable {
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
+        try container.encodeIfPresent(self.systemKey, forKey: .systemKey)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -64,5 +71,6 @@ public struct Insight: Codable, Hashable, Sendable {
         case orgId
         case createdAt
         case updatedAt
+        case systemKey
     }
 }

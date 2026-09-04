@@ -1,10 +1,14 @@
 import Foundation
 
+/// Fields used to update an API-request tool, including its URL, HTTP method, authentication, request data, retries, and response handling.
 public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [UpdateApiRequestToolDtoMessagesItem]?
+    /// This is the name of the tool. This will be passed to the model.
+    /// 
+    /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
+    public let name: String?
+    /// The HTTP method used for the API request.
     public let method: UpdateApiRequestToolDtoMethod?
     /// This is the timeout in seconds for the request. Defaults to 20 seconds.
     /// 
@@ -95,10 +99,6 @@ public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
     /// }
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
-    /// This is the name of the tool. This will be passed to the model.
-    /// 
-    /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
-    public let name: String?
     /// This is the description of the tool. This will be passed to the model.
     public let description: String?
     /// This is where the request will be sent.
@@ -270,13 +270,13 @@ public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateApiRequestToolDtoMessagesItem]? = nil,
+        name: String? = nil,
         method: UpdateApiRequestToolDtoMethod? = nil,
         timeoutSeconds: Double? = nil,
         credentialId: String? = nil,
         encryptedPaths: [String]? = nil,
         parameters: [ToolParameter]? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
-        name: String? = nil,
         description: String? = nil,
         url: String? = nil,
         body: JsonSchema? = nil,
@@ -286,13 +286,13 @@ public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.name = name
         self.method = method
         self.timeoutSeconds = timeoutSeconds
         self.credentialId = credentialId
         self.encryptedPaths = encryptedPaths
         self.parameters = parameters
         self.rejectionPlan = rejectionPlan
-        self.name = name
         self.description = description
         self.url = url
         self.body = body
@@ -305,13 +305,13 @@ public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateApiRequestToolDtoMessagesItem].self, forKey: .messages)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.method = try container.decodeIfPresent(UpdateApiRequestToolDtoMethod.self, forKey: .method)
         self.timeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .timeoutSeconds)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
         self.encryptedPaths = try container.decodeIfPresent([String].self, forKey: .encryptedPaths)
         self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
-        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.url = try container.decodeIfPresent(String.self, forKey: .url)
         self.body = try container.decodeIfPresent(JsonSchema.self, forKey: .body)
@@ -325,13 +325,13 @@ public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.method, forKey: .method)
         try container.encodeIfPresent(self.timeoutSeconds, forKey: .timeoutSeconds)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
         try container.encodeIfPresent(self.encryptedPaths, forKey: .encryptedPaths)
         try container.encodeIfPresent(self.parameters, forKey: .parameters)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encodeIfPresent(self.url, forKey: .url)
         try container.encodeIfPresent(self.body, forKey: .body)
@@ -343,13 +343,13 @@ public struct UpdateApiRequestToolDto: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case name
         case method
         case timeoutSeconds
         case credentialId
         case encryptedPaths
         case parameters
         case rejectionPlan
-        case name
         case description
         case url
         case body

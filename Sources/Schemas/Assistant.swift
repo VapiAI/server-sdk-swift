@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved assistant configuration returned by the Vapi API. It defines how the assistant listens, reasons, speaks, handles conversations, sends events, and produces artifacts and analysis.
 public struct Assistant: Codable, Hashable, Sendable {
     /// These are the options for the assistant's transcriber.
     public let transcriber: AssistantTranscriber?
@@ -11,6 +12,7 @@ public struct Assistant: Codable, Hashable, Sendable {
     /// 
     /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
     public let firstMessage: String?
+    /// Set to `true` to allow the user to interrupt the assistant while it speaks the first message. Default is `false`.
     public let firstMessageInterruptionsEnabled: Bool?
     /// This is the mode for the first message. Default is 'assistant-speaks-first'.
     /// 
@@ -49,6 +51,11 @@ public struct Assistant: Codable, Hashable, Sendable {
     public let credentials: [AssistantCredentialsItem]?
     /// This is a set of actions that will be performed on certain events.
     public let hooks: [AssistantHooksItem]?
+    /// This is the latest version label (e.g. `v3`) of the assistant in the
+    /// version history. `null` while the org is not yet
+    /// onboarded to versioning, or for assistants that have not yet been
+    /// published under it.
+    public let latestVersion: Nullable<String>?
     /// This is the name of the assistant.
     /// 
     /// This is required when you want to transfer between assistants in a call.
@@ -63,6 +70,7 @@ public struct Assistant: Codable, Hashable, Sendable {
     public let endCallMessage: String?
     /// This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.
     public let endCallPhrases: [String]?
+    /// Compliance settings for the assistant, including HIPAA and PCI behavior, security filtering, and recording consent.
     public let compliancePlan: CompliancePlan?
     /// This is for metadata you want to store on the assistant.
     public let metadata: [String: JSONValue]?
@@ -115,6 +123,7 @@ public struct Assistant: Codable, Hashable, Sendable {
     /// 2. phoneNumber.serverUrl
     /// 3. org.serverUrl
     public let server: Server?
+    /// Configuration for collecting and processing DTMF keypad input during calls.
     public let keypadInputPlan: KeypadInputPlan?
     /// This is the unique identifier for the assistant.
     public let id: String
@@ -144,6 +153,7 @@ public struct Assistant: Codable, Hashable, Sendable {
         observabilityPlan: LangfuseObservabilityPlan? = nil,
         credentials: [AssistantCredentialsItem]? = nil,
         hooks: [AssistantHooksItem]? = nil,
+        latestVersion: Nullable<String>? = nil,
         name: String? = nil,
         voicemailMessage: String? = nil,
         endCallMessage: String? = nil,
@@ -181,6 +191,7 @@ public struct Assistant: Codable, Hashable, Sendable {
         self.observabilityPlan = observabilityPlan
         self.credentials = credentials
         self.hooks = hooks
+        self.latestVersion = latestVersion
         self.name = name
         self.voicemailMessage = voicemailMessage
         self.endCallMessage = endCallMessage
@@ -221,6 +232,7 @@ public struct Assistant: Codable, Hashable, Sendable {
         self.observabilityPlan = try container.decodeIfPresent(LangfuseObservabilityPlan.self, forKey: .observabilityPlan)
         self.credentials = try container.decodeIfPresent([AssistantCredentialsItem].self, forKey: .credentials)
         self.hooks = try container.decodeIfPresent([AssistantHooksItem].self, forKey: .hooks)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.voicemailMessage = try container.decodeIfPresent(String.self, forKey: .voicemailMessage)
         self.endCallMessage = try container.decodeIfPresent(String.self, forKey: .endCallMessage)
@@ -262,6 +274,7 @@ public struct Assistant: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.observabilityPlan, forKey: .observabilityPlan)
         try container.encodeIfPresent(self.credentials, forKey: .credentials)
         try container.encodeIfPresent(self.hooks, forKey: .hooks)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.voicemailMessage, forKey: .voicemailMessage)
         try container.encodeIfPresent(self.endCallMessage, forKey: .endCallMessage)
@@ -301,6 +314,7 @@ public struct Assistant: Codable, Hashable, Sendable {
         case observabilityPlan
         case credentials
         case hooks
+        case latestVersion
         case name
         case voicemailMessage
         case endCallMessage

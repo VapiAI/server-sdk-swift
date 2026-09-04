@@ -1,6 +1,8 @@
 import Foundation
 
+/// Configuration passed to Twilio for assistant calls, including ring timeout and Twilio recording behavior.
 public struct TransportConfigurationTwilio: Codable, Hashable, Sendable {
+    /// Selects Twilio as the call transport provider.
     public let provider: TransportConfigurationTwilioProvider
     /// The integer number of seconds that we should allow the phone to ring before assuming there is no answer.
     /// The default is `60` seconds and the maximum is `600` seconds.

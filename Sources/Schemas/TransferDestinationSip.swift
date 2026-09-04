@@ -1,5 +1,6 @@
 import Foundation
 
+/// Transfers a call to a SIP URI, with optional caller ID, headers, message, and transfer plan.
 public struct TransferDestinationSip: Codable, Hashable, Sendable {
     /// This is spoken to the customer before connecting them to the destination.
     /// 
@@ -27,6 +28,17 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
     public let transferPlan: TransferPlan?
     /// These are custom headers to be added to SIP refer during transfer call.
     public let sipHeaders: [String: JSONValue]?
+    /// This is the name of the transfer destination. This is just for your own reference.
+    /// 
+    /// Usage:
+    /// - Optional. Stored with the destination wherever it is supplied. For `number`
+    ///   and `sip` destinations it is also persisted on the transfer record in the
+    ///   call artifact after a transfer and displayed in the dashboard call log (on
+    ///   the transfer divider in the transcript view) alongside the destination.
+    ///   When omitted, everything behaves exactly as before.
+    /// - Display-only. Unlike `description`, it is never included in prompts or tool
+    ///   descriptions and has no effect on model behavior or destination choice.
+    public let name: String?
     /// This is the description of the destination, used by the AI to choose when and how to transfer the call.
     public let description: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -38,6 +50,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         callerId: String? = nil,
         transferPlan: TransferPlan? = nil,
         sipHeaders: [String: JSONValue]? = nil,
+        name: String? = nil,
         description: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -46,6 +59,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         self.callerId = callerId
         self.transferPlan = transferPlan
         self.sipHeaders = sipHeaders
+        self.name = name
         self.description = description
         self.additionalProperties = additionalProperties
     }
@@ -57,6 +71,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         self.callerId = try container.decodeIfPresent(String.self, forKey: .callerId)
         self.transferPlan = try container.decodeIfPresent(TransferPlan.self, forKey: .transferPlan)
         self.sipHeaders = try container.decodeIfPresent([String: JSONValue].self, forKey: .sipHeaders)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -69,6 +84,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.callerId, forKey: .callerId)
         try container.encodeIfPresent(self.transferPlan, forKey: .transferPlan)
         try container.encodeIfPresent(self.sipHeaders, forKey: .sipHeaders)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
     }
 
@@ -79,6 +95,7 @@ public struct TransferDestinationSip: Codable, Hashable, Sendable {
         case callerId
         case transferPlan
         case sipHeaders
+        case name
         case description
     }
 }

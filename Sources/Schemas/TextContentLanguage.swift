@@ -1,5 +1,6 @@
 import Foundation
 
+/// Language code associated with this text variant.
 public enum TextContentLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case aa
     case ab

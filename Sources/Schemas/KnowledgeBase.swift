@@ -1,5 +1,6 @@
 import Foundation
 
+/// A knowledge-base configuration, including its provider, model, description, and associated files.
 public struct KnowledgeBase: Codable, Hashable, Sendable {
     /// The name of the knowledge base
     public let name: String

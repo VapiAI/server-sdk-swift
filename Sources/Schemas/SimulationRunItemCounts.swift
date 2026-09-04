@@ -1,18 +1,22 @@
 import Foundation
 
 public struct SimulationRunItemCounts: Codable, Hashable, Sendable {
-    /// Total number of run items
+    /// The total number of run items.
     public let total: Double
-    /// Number of passed run items
+    /// The number of run items that passed all required evaluations.
     public let passed: Double
-    /// Number of failed run items
+    /// The number of run items that failed at least one required evaluation.
     public let failed: Double
-    /// Number of running/evaluating run items
+    /// The number of run items currently running or evaluating.
     public let running: Double
-    /// Number of queued run items
+    /// The number of run items waiting to start.
     public let queued: Double
-    /// Number of canceled run items
+    /// The number of run items that were canceled.
     public let canceled: Double
+    /// Number of distinct simulations represented by the run items. Omitted when any item has no simulation ID.
+    public let distinctSimulationTotal: Double?
+    /// Number of distinct simulations with a failed or canceled item. Omitted when any item has no simulation ID.
+    public let distinctSimulationFailed: Double?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -23,6 +27,8 @@ public struct SimulationRunItemCounts: Codable, Hashable, Sendable {
         running: Double,
         queued: Double,
         canceled: Double,
+        distinctSimulationTotal: Double? = nil,
+        distinctSimulationFailed: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.total = total
@@ -31,6 +37,8 @@ public struct SimulationRunItemCounts: Codable, Hashable, Sendable {
         self.running = running
         self.queued = queued
         self.canceled = canceled
+        self.distinctSimulationTotal = distinctSimulationTotal
+        self.distinctSimulationFailed = distinctSimulationFailed
         self.additionalProperties = additionalProperties
     }
 
@@ -42,6 +50,8 @@ public struct SimulationRunItemCounts: Codable, Hashable, Sendable {
         self.running = try container.decode(Double.self, forKey: .running)
         self.queued = try container.decode(Double.self, forKey: .queued)
         self.canceled = try container.decode(Double.self, forKey: .canceled)
+        self.distinctSimulationTotal = try container.decodeIfPresent(Double.self, forKey: .distinctSimulationTotal)
+        self.distinctSimulationFailed = try container.decodeIfPresent(Double.self, forKey: .distinctSimulationFailed)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -54,6 +64,8 @@ public struct SimulationRunItemCounts: Codable, Hashable, Sendable {
         try container.encode(self.running, forKey: .running)
         try container.encode(self.queued, forKey: .queued)
         try container.encode(self.canceled, forKey: .canceled)
+        try container.encodeIfPresent(self.distinctSimulationTotal, forKey: .distinctSimulationTotal)
+        try container.encodeIfPresent(self.distinctSimulationFailed, forKey: .distinctSimulationFailed)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -64,5 +76,7 @@ public struct SimulationRunItemCounts: Codable, Hashable, Sendable {
         case running
         case queued
         case canceled
+        case distinctSimulationTotal
+        case distinctSimulationFailed
     }
 }

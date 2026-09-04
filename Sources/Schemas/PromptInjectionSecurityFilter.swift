@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters potential prompt-injection patterns from transcripts.
 public struct PromptInjectionSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
     public let type: PromptInjectionSecurityFilterType

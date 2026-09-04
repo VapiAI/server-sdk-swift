@@ -1,6 +1,9 @@
 import Foundation
 
 public enum CreateAzureOpenAiCredentialDtoModelsItem: String, Codable, Hashable, CaseIterable, Sendable {
+    case gpt56Luna20260709 = "gpt-5.6-luna-2026-07-09"
+    case gpt56Terra20260709 = "gpt-5.6-terra-2026-07-09"
+    case gpt56Sol20260709 = "gpt-5.6-sol-2026-07-09"
     case gpt54 = "gpt-5.4"
     case gpt54Mini = "gpt-5.4-mini"
     case gpt54Nano = "gpt-5.4-nano"
@@ -24,4 +27,7 @@ public enum CreateAzureOpenAiCredentialDtoModelsItem: String, Codable, Hashable,
     case gpt40613 = "gpt-4-0613"
     case gpt35Turbo0125 = "gpt-35-turbo-0125"
     case gpt35Turbo1106 = "gpt-35-turbo-1106"
+    case gpt4O = "gpt-4o"
+    case gpt41 = "gpt-4.1"
+    case gpt54Mini20260317 = "gpt-5.4-mini-2026-03-17"
 }

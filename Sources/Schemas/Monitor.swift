@@ -1,6 +1,8 @@
 import Foundation
 
+/// Live monitoring data for a call, including attached monitor results and listening and control URLs.
 public struct Monitor: Codable, Hashable, Sendable {
+    /// Results produced by monitors attached to the call.
     public let monitors: [MonitorResult]?
     /// This is the URL where the assistant's calls can be listened to in real-time. To enable, set `assistant.monitorPlan.listenEnabled` to `true`.
     public let listenUrl: String?

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Emotion and intensity applied to the Cartesia voice.
 public enum CartesiaExperimentalControlsEmotion: String, Codable, Hashable, CaseIterable, Sendable {
     case angerLowest = "anger:lowest"
     case angerLow = "anger:low"

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for synthesizing assistant speech through a custom server, including voice selection, server connection, chunking, and caching.
 public struct FallbackCustomVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

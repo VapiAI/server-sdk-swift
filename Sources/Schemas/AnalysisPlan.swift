@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for post-call analysis of summaries, structured-data extraction, success evaluation, and outcomes.
 public struct AnalysisPlan: Codable, Hashable, Sendable {
     /// The minimum number of messages required to run the analysis plan.
     /// If the number of messages is less than this, analysis will be skipped.

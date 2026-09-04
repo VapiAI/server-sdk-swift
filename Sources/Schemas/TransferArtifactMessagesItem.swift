@@ -1,0 +1,45 @@
+import Foundation
+
+public enum TransferArtifactMessagesItem: Codable, Hashable, Sendable {
+    case botMessage(BotMessage)
+    case systemMessage(SystemMessage)
+    case toolCallMessage(ToolCallMessage)
+    case toolCallResultMessage(ToolCallResultMessage)
+    case userMessage(UserMessage)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(BotMessage.self) {
+            self = .botMessage(value)
+        } else if let value = try? container.decode(SystemMessage.self) {
+            self = .systemMessage(value)
+        } else if let value = try? container.decode(ToolCallMessage.self) {
+            self = .toolCallMessage(value)
+        } else if let value = try? container.decode(ToolCallResultMessage.self) {
+            self = .toolCallResultMessage(value)
+        } else if let value = try? container.decode(UserMessage.self) {
+            self = .userMessage(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Unexpected value."
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .botMessage(let value):
+            try container.encode(value)
+        case .systemMessage(let value):
+            try container.encode(value)
+        case .toolCallMessage(let value):
+            try container.encode(value)
+        case .toolCallResultMessage(let value):
+            try container.encode(value)
+        case .userMessage(let value):
+            try container.encode(value)
+        }
+    }
+}

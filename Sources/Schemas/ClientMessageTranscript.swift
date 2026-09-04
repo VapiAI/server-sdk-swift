@@ -3,6 +3,11 @@ import Foundation
 public struct ClientMessageTranscript: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageTranscriptPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "transcript" is sent as transcriber outputs partial or final transcript.
     public let type: ClientMessageTranscriptType
     /// This is the timestamp of the message.
@@ -19,6 +24,12 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
     public let transcriptType: ClientMessageTranscriptTranscriptType
     /// This is the transcript content.
     public let transcript: String
+    /// The ID of the assistant that produced this transcript. Present on
+    /// assistant-role events when an active assistant ID is available.
+    public let assistantId: String?
+    /// The name of the assistant that produced this transcript. Present on
+    /// assistant-role events when an active assistant name is available.
+    public let assistantName: String?
     /// Indicates if the transcript was filtered for security reasons.
     public let isFiltered: Bool?
     /// List of detected security threats if the transcript was filtered.
@@ -30,6 +41,7 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageTranscriptPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ClientMessageTranscriptType,
         timestamp: Double? = nil,
         call: Call? = nil,
@@ -38,12 +50,15 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
         role: ClientMessageTranscriptRole,
         transcriptType: ClientMessageTranscriptTranscriptType,
         transcript: String,
+        assistantId: String? = nil,
+        assistantName: String? = nil,
         isFiltered: Bool? = nil,
         detectedThreats: [String]? = nil,
         originalTranscript: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.timestamp = timestamp
         self.call = call
@@ -52,6 +67,8 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
         self.role = role
         self.transcriptType = transcriptType
         self.transcript = transcript
+        self.assistantId = assistantId
+        self.assistantName = assistantName
         self.isFiltered = isFiltered
         self.detectedThreats = detectedThreats
         self.originalTranscript = originalTranscript
@@ -61,6 +78,7 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageTranscriptPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ClientMessageTranscriptType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.call = try container.decodeIfPresent(Call.self, forKey: .call)
@@ -69,6 +87,8 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
         self.role = try container.decode(ClientMessageTranscriptRole.self, forKey: .role)
         self.transcriptType = try container.decode(ClientMessageTranscriptTranscriptType.self, forKey: .transcriptType)
         self.transcript = try container.decode(String.self, forKey: .transcript)
+        self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
+        self.assistantName = try container.decodeIfPresent(String.self, forKey: .assistantName)
         self.isFiltered = try container.decodeIfPresent(Bool.self, forKey: .isFiltered)
         self.detectedThreats = try container.decodeIfPresent([String].self, forKey: .detectedThreats)
         self.originalTranscript = try container.decodeIfPresent(String.self, forKey: .originalTranscript)
@@ -79,6 +99,7 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encodeIfPresent(self.call, forKey: .call)
@@ -87,6 +108,8 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
         try container.encode(self.role, forKey: .role)
         try container.encode(self.transcriptType, forKey: .transcriptType)
         try container.encode(self.transcript, forKey: .transcript)
+        try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
+        try container.encodeIfPresent(self.assistantName, forKey: .assistantName)
         try container.encodeIfPresent(self.isFiltered, forKey: .isFiltered)
         try container.encodeIfPresent(self.detectedThreats, forKey: .detectedThreats)
         try container.encodeIfPresent(self.originalTranscript, forKey: .originalTranscript)
@@ -95,6 +118,7 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case timestamp
         case call
@@ -103,6 +127,8 @@ public struct ClientMessageTranscript: Codable, Hashable, Sendable {
         case role
         case transcriptType
         case transcript
+        case assistantId
+        case assistantName
         case isFiltered
         case detectedThreats
         case originalTranscript

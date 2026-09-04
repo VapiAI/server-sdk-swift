@@ -1,7 +1,10 @@
 import Foundation
 
+/// Error returned for one customer entry in a batch call request.
 public struct CallBatchError: Codable, Hashable, Sendable {
+    /// Customer configuration associated with the failed call.
     public let customer: CreateCustomerDto
+    /// Error message explaining why the call could not be created.
     public let error: String
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

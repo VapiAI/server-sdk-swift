@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageVoiceRequestPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "voice-request" is sent when using `assistant.voice={ "type": "custom-voice" }`.
     /// 
     /// Here is what the request will look like:
@@ -49,6 +54,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageVoiceRequestPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageVoiceRequestType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
@@ -61,6 +67,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.timestamp = timestamp
         self.artifact = artifact
@@ -76,6 +83,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageVoiceRequestPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageVoiceRequestType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
@@ -92,6 +100,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encodeIfPresent(self.artifact, forKey: .artifact)
@@ -106,6 +115,7 @@ public struct ServerMessageVoiceRequest: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case timestamp
         case artifact

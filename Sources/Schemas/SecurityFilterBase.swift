@@ -1,5 +1,6 @@
 import Foundation
 
+/// Base configuration for a security filter applied to transcripts before model processing.
 public struct SecurityFilterBase: Codable, Hashable, Sendable {
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

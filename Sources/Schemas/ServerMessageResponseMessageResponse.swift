@@ -6,6 +6,7 @@ import Foundation
 public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
     case serverMessageResponseAssistantRequest(ServerMessageResponseAssistantRequest)
     case serverMessageResponseCallEndpointingRequest(ServerMessageResponseCallEndpointingRequest)
+    case serverMessageResponseCampaignPredial(ServerMessageResponseCampaignPredial)
     case serverMessageResponseHandoffDestinationRequest(ServerMessageResponseHandoffDestinationRequest)
     case serverMessageResponseKnowledgeBaseRequest(ServerMessageResponseKnowledgeBaseRequest)
     case serverMessageResponseToolCalls(ServerMessageResponseToolCalls)
@@ -18,6 +19,8 @@ public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
             self = .serverMessageResponseAssistantRequest(value)
         } else if let value = try? container.decode(ServerMessageResponseCallEndpointingRequest.self) {
             self = .serverMessageResponseCallEndpointingRequest(value)
+        } else if let value = try? container.decode(ServerMessageResponseCampaignPredial.self) {
+            self = .serverMessageResponseCampaignPredial(value)
         } else if let value = try? container.decode(ServerMessageResponseHandoffDestinationRequest.self) {
             self = .serverMessageResponseHandoffDestinationRequest(value)
         } else if let value = try? container.decode(ServerMessageResponseKnowledgeBaseRequest.self) {
@@ -42,6 +45,8 @@ public enum ServerMessageResponseMessageResponse: Codable, Hashable, Sendable {
         case .serverMessageResponseAssistantRequest(let value):
             try container.encode(value)
         case .serverMessageResponseCallEndpointingRequest(let value):
+            try container.encode(value)
+        case .serverMessageResponseCampaignPredial(let value):
             try container.encode(value)
         case .serverMessageResponseHandoffDestinationRequest(let value):
             try container.encode(value)

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls collection of dual-tone multi-frequency (DTMF) keypad input, including enablement, processing timeout, and delimiters.
 public struct KeypadInputPlan: Codable, Hashable, Sendable {
     /// This keeps track of whether the user has enabled keypad input.
     /// By default, it is off.

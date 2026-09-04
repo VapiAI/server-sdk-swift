@@ -1,5 +1,6 @@
 import Foundation
 
+/// Messages and variable values captured while a workflow node was active.
 public struct NodeArtifact: Codable, Hashable, Sendable {
     /// These are the messages that were spoken during the node.
     public let messages: [NodeArtifactMessagesItem]?

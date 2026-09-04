@@ -57,4 +57,11 @@ public enum DeepgramVoiceId: String, Codable, Hashable, CaseIterable, Sendable {
     case aquila
     case selena
     case javier
+    case viktoria
+    case kara
+    case fabian
+    case julius
+    case lara
+    case elara
+    case aurelia
 }

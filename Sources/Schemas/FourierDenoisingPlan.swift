@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for Fourier denoising, including media detection, thresholds, baseline calculation, and analysis window.
 public struct FourierDenoisingPlan: Codable, Hashable, Sendable {
     /// Whether Fourier denoising is enabled. Note that this is experimental and may not work as expected.
     public let enabled: Bool?

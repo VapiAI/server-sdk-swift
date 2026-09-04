@@ -1,5 +1,6 @@
 import Foundation
 
+/// Start, end, timezone, and time step used for analytics aggregation.
 public struct TimeRange: Codable, Hashable, Sendable {
     /// This is the time step for aggregations.
     /// 

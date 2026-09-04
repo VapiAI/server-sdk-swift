@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of structured-output definitions and metadata describing the result set.
 public struct StructuredOutputPaginatedResponse: Codable, Hashable, Sendable {
+    /// The structured-output definitions returned for the current page.
     public let results: [StructuredOutput]
+    /// Pagination metadata for the structured-output result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

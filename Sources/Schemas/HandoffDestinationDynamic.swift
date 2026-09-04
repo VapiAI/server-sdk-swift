@@ -1,5 +1,6 @@
 import Foundation
 
+/// Uses a webhook response to select the handoff destination at runtime.
 public struct HandoffDestinationDynamic: Codable, Hashable, Sendable {
     /// This is where Vapi will send the handoff-destination-request webhook in a dynamic handoff.
     /// 

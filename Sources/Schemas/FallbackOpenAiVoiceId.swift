@@ -1,7 +1,7 @@
 import Foundation
 
 /// This is the provider-specific ID that will be used.
-/// Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.
+/// Please note that ash, ballad, coral, sage, and verse may only be used with realtime or GPT-Live models.
 public enum FallbackOpenAiVoiceId: Codable, Hashable, Sendable {
     case fallbackOpenAiVoiceIdEnum(FallbackOpenAiVoiceIdEnum)
     case string(String)

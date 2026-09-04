@@ -1,5 +1,6 @@
 import Foundation
 
+/// A user-authored entry in the call message history, including content, timing, security-filter results, and optional speaker metadata.
 public struct UserMessage: Codable, Hashable, Sendable {
     /// The role of the user in the conversation.
     public let role: String

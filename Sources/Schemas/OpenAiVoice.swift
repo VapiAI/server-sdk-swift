@@ -1,10 +1,11 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with OpenAI, including voice and model selection, delivery instructions, speed, chunking, caching, and fallback settings.
 public struct OpenAiVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
     /// This is the provider-specific ID that will be used.
-    /// Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.
+    /// Please note that ash, ballad, coral, sage, and verse may only be used with realtime or GPT-Live models.
     public let voiceId: OpenAiVoiceId
     /// This is the model that will be used for text-to-speech.
     public let model: OpenAiVoiceModel?

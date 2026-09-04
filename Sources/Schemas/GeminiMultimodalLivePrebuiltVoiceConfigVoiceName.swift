@@ -1,5 +1,6 @@
 import Foundation
 
+/// Prebuilt Gemini voice used for audio output.
 public enum GeminiMultimodalLivePrebuiltVoiceConfigVoiceName: String, Codable, Hashable, CaseIterable, Sendable {
     case puck = "Puck"
     case charon = "Charon"

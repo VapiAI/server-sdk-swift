@@ -1,5 +1,6 @@
 import Foundation
 
+/// Azure region that hosts the OpenAI resource.
 public enum CreateAzureOpenAiCredentialDtoRegion: String, Codable, Hashable, CaseIterable, Sendable {
     case australiaeast
     case canadaeast
@@ -19,6 +20,8 @@ public enum CreateAzureOpenAiCredentialDtoRegion: String, Codable, Hashable, Cas
     case spaincentral
     case swedencentral
     case switzerland
+    case switzerlandnorth
+    case switzerlandwest
     case uaenorth
     case uk
     case westeurope

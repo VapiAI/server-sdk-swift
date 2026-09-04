@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls post-call success evaluation, including the rubric, prompt messages, enablement, and request timeout.
 public struct SuccessEvaluationPlan: Codable, Hashable, Sendable {
     /// This enforces the rubric of the evaluation. The output is stored in `call.analysis.successEvaluation`.
     /// 

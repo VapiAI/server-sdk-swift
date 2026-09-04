@@ -1,5 +1,6 @@
 import Foundation
 
+/// Conditions evaluated to determine whether a requested tool call should be rejected.
 public struct ToolRejectionPlan: Codable, Hashable, Sendable {
     /// This is the list of conditions that must be evaluated.
     /// 

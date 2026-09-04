@@ -1,5 +1,6 @@
 import Foundation
 
+/// A record of an eval execution, including its target, status, results, costs, completion details, and lifecycle timestamps.
 public struct EvalRun: Codable, Hashable, Sendable {
     /// This is the status of the eval run. When an eval run is created, the status is 'running'.
     /// When the eval run is completed, the status is 'ended'.
@@ -15,10 +16,15 @@ public struct EvalRun: Codable, Hashable, Sendable {
     public let eval: CreateEvalDto?
     /// This is the target that will be run against the eval
     public let target: EvalRunTarget
+    /// The unique identifier for the eval run.
     public let id: String
+    /// The unique identifier for the organization that owns the run.
     public let orgId: String
+    /// The ISO 8601 timestamp when the eval run was created.
     public let createdAt: Date
+    /// The ISO 8601 timestamp when the eval run started.
     public let startedAt: Date
+    /// The ISO 8601 timestamp when the eval run ended.
     public let endedAt: Date
     /// This is the ended message when the eval run ended for any reason apart from mockConversation.done
     public let endedMessage: String?

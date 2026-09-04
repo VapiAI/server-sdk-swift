@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters potential remote code execution (RCE) patterns from transcripts.
 public struct RceSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
     public let type: RceSecurityFilterType

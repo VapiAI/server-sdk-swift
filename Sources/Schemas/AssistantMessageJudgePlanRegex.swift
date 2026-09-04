@@ -1,5 +1,6 @@
 import Foundation
 
+/// Evaluates assistant-message content and tool-call arguments using regular-expression patterns.
 public struct AssistantMessageJudgePlanRegex: Codable, Hashable, Sendable {
     /// This is what that will be used to evaluate the model's message content.
     /// The content will be evaluated against the regex pattern provided in the Judge Plan content field.

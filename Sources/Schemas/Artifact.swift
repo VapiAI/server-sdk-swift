@@ -1,10 +1,16 @@
 import Foundation
 
+/// Artifacts generated during a call, including messages, recordings, transcript, logs, packet capture, workflow-node data, variables, performance metrics, structured outputs, scorecards, and transfers.
 public struct Artifact: Codable, Hashable, Sendable {
     /// These are the messages that were spoken during the call.
     public let messages: [ArtifactMessagesItem]?
     /// These are the messages that were spoken during the call, formatted for OpenAI.
     public let messagesOpenAiFormatted: [OpenAiMessage]?
+    /// Structured outputs skipped because their conditions were not met, keyed by saved or runtime output ID.
+    public let skippedStructuredOutputs: [String: SkippedStructuredOutput]?
+    /// These are the transfer records for the call's transfer attempts (warm and blind), including
+    /// destination, mode, and status. Warm transfer records also include transcripts and messages.
+    public let transfers: [TransferArtifact]?
     /// This is the recording url for the call. To enable, set `assistant.artifactPlan.recordingEnabled`.
     public let recordingUrl: String?
     /// This is the stereo recording url for the call. To enable, set `assistant.artifactPlan.recordingEnabled`.
@@ -35,16 +41,46 @@ public struct Artifact: Codable, Hashable, Sendable {
     /// These are the scorecards that have been evaluated based on the structured outputs extracted during the call.
     /// To enable, set `assistant.artifactPlan.scorecardIds` or `assistant.artifactPlan.scorecards` with the IDs or objects of the scorecards you want to evaluate.
     public let scorecards: [String: JSONValue]?
-    /// These are the transfer records from warm transfers, including destinations, transcripts, and status.
-    public let transfers: [String]?
     /// This is when the structured outputs were last updated
     public let structuredOutputsLastUpdatedAt: Date?
+    /// This is a presigned URL to download the mono recording without
+    /// authentication. Populated on API responses and server messages; never
+    /// stored. Expires at `presignedUrlsExpiresAt` — after that, use
+    /// `GET /call/{id}/mono-recording`.
+    public let presignedMonoUrl: String?
+    /// This is a presigned URL to download the stereo recording without
+    /// authentication. Expires at `presignedUrlsExpiresAt` — after that, use
+    /// `GET /call/{id}/stereo-recording`.
+    public let presignedStereoUrl: String?
+    /// This is a presigned URL to download the video recording without
+    /// authentication. Expires at `presignedUrlsExpiresAt` — after that, use
+    /// `GET /call/{id}/video-recording`.
+    public let presignedVideoUrl: String?
+    /// This is a presigned URL to download the assistant-channel mono recording
+    /// without authentication. Expires at `presignedUrlsExpiresAt`.
+    public let presignedAssistantUrl: String?
+    /// This is a presigned URL to download the customer-channel mono recording
+    /// without authentication. Expires at `presignedUrlsExpiresAt`.
+    public let presignedCustomerUrl: String?
+    /// This is a presigned URL to download the packet capture without
+    /// authentication. Expires at `presignedUrlsExpiresAt`.
+    public let presignedPcapUrl: String?
+    /// This is a presigned URL to download the call logs without
+    /// authentication. Expires at `presignedUrlsExpiresAt`.
+    public let presignedLogUrl: String?
+    /// This is when the presigned URLs above expire, as an ISO 8601 timestamp.
+    /// The raw `*Url` fields remain the stable identifiers and do not expire.
+    /// Presigned URLs are regenerated per response and per webhook delivery, so
+    /// values differ across retries.
+    public let presignedUrlsExpiresAt: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         messages: [ArtifactMessagesItem]? = nil,
         messagesOpenAiFormatted: [OpenAiMessage]? = nil,
+        skippedStructuredOutputs: [String: SkippedStructuredOutput]? = nil,
+        transfers: [TransferArtifact]? = nil,
         recordingUrl: String? = nil,
         stereoRecordingUrl: String? = nil,
         videoRecordingUrl: String? = nil,
@@ -59,12 +95,21 @@ public struct Artifact: Codable, Hashable, Sendable {
         performanceMetrics: PerformanceMetrics? = nil,
         structuredOutputs: [String: JSONValue]? = nil,
         scorecards: [String: JSONValue]? = nil,
-        transfers: [String]? = nil,
         structuredOutputsLastUpdatedAt: Date? = nil,
+        presignedMonoUrl: String? = nil,
+        presignedStereoUrl: String? = nil,
+        presignedVideoUrl: String? = nil,
+        presignedAssistantUrl: String? = nil,
+        presignedCustomerUrl: String? = nil,
+        presignedPcapUrl: String? = nil,
+        presignedLogUrl: String? = nil,
+        presignedUrlsExpiresAt: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
         self.messagesOpenAiFormatted = messagesOpenAiFormatted
+        self.skippedStructuredOutputs = skippedStructuredOutputs
+        self.transfers = transfers
         self.recordingUrl = recordingUrl
         self.stereoRecordingUrl = stereoRecordingUrl
         self.videoRecordingUrl = videoRecordingUrl
@@ -79,8 +124,15 @@ public struct Artifact: Codable, Hashable, Sendable {
         self.performanceMetrics = performanceMetrics
         self.structuredOutputs = structuredOutputs
         self.scorecards = scorecards
-        self.transfers = transfers
         self.structuredOutputsLastUpdatedAt = structuredOutputsLastUpdatedAt
+        self.presignedMonoUrl = presignedMonoUrl
+        self.presignedStereoUrl = presignedStereoUrl
+        self.presignedVideoUrl = presignedVideoUrl
+        self.presignedAssistantUrl = presignedAssistantUrl
+        self.presignedCustomerUrl = presignedCustomerUrl
+        self.presignedPcapUrl = presignedPcapUrl
+        self.presignedLogUrl = presignedLogUrl
+        self.presignedUrlsExpiresAt = presignedUrlsExpiresAt
         self.additionalProperties = additionalProperties
     }
 
@@ -88,6 +140,8 @@ public struct Artifact: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([ArtifactMessagesItem].self, forKey: .messages)
         self.messagesOpenAiFormatted = try container.decodeIfPresent([OpenAiMessage].self, forKey: .messagesOpenAiFormatted)
+        self.skippedStructuredOutputs = try container.decodeIfPresent([String: SkippedStructuredOutput].self, forKey: .skippedStructuredOutputs)
+        self.transfers = try container.decodeIfPresent([TransferArtifact].self, forKey: .transfers)
         self.recordingUrl = try container.decodeIfPresent(String.self, forKey: .recordingUrl)
         self.stereoRecordingUrl = try container.decodeIfPresent(String.self, forKey: .stereoRecordingUrl)
         self.videoRecordingUrl = try container.decodeIfPresent(String.self, forKey: .videoRecordingUrl)
@@ -102,8 +156,15 @@ public struct Artifact: Codable, Hashable, Sendable {
         self.performanceMetrics = try container.decodeIfPresent(PerformanceMetrics.self, forKey: .performanceMetrics)
         self.structuredOutputs = try container.decodeIfPresent([String: JSONValue].self, forKey: .structuredOutputs)
         self.scorecards = try container.decodeIfPresent([String: JSONValue].self, forKey: .scorecards)
-        self.transfers = try container.decodeIfPresent([String].self, forKey: .transfers)
         self.structuredOutputsLastUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .structuredOutputsLastUpdatedAt)
+        self.presignedMonoUrl = try container.decodeIfPresent(String.self, forKey: .presignedMonoUrl)
+        self.presignedStereoUrl = try container.decodeIfPresent(String.self, forKey: .presignedStereoUrl)
+        self.presignedVideoUrl = try container.decodeIfPresent(String.self, forKey: .presignedVideoUrl)
+        self.presignedAssistantUrl = try container.decodeIfPresent(String.self, forKey: .presignedAssistantUrl)
+        self.presignedCustomerUrl = try container.decodeIfPresent(String.self, forKey: .presignedCustomerUrl)
+        self.presignedPcapUrl = try container.decodeIfPresent(String.self, forKey: .presignedPcapUrl)
+        self.presignedLogUrl = try container.decodeIfPresent(String.self, forKey: .presignedLogUrl)
+        self.presignedUrlsExpiresAt = try container.decodeIfPresent(String.self, forKey: .presignedUrlsExpiresAt)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -112,6 +173,8 @@ public struct Artifact: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.messagesOpenAiFormatted, forKey: .messagesOpenAiFormatted)
+        try container.encodeIfPresent(self.skippedStructuredOutputs, forKey: .skippedStructuredOutputs)
+        try container.encodeIfPresent(self.transfers, forKey: .transfers)
         try container.encodeIfPresent(self.recordingUrl, forKey: .recordingUrl)
         try container.encodeIfPresent(self.stereoRecordingUrl, forKey: .stereoRecordingUrl)
         try container.encodeIfPresent(self.videoRecordingUrl, forKey: .videoRecordingUrl)
@@ -126,14 +189,23 @@ public struct Artifact: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.performanceMetrics, forKey: .performanceMetrics)
         try container.encodeIfPresent(self.structuredOutputs, forKey: .structuredOutputs)
         try container.encodeIfPresent(self.scorecards, forKey: .scorecards)
-        try container.encodeIfPresent(self.transfers, forKey: .transfers)
         try container.encodeIfPresent(self.structuredOutputsLastUpdatedAt, forKey: .structuredOutputsLastUpdatedAt)
+        try container.encodeIfPresent(self.presignedMonoUrl, forKey: .presignedMonoUrl)
+        try container.encodeIfPresent(self.presignedStereoUrl, forKey: .presignedStereoUrl)
+        try container.encodeIfPresent(self.presignedVideoUrl, forKey: .presignedVideoUrl)
+        try container.encodeIfPresent(self.presignedAssistantUrl, forKey: .presignedAssistantUrl)
+        try container.encodeIfPresent(self.presignedCustomerUrl, forKey: .presignedCustomerUrl)
+        try container.encodeIfPresent(self.presignedPcapUrl, forKey: .presignedPcapUrl)
+        try container.encodeIfPresent(self.presignedLogUrl, forKey: .presignedLogUrl)
+        try container.encodeIfPresent(self.presignedUrlsExpiresAt, forKey: .presignedUrlsExpiresAt)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
         case messagesOpenAiFormatted = "messagesOpenAIFormatted"
+        case skippedStructuredOutputs
+        case transfers
         case recordingUrl
         case stereoRecordingUrl
         case videoRecordingUrl
@@ -148,7 +220,14 @@ public struct Artifact: Codable, Hashable, Sendable {
         case performanceMetrics
         case structuredOutputs
         case scorecards
-        case transfers
         case structuredOutputsLastUpdatedAt
+        case presignedMonoUrl
+        case presignedStereoUrl
+        case presignedVideoUrl
+        case presignedAssistantUrl
+        case presignedCustomerUrl
+        case presignedPcapUrl
+        case presignedLogUrl
+        case presignedUrlsExpiresAt
     }
 }

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Enables or disables one regular-expression matching option for a text replacement.
 public struct RegexOption: Codable, Hashable, Sendable {
     /// This is the type of the regex option. Options are:
     /// - `ignore-case`: Ignores the case of the text being matched. Add

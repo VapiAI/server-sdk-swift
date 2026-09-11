@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to create a squad. Provide an ordered list of assistant members and optional overrides that control how the squad handles a conversation and transfers between assistants.
 public struct CreateSquadDto: Codable, Hashable, Sendable {
     /// This is the name of the squad.
     public let name: String?

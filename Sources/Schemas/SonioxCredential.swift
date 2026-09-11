@@ -4,6 +4,8 @@ public struct SonioxCredential: Codable, Hashable, Sendable {
     public let provider: SonioxCredentialProvider
     /// This is not returned in the API.
     public let apiKey: String
+    /// Custom Soniox WebSocket endpoint (e.g. EU server wss://stt-rt.eu.soniox.com/transcribe-websocket). Defaults to the region-appropriate endpoint when omitted.
+    public let apiUrl: String?
     /// This is the unique identifier for the credential.
     public let id: String
     /// This is the unique identifier for the org that this credential belongs to.
@@ -20,6 +22,7 @@ public struct SonioxCredential: Codable, Hashable, Sendable {
     public init(
         provider: SonioxCredentialProvider,
         apiKey: String,
+        apiUrl: String? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -29,6 +32,7 @@ public struct SonioxCredential: Codable, Hashable, Sendable {
     ) {
         self.provider = provider
         self.apiKey = apiKey
+        self.apiUrl = apiUrl
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -41,6 +45,7 @@ public struct SonioxCredential: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.provider = try container.decode(SonioxCredentialProvider.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
+        self.apiUrl = try container.decodeIfPresent(String.self, forKey: .apiUrl)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -54,6 +59,7 @@ public struct SonioxCredential: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.provider, forKey: .provider)
         try container.encode(self.apiKey, forKey: .apiKey)
+        try container.encodeIfPresent(self.apiUrl, forKey: .apiUrl)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -65,6 +71,7 @@ public struct SonioxCredential: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case provider
         case apiKey
+        case apiUrl
         case id
         case orgId
         case createdAt

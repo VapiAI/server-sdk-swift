@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls whether a conversation node can be entered globally and the condition evaluated before that node runs.
 public struct GlobalNodePlan: Codable, Hashable, Sendable {
     /// This is the flag to determine if this node is a global node
     /// 

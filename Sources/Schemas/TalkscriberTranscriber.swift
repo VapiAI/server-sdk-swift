@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with Talkscriber, including model, language, and fallback settings.
 public struct TalkscriberTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: TalkscriberTranscriberModel?

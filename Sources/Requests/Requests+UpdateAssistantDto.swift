@@ -12,6 +12,7 @@ extension Requests {
         /// 
         /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
         public let firstMessage: String?
+        /// Set to `true` to allow the user to interrupt the assistant while it speaks the first message. Default is `false`.
         public let firstMessageInterruptionsEnabled: Bool?
         /// This is the mode for the first message. Default is 'assistant-speaks-first'.
         /// 
@@ -64,6 +65,7 @@ extension Requests {
         public let endCallMessage: String?
         /// This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.
         public let endCallPhrases: [String]?
+        /// Compliance settings for the assistant, including HIPAA and PCI behavior, security filtering, and recording consent.
         public let compliancePlan: CompliancePlan?
         /// This is for metadata you want to store on the assistant.
         public let metadata: [String: JSONValue]?
@@ -116,6 +118,7 @@ extension Requests {
         /// 2. phoneNumber.serverUrl
         /// 3. org.serverUrl
         public let server: Server?
+        /// Configuration for collecting and processing DTMF keypad input during calls.
         public let keypadInputPlan: KeypadInputPlan?
         /// Additional properties that are not explicitly defined in the schema
         public let additionalProperties: [String: JSONValue]

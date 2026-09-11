@@ -1,6 +1,8 @@
 import Foundation
 
 public struct UpdateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
+    /// This knowledge base is bring your own knowledge base implementation.
+    public let provider: UpdateCustomKnowledgeBaseDtoProvider?
     /// This is where the knowledge base request will be sent.
     /// 
     /// Request Example:
@@ -45,15 +47,18 @@ public struct UpdateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateCustomKnowledgeBaseDtoProvider? = nil,
         server: Server? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.server = server
         self.additionalProperties = additionalProperties
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateCustomKnowledgeBaseDtoProvider.self, forKey: .provider)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -61,11 +66,13 @@ public struct UpdateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.server, forKey: .server)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case server
     }
 }

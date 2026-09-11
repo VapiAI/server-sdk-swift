@@ -1,6 +1,6 @@
 import Foundation
 
-public enum CallHookModelResponseTimeoutDoItem: Codable, Hashable, Sendable {
+public indirect enum CallHookModelResponseTimeoutDoItem: Codable, Hashable, Sendable {
     case messageAdd(MessageAddHookAction)
     case say(SayHookAction)
     case tool(ToolCallHookAction)

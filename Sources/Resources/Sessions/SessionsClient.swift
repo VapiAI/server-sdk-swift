@@ -7,7 +7,7 @@ public final class SessionsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func list(id: String? = nil, name: String? = nil, assistantId: String? = nil, assistantIdAny: String? = nil, squadId: String? = nil, workflowId: String? = nil, numberE164CheckEnabled: Bool? = nil, extension: String? = nil, assistantOverrides: String? = nil, number: String? = nil, sipUri: String? = nil, email: String? = nil, externalId: String? = nil, customerNumberAny: String? = nil, phoneNumberId: String? = nil, phoneNumberIdAny: String? = nil, page: Double? = nil, sortOrder: ListSessionsRequestSortOrder? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionPaginatedResponse {
+    public func list(id: String? = nil, name: String? = nil, assistantId: String? = nil, assistantIdAny: String? = nil, squadId: String? = nil, workflowId: String? = nil, numberE164CheckEnabled: Bool? = nil, extension: String? = nil, assistantOverrides: String? = nil, squadOverrides: String? = nil, number: String? = nil, sipUri: String? = nil, email: String? = nil, externalId: String? = nil, customerNumberAny: String? = nil, idAny: String? = nil, phoneNumberId: String? = nil, phoneNumberIdAny: String? = nil, page: Double? = nil, sortOrder: ListSessionsRequestSortOrder? = nil, sortBy: ListSessionsRequestSortBy? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionPaginatedResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/session",
@@ -21,15 +21,18 @@ public final class SessionsClient: Sendable {
                 "numberE164CheckEnabled": numberE164CheckEnabled.map { .bool($0) }, 
                 "extension": `extension`.map { .string($0) }, 
                 "assistantOverrides": assistantOverrides.map { .string($0) }, 
+                "squadOverrides": squadOverrides.map { .string($0) }, 
                 "number": number.map { .string($0) }, 
                 "sipUri": sipUri.map { .string($0) }, 
                 "email": email.map { .string($0) }, 
                 "externalId": externalId.map { .string($0) }, 
                 "customerNumberAny": customerNumberAny.map { .string($0) }, 
+                "idAny": idAny.map { .string($0) }, 
                 "phoneNumberId": phoneNumberId.map { .string($0) }, 
                 "phoneNumberIdAny": phoneNumberIdAny.map { .string($0) }, 
                 "page": page.map { .double($0) }, 
                 "sortOrder": sortOrder.map { .string($0.rawValue) }, 
+                "sortBy": sortBy.map { .string($0.rawValue) }, 
                 "limit": limit.map { .double($0) }, 
                 "createdAtGt": createdAtGt.map { .date($0) }, 
                 "createdAtLt": createdAtLt.map { .date($0) }, 

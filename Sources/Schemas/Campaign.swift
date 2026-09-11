@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved outbound calling campaign, including its calling configuration, schedule, status, customers, calls, and call-progress counters.
 public struct Campaign: Codable, Hashable, Sendable {
     /// This is the status of the campaign.
     public let status: CampaignStatus
@@ -19,8 +20,20 @@ public struct Campaign: Codable, Hashable, Sendable {
     public let dialPlan: [DialPlanEntry]?
     /// This is the schedule plan for the campaign. Calls will start at startedAt and continue until your organization’s concurrency limit is reached. Any remaining calls will be retried for up to one hour as capacity becomes available. After that hour or after latestAt, whichever comes first, any calls that couldn’t be placed won’t be retried.
     public let schedulePlan: SchedulePlan?
-    /// These are the customers that will be called in the campaign. Required if dialPlan is not provided.
+    /// These are the customers that will be called in the campaign. Required if dialPlan is not provided. Maximum of 10000 customers per campaign.
     public let customers: [CreateCustomerDto]?
+    /// This is the maximum number of concurrent calls that will be made for the campaign. Defaults to 10. Maximum of 500, and may not exceed your organization's concurrency limit.
+    public let maxConcurrency: Double?
+    /// These are the overrides for the assistant's settings and template variables for the campaign. Use this when the campaign targets an `assistantId`.
+    public let assistantOverrides: AssistantOverrides?
+    /// These are the overrides for the squad and template variables for the campaign. Use this when the campaign targets a `squadId`. Per-contact `squadOverrides` are deep-merged on top of this at dispatch time.
+    public let squadOverrides: AssistantOverrides?
+    /// This is the server (URL, auth headers, timeout, etc.) for the campaign webhooks.
+    public let server: Server?
+    /// These are the messages that will be sent to your Server URL.
+    public let serverMessages: [CampaignServerMessagesItem]?
+    /// This opts the campaign into the blocking `campaign.predial` eligibility webhook. When set, every contact triggers a `campaign.predial` POST to the Server URL before dialing, and the response `{ eligible: boolean }` decides whether the call is placed. Requires `server`. When unset, no pre-dial webhook is sent.
+    public let predialPlan: CampaignPredialPlan?
     /// This is the unique identifier for the campaign.
     public let id: String
     /// This is the unique identifier for the org that this campaign belongs to.
@@ -55,6 +68,12 @@ public struct Campaign: Codable, Hashable, Sendable {
         dialPlan: [DialPlanEntry]? = nil,
         schedulePlan: SchedulePlan? = nil,
         customers: [CreateCustomerDto]? = nil,
+        maxConcurrency: Double? = nil,
+        assistantOverrides: AssistantOverrides? = nil,
+        squadOverrides: AssistantOverrides? = nil,
+        server: Server? = nil,
+        serverMessages: [CampaignServerMessagesItem]? = nil,
+        predialPlan: CampaignPredialPlan? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -77,6 +96,12 @@ public struct Campaign: Codable, Hashable, Sendable {
         self.dialPlan = dialPlan
         self.schedulePlan = schedulePlan
         self.customers = customers
+        self.maxConcurrency = maxConcurrency
+        self.assistantOverrides = assistantOverrides
+        self.squadOverrides = squadOverrides
+        self.server = server
+        self.serverMessages = serverMessages
+        self.predialPlan = predialPlan
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -102,6 +127,12 @@ public struct Campaign: Codable, Hashable, Sendable {
         self.dialPlan = try container.decodeIfPresent([DialPlanEntry].self, forKey: .dialPlan)
         self.schedulePlan = try container.decodeIfPresent(SchedulePlan.self, forKey: .schedulePlan)
         self.customers = try container.decodeIfPresent([CreateCustomerDto].self, forKey: .customers)
+        self.maxConcurrency = try container.decodeIfPresent(Double.self, forKey: .maxConcurrency)
+        self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
+        self.squadOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .squadOverrides)
+        self.server = try container.decodeIfPresent(Server.self, forKey: .server)
+        self.serverMessages = try container.decodeIfPresent([CampaignServerMessagesItem].self, forKey: .serverMessages)
+        self.predialPlan = try container.decodeIfPresent(CampaignPredialPlan.self, forKey: .predialPlan)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -128,6 +159,12 @@ public struct Campaign: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.dialPlan, forKey: .dialPlan)
         try container.encodeIfPresent(self.schedulePlan, forKey: .schedulePlan)
         try container.encodeIfPresent(self.customers, forKey: .customers)
+        try container.encodeIfPresent(self.maxConcurrency, forKey: .maxConcurrency)
+        try container.encodeIfPresent(self.assistantOverrides, forKey: .assistantOverrides)
+        try container.encodeIfPresent(self.squadOverrides, forKey: .squadOverrides)
+        try container.encodeIfPresent(self.server, forKey: .server)
+        try container.encodeIfPresent(self.serverMessages, forKey: .serverMessages)
+        try container.encodeIfPresent(self.predialPlan, forKey: .predialPlan)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -152,6 +189,12 @@ public struct Campaign: Codable, Hashable, Sendable {
         case dialPlan
         case schedulePlan
         case customers
+        case maxConcurrency
+        case assistantOverrides
+        case squadOverrides
+        case server
+        case serverMessages
+        case predialPlan
         case id
         case orgId
         case createdAt

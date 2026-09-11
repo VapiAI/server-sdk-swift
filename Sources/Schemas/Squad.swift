@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved squad configuration that coordinates a group of assistants during a conversation. The first member starts the call, and member destinations control transfers between assistants.
 public struct Squad: Codable, Hashable, Sendable {
     /// This is the name of the squad.
     public let name: String?

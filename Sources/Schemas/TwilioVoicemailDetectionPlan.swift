@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for Twilio answering-machine detection, including recognized outcomes, enablement, timeout, speech thresholds, and silence timeout.
 public struct TwilioVoicemailDetectionPlan: Codable, Hashable, Sendable {
     /// This is the provider to use for voicemail detection.
     public let provider: TwilioVoicemailDetectionPlanProvider

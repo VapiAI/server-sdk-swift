@@ -1,5 +1,6 @@
 import Foundation
 
+/// Stored OAuth 2.0 authorization for Google Sheets operations.
 public struct CreateGoogleSheetsOAuth2AuthorizationCredentialDto: Codable, Hashable, Sendable {
     /// The authorization ID for the OAuth2 authorization
     public let authorizationId: String

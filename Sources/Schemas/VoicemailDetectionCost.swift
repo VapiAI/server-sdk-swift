@@ -1,5 +1,6 @@
 import Foundation
 
+/// Voicemail-detection model cost, including provider, model, multimodal token usage, and amount.
 public struct VoicemailDetectionCost: Codable, Hashable, Sendable {
     /// This is the model that was used to perform the analysis.
     public let model: [String: JSONValue]

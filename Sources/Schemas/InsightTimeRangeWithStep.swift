@@ -1,5 +1,6 @@
 import Foundation
 
+/// Start, end, timezone, and aggregation step used for a time-series insight query.
 public struct InsightTimeRangeWithStep: Codable, Hashable, Sendable {
     /// This is the group by step for aggregation.
     /// 

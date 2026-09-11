@@ -1,5 +1,6 @@
 import Foundation
 
+/// Matches a call field against one or more allowed values to determine whether a hook runs.
 public struct CallHookFilter: Codable, Hashable, Sendable {
     /// This is the type of filter - currently only "oneOf" is supported
     public let type: CallHookFilterType

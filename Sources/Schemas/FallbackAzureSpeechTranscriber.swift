@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with Azure Speech, including language and segmentation.
 public struct FallbackAzureSpeechTranscriber: Codable, Hashable, Sendable {
     /// This is the language that will be set for the transcription. The list of languages Azure supports can be found here: https://learn.microsoft.com/en-us/azure/ai-services/speech-service/language-support?tabs=stt
     public let language: FallbackAzureSpeechTranscriberLanguage?

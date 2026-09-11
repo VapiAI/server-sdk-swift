@@ -1,6 +1,7 @@
 import Foundation
 
 public struct UpdateAzureCredentialDto: Codable, Hashable, Sendable {
+    public let provider: UpdateAzureCredentialDtoProvider?
     /// This is the service being used in Azure.
     public let service: UpdateAzureCredentialDtoService?
     /// This is the region of the Azure resource.
@@ -17,6 +18,7 @@ public struct UpdateAzureCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateAzureCredentialDtoProvider? = nil,
         service: UpdateAzureCredentialDtoService? = nil,
         region: UpdateAzureCredentialDtoRegion? = nil,
         apiKey: String? = nil,
@@ -25,6 +27,7 @@ public struct UpdateAzureCredentialDto: Codable, Hashable, Sendable {
         bucketPlan: AzureBlobStorageBucketPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.service = service
         self.region = region
         self.apiKey = apiKey
@@ -36,6 +39,7 @@ public struct UpdateAzureCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateAzureCredentialDtoProvider.self, forKey: .provider)
         self.service = try container.decodeIfPresent(UpdateAzureCredentialDtoService.self, forKey: .service)
         self.region = try container.decodeIfPresent(UpdateAzureCredentialDtoRegion.self, forKey: .region)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
@@ -48,6 +52,7 @@ public struct UpdateAzureCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.service, forKey: .service)
         try container.encodeIfPresent(self.region, forKey: .region)
         try container.encodeIfPresent(self.apiKey, forKey: .apiKey)
@@ -58,6 +63,7 @@ public struct UpdateAzureCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case service
         case region
         case apiKey

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Groups analytics results by a selected assistant variable-value key.
 public struct VariableValueGroupBy: Codable, Hashable, Sendable {
     /// This is the key of the variable value to group by.
     public let key: String

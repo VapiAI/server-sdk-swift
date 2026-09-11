@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageCallEndpointingRequestPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "call.endpointing.request" is sent when using `assistant.startSpeakingPlan.smartEndpointingPlan={ "provider": "custom-endpointing-model" }`.
     /// 
     /// Here is what the request will look like:
@@ -53,6 +58,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageCallEndpointingRequestPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageCallEndpointingRequestType,
         messages: [ServerMessageCallEndpointingRequestMessagesItem]? = nil,
         messagesOpenAiFormatted: [OpenAiMessage],
@@ -65,6 +71,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.messages = messages
         self.messagesOpenAiFormatted = messagesOpenAiFormatted
@@ -80,6 +87,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageCallEndpointingRequestPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageCallEndpointingRequestType.self, forKey: .type)
         self.messages = try container.decodeIfPresent([ServerMessageCallEndpointingRequestMessagesItem].self, forKey: .messages)
         self.messagesOpenAiFormatted = try container.decode([OpenAiMessage].self, forKey: .messagesOpenAiFormatted)
@@ -96,6 +104,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.messagesOpenAiFormatted, forKey: .messagesOpenAiFormatted)
@@ -110,6 +119,7 @@ public struct ServerMessageCallEndpointingRequest: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case messages
         case messagesOpenAiFormatted = "messagesOpenAIFormatted"

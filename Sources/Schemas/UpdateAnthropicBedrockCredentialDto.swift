@@ -1,6 +1,7 @@
 import Foundation
 
 public struct UpdateAnthropicBedrockCredentialDto: Codable, Hashable, Sendable {
+    public let provider: UpdateAnthropicBedrockCredentialDtoProvider?
     /// AWS region where Bedrock is configured.
     public let region: UpdateAnthropicBedrockCredentialDtoRegion?
     /// Authentication method - either direct IAM credentials or cross-account role assumption.
@@ -11,11 +12,13 @@ public struct UpdateAnthropicBedrockCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateAnthropicBedrockCredentialDtoProvider? = nil,
         region: UpdateAnthropicBedrockCredentialDtoRegion? = nil,
         authenticationPlan: UpdateAnthropicBedrockCredentialDtoAuthenticationPlan? = nil,
         name: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.region = region
         self.authenticationPlan = authenticationPlan
         self.name = name
@@ -24,6 +27,7 @@ public struct UpdateAnthropicBedrockCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateAnthropicBedrockCredentialDtoProvider.self, forKey: .provider)
         self.region = try container.decodeIfPresent(UpdateAnthropicBedrockCredentialDtoRegion.self, forKey: .region)
         self.authenticationPlan = try container.decodeIfPresent(UpdateAnthropicBedrockCredentialDtoAuthenticationPlan.self, forKey: .authenticationPlan)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -33,6 +37,7 @@ public struct UpdateAnthropicBedrockCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.region, forKey: .region)
         try container.encodeIfPresent(self.authenticationPlan, forKey: .authenticationPlan)
         try container.encodeIfPresent(self.name, forKey: .name)
@@ -40,6 +45,7 @@ public struct UpdateAnthropicBedrockCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case region
         case authenticationPlan
         case name

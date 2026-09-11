@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls how model output is split into chunks before voice synthesis, including minimum length, punctuation boundaries, and formatting.
 public struct ChunkPlan: Codable, Hashable, Sendable {
     /// This determines whether the model output is chunked before being sent to the voice provider. Default `true`.
     /// 

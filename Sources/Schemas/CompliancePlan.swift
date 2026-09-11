@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls HIPAA and PCI requirements, transcript security filtering, and recording-consent handling for assistant calls.
 public struct CompliancePlan: Codable, Hashable, Sendable {
     /// When this is enabled, logs, recordings, and transcriptions will be stored in HIPAA-compliant storage. Defaults to false. Only HIPAA-compliant providers will be available for LLM, Voice, and Transcriber respectively. This setting is only honored if the organization is on an Enterprise subscription or has purchased the HIPAA add-on.
     public let hipaaEnabled: Bool?
@@ -8,6 +9,7 @@ public struct CompliancePlan: Codable, Hashable, Sendable {
     public let pciEnabled: Bool?
     /// This is the security filter plan for the assistant. It allows filtering of transcripts for security threats before sending to LLM.
     public let securityFilterPlan: SecurityFilterPlan?
+    /// Controls how recording consent is requested before the assistant joins the call.
     public let recordingConsentPlan: CompliancePlanRecordingConsentPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

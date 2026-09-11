@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to connect a bring-your-own phone number to Vapi with a stored telephony credential and routing settings.
 public struct CreateByoPhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

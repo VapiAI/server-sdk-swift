@@ -1,5 +1,6 @@
 import Foundation
 
+/// Direct AWS IAM credentials used to authenticate requests.
 public struct AwsiamCredentialsAuthenticationPlan: Codable, Hashable, Sendable {
     /// AWS Access Key ID. This is not returned in the API.
     public let awsAccessKeyId: String

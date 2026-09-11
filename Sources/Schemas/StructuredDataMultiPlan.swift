@@ -1,5 +1,6 @@
 import Foundation
 
+/// Associates a catalog key with a structured data extraction plan.
 public struct StructuredDataMultiPlan: Codable, Hashable, Sendable {
     /// This is the key of the structured data plan in the catalog.
     public let key: String

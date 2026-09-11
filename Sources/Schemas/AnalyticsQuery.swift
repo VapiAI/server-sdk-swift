@@ -1,5 +1,6 @@
 import Foundation
 
+/// A named analytics query against call or subscription data, including grouping, time range, and aggregation operations.
 public struct AnalyticsQuery: Codable, Hashable, Sendable {
     /// This is the table you want to query.
     public let table: AnalyticsQueryTable

@@ -1,10 +1,10 @@
 import Foundation
 
 public struct UpdateGhlToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [UpdateGhlToolDtoMessagesItem]?
+    /// The type of tool. "ghl" for GHL tool.
+    public let type: UpdateGhlToolDtoType?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -90,11 +90,13 @@ public struct UpdateGhlToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateGhlToolDtoMessagesItem]? = nil,
+        type: UpdateGhlToolDtoType? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         metadata: GhlToolMetadata? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.type = type
         self.rejectionPlan = rejectionPlan
         self.metadata = metadata
         self.additionalProperties = additionalProperties
@@ -103,6 +105,7 @@ public struct UpdateGhlToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateGhlToolDtoMessagesItem].self, forKey: .messages)
+        self.type = try container.decodeIfPresent(UpdateGhlToolDtoType.self, forKey: .type)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.metadata = try container.decodeIfPresent(GhlToolMetadata.self, forKey: .metadata)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -112,6 +115,7 @@ public struct UpdateGhlToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.type, forKey: .type)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
     }
@@ -119,6 +123,7 @@ public struct UpdateGhlToolDto: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case type
         case rejectionPlan
         case metadata
     }

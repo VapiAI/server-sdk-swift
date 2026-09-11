@@ -1,5 +1,6 @@
 import Foundation
 
+/// A Vonage phone number connected to Vapi, including its credential, routing, hooks, server settings, and lifecycle metadata.
 public struct VonagePhoneNumber: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

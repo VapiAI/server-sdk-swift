@@ -1,10 +1,16 @@
 import Foundation
 
+/// Metadata identifying a saved insight run and its lifecycle timestamps.
 public struct InsightRunResponse: Codable, Hashable, Sendable {
+    /// The unique identifier for the insight run.
     public let id: String
+    /// The unique identifier for the insight that was run.
     public let insightId: String
+    /// The unique identifier for the organization that owns the run.
     public let orgId: String
+    /// The ISO 8601 timestamp when the insight run was created.
     public let createdAt: Date
+    /// The ISO 8601 timestamp when the insight run was last updated.
     public let updatedAt: Date
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

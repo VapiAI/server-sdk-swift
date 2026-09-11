@@ -1,5 +1,6 @@
 import Foundation
 
+/// Replaces text matching a regular expression before it is sent to a voice provider.
 public struct RegexReplacement: Codable, Hashable, Sendable {
     /// This is the regex pattern to replace.
     /// 

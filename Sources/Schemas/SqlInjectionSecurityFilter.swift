@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters potential SQL injection patterns from transcripts.
 public struct SqlInjectionSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
     public let type: SqlInjectionSecurityFilterType

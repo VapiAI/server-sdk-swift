@@ -1,5 +1,6 @@
 import Foundation
 
+/// A custom endpointing rule that matches both the assistant's last message and the customer's current speech before applying a configured timeout.
 public struct BothCustomEndpointingRule: Codable, Hashable, Sendable {
     /// This is the regex pattern to match the assistant's message.
     /// 
@@ -14,6 +15,7 @@ public struct BothCustomEndpointingRule: Codable, Hashable, Sendable {
     /// 
     /// @default []
     public let assistantRegexOptions: [RegexOption]?
+    /// The regular expression pattern matched against the customer's speech.
     public let customerRegex: String
     /// These are the options for the customer's message regex match. Defaults to all disabled.
     /// 

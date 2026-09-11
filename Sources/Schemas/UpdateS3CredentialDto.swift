@@ -1,6 +1,8 @@
 import Foundation
 
 public struct UpdateS3CredentialDto: Codable, Hashable, Sendable {
+    /// Credential provider. Only allowed value is s3
+    public let provider: UpdateS3CredentialDtoProvider?
     /// AWS access key ID.
     public let awsAccessKeyId: String?
     /// AWS access key secret. This is not returned in the API.
@@ -19,6 +21,7 @@ public struct UpdateS3CredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateS3CredentialDtoProvider? = nil,
         awsAccessKeyId: String? = nil,
         awsSecretAccessKey: String? = nil,
         region: String? = nil,
@@ -28,6 +31,7 @@ public struct UpdateS3CredentialDto: Codable, Hashable, Sendable {
         name: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.awsAccessKeyId = awsAccessKeyId
         self.awsSecretAccessKey = awsSecretAccessKey
         self.region = region
@@ -40,6 +44,7 @@ public struct UpdateS3CredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateS3CredentialDtoProvider.self, forKey: .provider)
         self.awsAccessKeyId = try container.decodeIfPresent(String.self, forKey: .awsAccessKeyId)
         self.awsSecretAccessKey = try container.decodeIfPresent(String.self, forKey: .awsSecretAccessKey)
         self.region = try container.decodeIfPresent(String.self, forKey: .region)
@@ -53,6 +58,7 @@ public struct UpdateS3CredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.awsAccessKeyId, forKey: .awsAccessKeyId)
         try container.encodeIfPresent(self.awsSecretAccessKey, forKey: .awsSecretAccessKey)
         try container.encodeIfPresent(self.region, forKey: .region)
@@ -64,6 +70,7 @@ public struct UpdateS3CredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case awsAccessKeyId
         case awsSecretAccessKey
         case region

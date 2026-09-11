@@ -41,6 +41,13 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
     public let createdAt: Date
     /// The ISO 8601 date-time string of when the voice library was last updated.
     public let updatedAt: Date
+    /// Whether this voice was cloned by the org from their own audio, as opposed
+    /// to a seeded/preset voice. Drives the cloned filter and tag. Backed by a
+    /// NOT NULL DEFAULT false column, so it is always present at read time.
+    public let isCloned: Bool?
+    /// The provider that produced the clone (e.g. 'xai'). The voice `provider`
+    /// stays 'vapi'; this records the underlying backend. Unset for non-cloned voices.
+    public let cloneBackend: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -65,6 +72,8 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         isDeleted: Bool,
         createdAt: Date,
         updatedAt: Date,
+        isCloned: Bool? = nil,
+        cloneBackend: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.provider = provider
@@ -87,6 +96,8 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         self.isDeleted = isDeleted
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.isCloned = isCloned
+        self.cloneBackend = cloneBackend
         self.additionalProperties = additionalProperties
     }
 
@@ -112,6 +123,8 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         self.isDeleted = try container.decode(Bool.self, forKey: .isDeleted)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        self.isCloned = try container.decodeIfPresent(Bool.self, forKey: .isCloned)
+        self.cloneBackend = try container.decodeIfPresent(String.self, forKey: .cloneBackend)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -138,6 +151,8 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         try container.encode(self.isDeleted, forKey: .isDeleted)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
+        try container.encodeIfPresent(self.isCloned, forKey: .isCloned)
+        try container.encodeIfPresent(self.cloneBackend, forKey: .cloneBackend)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -162,5 +177,7 @@ public struct VoiceLibrary: Codable, Hashable, Sendable {
         case isDeleted
         case createdAt
         case updatedAt
+        case isCloned
+        case cloneBackend
     }
 }

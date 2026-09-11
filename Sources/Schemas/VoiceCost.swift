@@ -1,5 +1,6 @@
 import Foundation
 
+/// Voice-synthesis cost for a call, including voice, character usage, and amount.
 public struct VoiceCost: Codable, Hashable, Sendable {
     /// This is the voice that was used during the call.
     /// 

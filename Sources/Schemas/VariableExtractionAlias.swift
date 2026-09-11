@@ -1,5 +1,6 @@
 import Foundation
 
+/// Defines an additional Liquid-based variable from values extracted during a call.
 public struct VariableExtractionAlias: Codable, Hashable, Sendable {
     /// This is the key of the variable.
     /// 

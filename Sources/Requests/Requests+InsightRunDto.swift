@@ -2,6 +2,7 @@ import Foundation
 
 extension Requests {
     public struct InsightRunDto: Codable, Hashable, Sendable {
+        /// Output-formatting instructions applied to the insight run.
         public let formatPlan: InsightRunFormatPlan?
         /// This is the optional time range override for the insight.
         /// If provided, overrides every field in the insight's timeRange.
@@ -11,16 +12,21 @@ extension Requests {
         /// step default - "day"
         /// For Pie and Text Insights, step will be ignored even if provided.
         public let timeRangeOverride: InsightTimeRangeWithStep?
+        /// Optional runtime assistant scope for dashboards.
+        /// This is applied to call-table queries without mutating the saved insight.
+        public let assistantId: String?
         /// Additional properties that are not explicitly defined in the schema
         public let additionalProperties: [String: JSONValue]
 
         public init(
             formatPlan: InsightRunFormatPlan? = nil,
             timeRangeOverride: InsightTimeRangeWithStep? = nil,
+            assistantId: String? = nil,
             additionalProperties: [String: JSONValue] = .init()
         ) {
             self.formatPlan = formatPlan
             self.timeRangeOverride = timeRangeOverride
+            self.assistantId = assistantId
             self.additionalProperties = additionalProperties
         }
 
@@ -28,6 +34,7 @@ extension Requests {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             self.formatPlan = try container.decodeIfPresent(InsightRunFormatPlan.self, forKey: .formatPlan)
             self.timeRangeOverride = try container.decodeIfPresent(InsightTimeRangeWithStep.self, forKey: .timeRangeOverride)
+            self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
             self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
         }
 
@@ -36,12 +43,14 @@ extension Requests {
             try encoder.encodeAdditionalProperties(self.additionalProperties)
             try container.encodeIfPresent(self.formatPlan, forKey: .formatPlan)
             try container.encodeIfPresent(self.timeRangeOverride, forKey: .timeRangeOverride)
+            try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
         }
 
         /// Keys for encoding/decoding struct properties.
         enum CodingKeys: String, CodingKey, CaseIterable {
             case formatPlan
             case timeRangeOverride
+            case assistantId
         }
     }
 }

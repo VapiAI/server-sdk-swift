@@ -16,4 +16,5 @@ public enum WorkflowAnthropicBedrockModelModel: String, Codable, Hashable, CaseI
     case claudeSonnet4520250929 = "claude-sonnet-4-5-20250929"
     case claudeSonnet46 = "claude-sonnet-4-6"
     case claudeHaiku4520251001 = "claude-haiku-4-5-20251001"
+    case globalAnthropicClaudeHaiku4520251001V10 = "global.anthropic.claude-haiku-4-5-20251001-v1:0"
 }

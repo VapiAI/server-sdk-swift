@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with ElevenLabs, including model, language, speech thresholds, and fallback settings.
 public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: ElevenLabsTranscriberModel?

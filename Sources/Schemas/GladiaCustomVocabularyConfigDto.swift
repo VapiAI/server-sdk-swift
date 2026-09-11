@@ -1,5 +1,6 @@
 import Foundation
 
+/// Custom vocabulary configuration for Gladia transcription, including vocabulary items and default recognition intensity.
 public struct GladiaCustomVocabularyConfigDto: Codable, Hashable, Sendable {
     /// Array of vocabulary items (strings or objects with value, pronunciations, intensity, language)
     public let vocabulary: [GladiaCustomVocabularyConfigDtoVocabularyItem]

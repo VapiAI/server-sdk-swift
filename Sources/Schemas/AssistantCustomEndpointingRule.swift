@@ -1,5 +1,6 @@
 import Foundation
 
+/// A custom endpointing rule that matches the assistant's last message and applies a configured timeout.
 public struct AssistantCustomEndpointingRule: Codable, Hashable, Sendable {
     /// This is the regex pattern to match.
     /// 

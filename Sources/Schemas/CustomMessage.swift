@@ -1,5 +1,6 @@
 import Foundation
 
+/// A message spoken by the assistant with optional language-specific content variants.
 public struct CustomMessage: Codable, Hashable, Sendable {
     /// This is an alternative to the `content` property. It allows to specify variants of the same content, one per language.
     /// 

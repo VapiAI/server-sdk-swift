@@ -20,6 +20,8 @@ public enum UpdateAzureCredentialDtoRegion: String, Codable, Hashable, CaseItera
     case spaincentral
     case swedencentral
     case switzerland
+    case switzerlandnorth
+    case switzerlandwest
     case uaenorth
     case uk
     case westeurope

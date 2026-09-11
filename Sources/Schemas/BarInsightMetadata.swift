@@ -1,10 +1,16 @@
 import Foundation
 
+/// Display settings for a bar insight, including chart name, axis labels, and optional y-axis bounds.
 public struct BarInsightMetadata: Codable, Hashable, Sendable {
+    /// Label displayed on the chart's x-axis.
     public let xAxisLabel: String?
+    /// Label displayed on the chart's y-axis.
     public let yAxisLabel: String?
+    /// Minimum value displayed on the chart's y-axis.
     public let yAxisMin: Double?
+    /// Maximum value displayed on the chart's y-axis.
     public let yAxisMax: Double?
+    /// Display name for the insight chart.
     public let name: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

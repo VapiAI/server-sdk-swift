@@ -1,7 +1,10 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with Cartesia, including model and language.
 public struct FallbackCartesiaTranscriber: Codable, Hashable, Sendable {
+    /// The Cartesia speech-to-text model used for transcription.
     public let model: FallbackCartesiaTranscriberModel?
+    /// The language code used for transcription.
     public let language: FallbackCartesiaTranscriberLanguage?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

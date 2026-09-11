@@ -1,11 +1,12 @@
 import Foundation
 
+/// Runs configured actions when the customer does not speak before the configured timeout, with support for trigger limits and named instances.
 public struct CallHookCustomerSpeechTimeout: Codable, Hashable, Sendable {
     /// Must be either "customer.speech.timeout" or match the pattern "customer.speech.timeout[property=value]"
     public let on: String
     /// This is the set of actions to perform when the hook triggers
     public let `do`: [CallHookCustomerSpeechTimeoutDoItem]
-    /// This is the set of filters that must match for the hook to trigger
+    /// Controls the speech timeout, maximum trigger count, and counter reset behavior for this hook.
     public let options: CustomerSpeechTimeoutOptions?
     /// This is the name of the hook, it can be set by the user to identify the hook.
     /// If no name is provided, the hook will be auto generated as UUID.

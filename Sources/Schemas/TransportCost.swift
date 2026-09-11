@@ -1,6 +1,8 @@
 import Foundation
 
+/// Telephony transport cost for a call, including provider, billable minutes, and amount.
 public struct TransportCost: Codable, Hashable, Sendable {
+    /// Telephony or transport provider that generated the cost.
     public let provider: TransportCostProvider?
     /// This is the minutes of `transport` usage. This should match `call.endedAt` - `call.startedAt`.
     public let minutes: Double

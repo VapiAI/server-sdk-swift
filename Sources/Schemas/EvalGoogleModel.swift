@@ -1,5 +1,6 @@
 import Foundation
 
+/// Google model configuration for an LLM judge, including its messages and generation settings.
 public struct EvalGoogleModel: Codable, Hashable, Sendable {
     /// This is the name of the model. Ex. gpt-4o
     public let model: EvalGoogleModelModel

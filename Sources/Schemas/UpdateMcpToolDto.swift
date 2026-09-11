@@ -1,9 +1,8 @@
 import Foundation
 
+/// Fields used to update an MCP tool, including its server, connection metadata, exposed tool messages, and rejection plan.
 public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [UpdateMcpToolDtoMessagesItem]?
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
@@ -96,6 +95,7 @@ public struct UpdateMcpToolDto: Codable, Hashable, Sendable {
     /// }
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
+    /// Connection metadata for the MCP server, including its communication protocol.
     public let metadata: McpToolMetadata?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

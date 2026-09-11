@@ -1,5 +1,6 @@
 import Foundation
 
+/// Combines nested regular-expression, Liquid, or grouped conditions with an `AND` or `OR` operator.
 public struct GroupCondition: Codable, Hashable, Sendable {
     /// This is the logical operator for combining conditions in this group
     public let `operator`: GroupConditionOperator

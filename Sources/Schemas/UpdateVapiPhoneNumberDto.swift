@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fields used to update a Vapi-managed phone number or SIP URI, including its authentication, routing, hooks, and server settings.
 public struct UpdateVapiPhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

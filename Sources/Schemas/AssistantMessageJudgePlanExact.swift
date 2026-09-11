@@ -1,5 +1,6 @@
 import Foundation
 
+/// Evaluates an assistant message using case-insensitive exact content matching and expected tool calls.
 public struct AssistantMessageJudgePlanExact: Codable, Hashable, Sendable {
     /// This is what that will be used to evaluate the model's message content.
     /// If you provide a string, the assistant message content will be evaluated against it as an exact match, case-insensitive.

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Time window that controls the earliest and latest time a call may begin.
 public struct SchedulePlan: Codable, Hashable, Sendable {
     /// This is the ISO 8601 date-time string of the earliest time the call can be scheduled.
     public let earliestAt: Date

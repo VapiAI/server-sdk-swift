@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for sending conversation audio to a custom WebSocket transcription server.
 public struct CustomTranscriber: Codable, Hashable, Sendable {
     /// This is where the transcription request will be sent.
     /// 

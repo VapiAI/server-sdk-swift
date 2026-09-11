@@ -1,5 +1,6 @@
 import Foundation
 
+/// An entry in the call message history that records the result and metadata for a completed tool call.
 public struct ToolCallResultMessage: Codable, Hashable, Sendable {
     /// The role of the tool call result in the conversation.
     public let role: String
@@ -15,6 +16,9 @@ public struct ToolCallResultMessage: Codable, Hashable, Sendable {
     public let secondsFromStart: Double
     /// The metadata for the tool call result.
     public let metadata: [String: JSONValue]?
+    /// Warnings raised for this tool call result, e.g. when the response is
+    /// larger than recommended for voice AI context windows.
+    public let warnings: [ToolCallResultMessageWarning]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -26,6 +30,7 @@ public struct ToolCallResultMessage: Codable, Hashable, Sendable {
         time: Double,
         secondsFromStart: Double,
         metadata: [String: JSONValue]? = nil,
+        warnings: [ToolCallResultMessageWarning]? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.role = role
@@ -35,6 +40,7 @@ public struct ToolCallResultMessage: Codable, Hashable, Sendable {
         self.time = time
         self.secondsFromStart = secondsFromStart
         self.metadata = metadata
+        self.warnings = warnings
         self.additionalProperties = additionalProperties
     }
 
@@ -47,6 +53,7 @@ public struct ToolCallResultMessage: Codable, Hashable, Sendable {
         self.time = try container.decode(Double.self, forKey: .time)
         self.secondsFromStart = try container.decode(Double.self, forKey: .secondsFromStart)
         self.metadata = try container.decodeIfPresent([String: JSONValue].self, forKey: .metadata)
+        self.warnings = try container.decodeIfPresent([ToolCallResultMessageWarning].self, forKey: .warnings)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -60,6 +67,7 @@ public struct ToolCallResultMessage: Codable, Hashable, Sendable {
         try container.encode(self.time, forKey: .time)
         try container.encode(self.secondsFromStart, forKey: .secondsFromStart)
         try container.encodeIfPresent(self.metadata, forKey: .metadata)
+        try container.encodeIfPresent(self.warnings, forKey: .warnings)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -71,5 +79,6 @@ public struct ToolCallResultMessage: Codable, Hashable, Sendable {
         case time
         case secondsFromStart
         case metadata
+        case warnings
     }
 }

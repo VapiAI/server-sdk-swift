@@ -1,5 +1,6 @@
 import Foundation
 
+/// VapiQL JSON query that counts values from a string-valued call-table column with optional call filters.
 public struct JsonQueryOnCallTableWithStringTypeColumn: Codable, Hashable, Sendable {
     /// This is the type of query. Only allowed type is "vapiql-json".
     public let type: JsonQueryOnCallTableWithStringTypeColumnType

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Call performance measurements, including per-turn and average provider, endpointing, transport, and interruption metrics.
 public struct PerformanceMetrics: Codable, Hashable, Sendable {
     /// These are the individual latencies for each turn.
     public let turnLatencies: [TurnLatency]?

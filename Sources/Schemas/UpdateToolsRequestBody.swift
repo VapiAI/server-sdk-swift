@@ -15,6 +15,7 @@ public enum UpdateToolsRequestBody: Codable, Hashable, Sendable {
     case googleCalendarEventCreate(UpdateGoogleCalendarCreateEventToolDto)
     case googleSheetsRowAppend(UpdateGoogleSheetsRowAppendToolDto)
     case handoff(UpdateHandoffToolDto)
+    case knowledgeBase(UpdateKnowledgeBaseToolDto)
     case mcp(UpdateMcpToolDto)
     case query(UpdateQueryToolDto)
     case sipRequest(UpdateSipRequestToolDto)
@@ -56,6 +57,8 @@ public enum UpdateToolsRequestBody: Codable, Hashable, Sendable {
             self = .googleSheetsRowAppend(try UpdateGoogleSheetsRowAppendToolDto(from: decoder))
         case "handoff":
             self = .handoff(try UpdateHandoffToolDto(from: decoder))
+        case "knowledgeBase":
+            self = .knowledgeBase(try UpdateKnowledgeBaseToolDto(from: decoder))
         case "mcp":
             self = .mcp(try UpdateMcpToolDto(from: decoder))
         case "query":
@@ -126,6 +129,9 @@ public enum UpdateToolsRequestBody: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .handoff(let data):
             try container.encode("handoff", forKey: .type)
+            try data.encode(to: encoder)
+        case .knowledgeBase(let data):
+            try container.encode("knowledgeBase", forKey: .type)
             try data.encode(to: encoder)
         case .mcp(let data):
             try container.encode("mcp", forKey: .type)

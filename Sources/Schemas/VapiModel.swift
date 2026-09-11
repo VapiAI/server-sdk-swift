@@ -11,19 +11,31 @@ public struct VapiModel: Codable, Hashable, Sendable {
     /// 
     /// Both `tools` and `toolIds` can be used together.
     public let toolIds: [String]?
+    /// These are version-pinned references to tools. Each entry pins a specific
+    /// version of a tool by `(toolId, version)`. When the same `toolId` appears
+    /// in both `toolIds` and `toolRefs[]`, the `toolRefs` pin wins (the
+    /// `toolIds` entry is dropped at write time).
+    public let toolRefs: [ToolRef]?
     /// These are the options for the knowledge base.
     public let knowledgeBase: CreateCustomKnowledgeBaseDto?
-    public let provider: VapiModelProvider
+    /// White-label Vapi models are selected by `version`, not a model name, so
+    /// `model` is optional here (the runtime already accepts a version-only Vapi
+    /// payload). Overriding the required `ModelBase.model`: the declared type stays
+    /// `string` to match the base (avoids TS2416) and the `= undefined!` initializer
+    /// satisfies TS2612 for the field override, while `@IsOptional` +
+    /// `@ApiPropertyOptional` make validation and the generated OpenAPI schema treat
+    /// it as optional (so `VapiModel.required` is `['provider']`).
+    public let model: String?
+    /// Vapi-managed model version (update channel). When set, this is a Vapi-managed
+    /// LLM routed by the registry; when absent, this is the legacy workflow form
+    /// below (`steps` / `workflow`).
+    public let version: VapiModelVersion?
     /// This is the workflow that will be used for the call. To use a transient workflow, use `workflow` instead.
     public let workflowId: String?
     /// This is the workflow that will be used for the call. To use an existing workflow, use `workflowId` instead.
     public let workflow: WorkflowUserEditable?
-    /// This is the name of the model. Ex. cognitivecomputations/dolphin-mixtral-8x7b
-    public let model: String
-    /// This is the temperature that will be used for calls. Default is 0 to leverage caching for lower latency.
+    /// This is the temperature that will be used for calls. Default is 0.5.
     public let temperature: Double?
-    /// This is the max number of tokens that the assistant will be allowed to generate in each turn of the conversation. Default is 250.
-    public let maxTokens: Double?
     /// This determines whether we detect user's emotion while they speak and send it as an additional info to model.
     /// 
     /// Default `false` because the model is usually are good at understanding the user's emotion from text.
@@ -43,13 +55,13 @@ public struct VapiModel: Codable, Hashable, Sendable {
         messages: [OpenAiMessage]? = nil,
         tools: [VapiModelToolsItem]? = nil,
         toolIds: [String]? = nil,
+        toolRefs: [ToolRef]? = nil,
         knowledgeBase: CreateCustomKnowledgeBaseDto? = nil,
-        provider: VapiModelProvider,
+        model: String? = nil,
+        version: VapiModelVersion? = nil,
         workflowId: String? = nil,
         workflow: WorkflowUserEditable? = nil,
-        model: String,
         temperature: Double? = nil,
-        maxTokens: Double? = nil,
         emotionRecognitionEnabled: Bool? = nil,
         numFastTurns: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -57,13 +69,13 @@ public struct VapiModel: Codable, Hashable, Sendable {
         self.messages = messages
         self.tools = tools
         self.toolIds = toolIds
+        self.toolRefs = toolRefs
         self.knowledgeBase = knowledgeBase
-        self.provider = provider
+        self.model = model
+        self.version = version
         self.workflowId = workflowId
         self.workflow = workflow
-        self.model = model
         self.temperature = temperature
-        self.maxTokens = maxTokens
         self.emotionRecognitionEnabled = emotionRecognitionEnabled
         self.numFastTurns = numFastTurns
         self.additionalProperties = additionalProperties
@@ -74,13 +86,13 @@ public struct VapiModel: Codable, Hashable, Sendable {
         self.messages = try container.decodeIfPresent([OpenAiMessage].self, forKey: .messages)
         self.tools = try container.decodeIfPresent([VapiModelToolsItem].self, forKey: .tools)
         self.toolIds = try container.decodeIfPresent([String].self, forKey: .toolIds)
+        self.toolRefs = try container.decodeIfPresent([ToolRef].self, forKey: .toolRefs)
         self.knowledgeBase = try container.decodeIfPresent(CreateCustomKnowledgeBaseDto.self, forKey: .knowledgeBase)
-        self.provider = try container.decode(VapiModelProvider.self, forKey: .provider)
+        self.model = try container.decodeIfPresent(String.self, forKey: .model)
+        self.version = try container.decodeIfPresent(VapiModelVersion.self, forKey: .version)
         self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
         self.workflow = try container.decodeIfPresent(WorkflowUserEditable.self, forKey: .workflow)
-        self.model = try container.decode(String.self, forKey: .model)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
-        self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
         self.emotionRecognitionEnabled = try container.decodeIfPresent(Bool.self, forKey: .emotionRecognitionEnabled)
         self.numFastTurns = try container.decodeIfPresent(Double.self, forKey: .numFastTurns)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -92,13 +104,13 @@ public struct VapiModel: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.tools, forKey: .tools)
         try container.encodeIfPresent(self.toolIds, forKey: .toolIds)
+        try container.encodeIfPresent(self.toolRefs, forKey: .toolRefs)
         try container.encodeIfPresent(self.knowledgeBase, forKey: .knowledgeBase)
-        try container.encode(self.provider, forKey: .provider)
+        try container.encodeIfPresent(self.model, forKey: .model)
+        try container.encodeIfPresent(self.version, forKey: .version)
         try container.encodeIfPresent(self.workflowId, forKey: .workflowId)
         try container.encodeIfPresent(self.workflow, forKey: .workflow)
-        try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
-        try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
         try container.encodeIfPresent(self.emotionRecognitionEnabled, forKey: .emotionRecognitionEnabled)
         try container.encodeIfPresent(self.numFastTurns, forKey: .numFastTurns)
     }
@@ -108,13 +120,13 @@ public struct VapiModel: Codable, Hashable, Sendable {
         case messages
         case tools
         case toolIds
+        case toolRefs
         case knowledgeBase
-        case provider
+        case model
+        case version
         case workflowId
         case workflow
-        case model
         case temperature
-        case maxTokens
         case emotionRecognitionEnabled
         case numFastTurns
     }

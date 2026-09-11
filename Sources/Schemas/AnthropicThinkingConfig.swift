@@ -1,6 +1,8 @@
 import Foundation
 
+/// Enables Anthropic extended thinking with a maximum thinking-token budget.
 public struct AnthropicThinkingConfig: Codable, Hashable, Sendable {
+    /// Enables Anthropic extended thinking.
     public let type: AnthropicThinkingConfigType
     /// The maximum number of tokens to allocate for thinking.
     /// Must be between 1024 and 100000 tokens.

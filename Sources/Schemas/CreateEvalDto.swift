@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to create a reusable eval containing a mock conversation and checkpoints for assessing assistant responses and tool calls.
 public struct CreateEvalDto: Codable, Hashable, Sendable {
     /// This is the mock conversation that will be used to evaluate the flow of the conversation.
     /// 

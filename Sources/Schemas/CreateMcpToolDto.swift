@@ -1,9 +1,8 @@
 import Foundation
 
+/// Configuration used to create a tool that connects an assistant to a Model Context Protocol server and exposes its available tools.
 public struct CreateMcpToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [CreateMcpToolDtoMessagesItem]?
     /// 
     ///   This is the server where a `tool-calls` webhook will be sent.
@@ -17,6 +16,7 @@ public struct CreateMcpToolDto: Codable, Hashable, Sendable {
     public let server: Server?
     /// Per-tool message overrides for individual tools loaded from the MCP server. Set messages to an empty array to suppress messages for a specific tool. Tools not listed here will use the default messages from the parent tool.
     public let toolMessages: [McpToolMessages]?
+    /// Connection metadata for the MCP server, including its communication protocol.
     public let metadata: McpToolMetadata?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 

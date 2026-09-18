@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for synthesizing assistant speech with Deepgram, including voice and model selection, model-improvement preferences, chunking, and caching.
 public struct FallbackDeepgramVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

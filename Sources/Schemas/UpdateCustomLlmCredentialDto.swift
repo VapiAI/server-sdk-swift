@@ -1,6 +1,7 @@
 import Foundation
 
 public struct UpdateCustomLlmCredentialDto: Codable, Hashable, Sendable {
+    public let provider: UpdateCustomLlmCredentialDtoProvider?
     /// This is not returned in the API.
     public let apiKey: String?
     /// This is the authentication plan. Currently supports OAuth2 RFC 6749. To use Bearer authentication, use apiKey
@@ -11,11 +12,13 @@ public struct UpdateCustomLlmCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateCustomLlmCredentialDtoProvider? = nil,
         apiKey: String? = nil,
         authenticationPlan: OAuth2AuthenticationPlan? = nil,
         name: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.apiKey = apiKey
         self.authenticationPlan = authenticationPlan
         self.name = name
@@ -24,6 +27,7 @@ public struct UpdateCustomLlmCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateCustomLlmCredentialDtoProvider.self, forKey: .provider)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
         self.authenticationPlan = try container.decodeIfPresent(OAuth2AuthenticationPlan.self, forKey: .authenticationPlan)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -33,6 +37,7 @@ public struct UpdateCustomLlmCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.apiKey, forKey: .apiKey)
         try container.encodeIfPresent(self.authenticationPlan, forKey: .authenticationPlan)
         try container.encodeIfPresent(self.name, forKey: .name)
@@ -40,6 +45,7 @@ public struct UpdateCustomLlmCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case apiKey
         case authenticationPlan
         case name

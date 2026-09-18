@@ -19,6 +19,8 @@ public struct SimulationSuite: Codable, Hashable, Sendable {
     public let path: Nullable<String>?
     /// This is the list of simulation IDs in this suite.
     public let simulationIds: [String]
+    /// This is the ordered list of assistant or squad assignments for the suite.
+    public let targetAssignments: [SimulationSuiteTargetAssignment]
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -31,6 +33,7 @@ public struct SimulationSuite: Codable, Hashable, Sendable {
         slackWebhookUrl: String? = nil,
         path: Nullable<String>? = nil,
         simulationIds: [String],
+        targetAssignments: [SimulationSuiteTargetAssignment],
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.id = id
@@ -41,6 +44,7 @@ public struct SimulationSuite: Codable, Hashable, Sendable {
         self.slackWebhookUrl = slackWebhookUrl
         self.path = path
         self.simulationIds = simulationIds
+        self.targetAssignments = targetAssignments
         self.additionalProperties = additionalProperties
     }
 
@@ -54,6 +58,7 @@ public struct SimulationSuite: Codable, Hashable, Sendable {
         self.slackWebhookUrl = try container.decodeIfPresent(String.self, forKey: .slackWebhookUrl)
         self.path = try container.decodeNullableIfPresent(String.self, forKey: .path)
         self.simulationIds = try container.decode([String].self, forKey: .simulationIds)
+        self.targetAssignments = try container.decode([SimulationSuiteTargetAssignment].self, forKey: .targetAssignments)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -68,6 +73,7 @@ public struct SimulationSuite: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.slackWebhookUrl, forKey: .slackWebhookUrl)
         try container.encodeNullableIfPresent(self.path, forKey: .path)
         try container.encode(self.simulationIds, forKey: .simulationIds)
+        try container.encode(self.targetAssignments, forKey: .targetAssignments)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -80,5 +86,6 @@ public struct SimulationSuite: Codable, Hashable, Sendable {
         case slackWebhookUrl
         case path
         case simulationIds
+        case targetAssignments
     }
 }

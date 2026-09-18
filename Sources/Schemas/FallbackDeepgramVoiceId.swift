@@ -57,4 +57,11 @@ public enum FallbackDeepgramVoiceId: String, Codable, Hashable, CaseIterable, Se
     case aquila
     case selena
     case javier
+    case viktoria
+    case kara
+    case fabian
+    case julius
+    case lara
+    case elara
+    case aurelia
 }

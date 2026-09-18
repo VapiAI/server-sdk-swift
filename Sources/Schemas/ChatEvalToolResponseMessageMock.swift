@@ -1,5 +1,6 @@
 import Foundation
 
+/// A simulated tool response in an evaluation conversation.
 public struct ChatEvalToolResponseMessageMock: Codable, Hashable, Sendable {
     /// This is the role of the message author.
     /// For a mock tool response message, the role is always 'tool'

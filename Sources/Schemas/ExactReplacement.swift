@@ -1,5 +1,6 @@
 import Foundation
 
+/// Replaces an exact word or phrase before text is sent to a voice provider.
 public struct ExactReplacement: Codable, Hashable, Sendable {
     /// This option let's you control whether to replace all instances of the key or only the first one. By default, it only replaces the first instance.
     /// Examples:

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating voice synthesis requests with Tavus.
 public struct CreateTavusCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls real-time listening and control for assistant calls, authentication requirements for monitor URLs, and attached monitors.
 public struct MonitorPlan: Codable, Hashable, Sendable {
     /// This determines whether the assistant's calls allow live listening. Defaults to true.
     /// 
@@ -27,11 +28,7 @@ public struct MonitorPlan: Codable, Hashable, Sendable {
     /// 
     /// @default false
     public let controlAuthenticationEnabled: Bool?
-    /// This the set of monitor ids that are attached to the assistant.
-    /// The source of truth for the monitor ids is the assistant_monitor join table.
-    /// This field can be used for transient assistants and to update assistants with new monitor ids.
-    /// 
-    /// @default []
+    /// IDs of the monitors attached to the assistant. Use this field for transient assistants or to update the monitors attached to an existing assistant. Defaults to an empty array.
     public let monitorIds: [String]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

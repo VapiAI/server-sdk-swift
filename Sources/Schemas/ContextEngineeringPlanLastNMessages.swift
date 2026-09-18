@@ -1,5 +1,6 @@
 import Foundation
 
+/// Includes a configured number of the most recent messages when constructing context for a handoff.
 public struct ContextEngineeringPlanLastNMessages: Codable, Hashable, Sendable {
     /// This is the maximum number of messages to include in the context engineering plan.
     public let maxMessages: Double

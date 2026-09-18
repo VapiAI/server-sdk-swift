@@ -1,9 +1,9 @@
 import Foundation
 
+/// A reusable tool that executes TypeScript code with configured credentials, environment variables, and timeout.
 public struct CodeTool: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    public let latestVersion: Nullable<String>?
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [CodeToolMessagesItem]?
     /// This determines if the tool is async.
     /// 
@@ -132,6 +132,7 @@ public struct CodeTool: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        latestVersion: Nullable<String>? = nil,
         messages: [CodeToolMessagesItem]? = nil,
         async: Bool? = nil,
         server: Server? = nil,
@@ -148,6 +149,7 @@ public struct CodeTool: Codable, Hashable, Sendable {
         function: OpenAiFunction? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.latestVersion = latestVersion
         self.messages = messages
         self.async = async
         self.server = server
@@ -167,6 +169,7 @@ public struct CodeTool: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
         self.messages = try container.decodeIfPresent([CodeToolMessagesItem].self, forKey: .messages)
         self.async = try container.decodeIfPresent(Bool.self, forKey: .async)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
@@ -187,6 +190,7 @@ public struct CodeTool: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.async, forKey: .async)
         try container.encodeIfPresent(self.server, forKey: .server)
@@ -205,6 +209,7 @@ public struct CodeTool: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case latestVersion
         case messages
         case async
         case server

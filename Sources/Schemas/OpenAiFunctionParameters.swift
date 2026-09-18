@@ -1,5 +1,6 @@
 import Foundation
 
+/// JSON object schema defining the properties accepted by a function and which properties are required.
 public struct OpenAiFunctionParameters: Codable, Hashable, Sendable {
     /// This must be set to 'object'. It instructs the model to return a JSON object containing the function call properties.
     public let type: OpenAiFunctionParametersType

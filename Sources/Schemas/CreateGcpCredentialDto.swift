@@ -1,5 +1,6 @@
 import Foundation
 
+/// Service-account credentials for Google Cloud resources and optional call-artifact storage, including region, bucket configuration, and upload fallback order.
 public struct CreateGcpCredentialDto: Codable, Hashable, Sendable {
     /// This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
     public let fallbackIndex: Double?
@@ -9,6 +10,7 @@ public struct CreateGcpCredentialDto: Codable, Hashable, Sendable {
     public let gcpKey: GcpKey
     /// This is the region of the GCP resource.
     public let region: String?
+    /// Bucket configuration used to store call artifacts in Google Cloud Storage.
     public let bucketPlan: BucketPlan?
     /// This is the name of credential. This is just for your reference.
     public let name: String?

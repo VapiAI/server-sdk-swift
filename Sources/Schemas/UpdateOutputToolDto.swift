@@ -1,10 +1,10 @@
 import Foundation
 
 public struct UpdateOutputToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [UpdateOutputToolDtoMessagesItem]?
+    /// The type of tool. "output" for Output tool.
+    public let type: UpdateOutputToolDtoType?
     /// This is the plan to reject a tool call based on the conversation state.
     /// 
     /// // Example 1: Reject endCall if user didn't say goodbye
@@ -89,10 +89,12 @@ public struct UpdateOutputToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateOutputToolDtoMessagesItem]? = nil,
+        type: UpdateOutputToolDtoType? = nil,
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.type = type
         self.rejectionPlan = rejectionPlan
         self.additionalProperties = additionalProperties
     }
@@ -100,6 +102,7 @@ public struct UpdateOutputToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateOutputToolDtoMessagesItem].self, forKey: .messages)
+        self.type = try container.decodeIfPresent(UpdateOutputToolDtoType.self, forKey: .type)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -108,12 +111,14 @@ public struct UpdateOutputToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.type, forKey: .type)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case type
         case rejectionPlan
     }
 }

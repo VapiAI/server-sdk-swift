@@ -1,5 +1,6 @@
 import Foundation
 
+/// Message spoken when a tool call fails, with optional language variants, argument conditions, and end-call behavior.
 public struct ToolMessageFailed: Codable, Hashable, Sendable {
     /// This is an alternative to the `content` property. It allows to specify variants of the same content, one per language.
     /// 
@@ -9,7 +10,23 @@ public struct ToolMessageFailed: Codable, Hashable, Sendable {
     /// 
     /// This will override the `content` property.
     public let contents: [TextContent]?
+    /// This is optional and defaults to "assistant".
+    /// 
+    /// When role=assistant, `content` is said out loud when the tool call fails.
+    /// 
+    /// When role=system, `content` is passed to the model as a system message
+    /// along with the failure result, and the model's generated response is
+    /// spoken. Example:
+    ///     assistant: tool called
+    ///     tool: error from your server
+    ///     <--- system prompt as hint
+    ///     ---> model generates response which is spoken
+    /// This is useful when you want the model to generate an error-aware
+    /// response instead of speaking a fixed failure message.
+    public let role: ToolMessageFailedRole?
     /// This is an optional boolean that if true, the call will end after the message is spoken. Default is false.
+    /// 
+    /// This is ignored if `role` is set to `system`.
     /// 
     /// @default false
     public let endCallAfterSpokenEnabled: Bool?
@@ -22,12 +39,14 @@ public struct ToolMessageFailed: Codable, Hashable, Sendable {
 
     public init(
         contents: [TextContent]? = nil,
+        role: ToolMessageFailedRole? = nil,
         endCallAfterSpokenEnabled: Bool? = nil,
         content: String? = nil,
         conditions: [Condition]? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.contents = contents
+        self.role = role
         self.endCallAfterSpokenEnabled = endCallAfterSpokenEnabled
         self.content = content
         self.conditions = conditions
@@ -37,6 +56,7 @@ public struct ToolMessageFailed: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.contents = try container.decodeIfPresent([TextContent].self, forKey: .contents)
+        self.role = try container.decodeIfPresent(ToolMessageFailedRole.self, forKey: .role)
         self.endCallAfterSpokenEnabled = try container.decodeIfPresent(Bool.self, forKey: .endCallAfterSpokenEnabled)
         self.content = try container.decodeIfPresent(String.self, forKey: .content)
         self.conditions = try container.decodeIfPresent([Condition].self, forKey: .conditions)
@@ -47,6 +67,7 @@ public struct ToolMessageFailed: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.contents, forKey: .contents)
+        try container.encodeIfPresent(self.role, forKey: .role)
         try container.encodeIfPresent(self.endCallAfterSpokenEnabled, forKey: .endCallAfterSpokenEnabled)
         try container.encodeIfPresent(self.content, forKey: .content)
         try container.encodeIfPresent(self.conditions, forKey: .conditions)
@@ -55,6 +76,7 @@ public struct ToolMessageFailed: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case contents
+        case role
         case endCallAfterSpokenEnabled
         case content
         case conditions

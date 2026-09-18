@@ -1,11 +1,10 @@
 import Foundation
 
+/// Fallback configuration for synthesizing assistant speech with OpenAI, including voice and model selection, delivery instructions, speed, chunking, and caching.
 public struct FallbackOpenAiVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
-    /// This is the provider-specific ID that will be used.
-    /// Please note that ash, ballad, coral, sage, and verse may only be used with realtime models.
-    public let voiceId: FallbackOpenAiVoiceId
+    public let voiceId: JSONValue
     /// This is the model that will be used for text-to-speech.
     public let model: FallbackOpenAiVoiceModel?
     /// This is a prompt that allows you to control the voice of your generated audio.
@@ -20,7 +19,7 @@ public struct FallbackOpenAiVoice: Codable, Hashable, Sendable {
 
     public init(
         cachingEnabled: Bool? = nil,
-        voiceId: FallbackOpenAiVoiceId,
+        voiceId: JSONValue,
         model: FallbackOpenAiVoiceModel? = nil,
         instructions: String? = nil,
         speed: Double? = nil,
@@ -39,7 +38,7 @@ public struct FallbackOpenAiVoice: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.cachingEnabled = try container.decodeIfPresent(Bool.self, forKey: .cachingEnabled)
-        self.voiceId = try container.decode(FallbackOpenAiVoiceId.self, forKey: .voiceId)
+        self.voiceId = try container.decode(JSONValue.self, forKey: .voiceId)
         self.model = try container.decodeIfPresent(FallbackOpenAiVoiceModel.self, forKey: .model)
         self.instructions = try container.decodeIfPresent(String.self, forKey: .instructions)
         self.speed = try container.decodeIfPresent(Double.self, forKey: .speed)

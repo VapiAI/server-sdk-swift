@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters call records by comparing a start or end timestamp with a date.
 public struct FilterDateTypeColumnOnCallTable: Codable, Hashable, Sendable {
     /// This is the column in the call table that will be filtered on.
     /// Date Type columns are columns where the rows store data as a date.

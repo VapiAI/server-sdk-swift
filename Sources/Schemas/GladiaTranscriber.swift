@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with Gladia, including language behavior, audio processing, endpointing, vocabulary, region, and fallback settings.
 public struct GladiaTranscriber: Codable, Hashable, Sendable {
     /// This is the Gladia model that will be used. Default is 'fast'
     public let model: GladiaTranscriberModel?
@@ -8,7 +9,7 @@ public struct GladiaTranscriber: Codable, Hashable, Sendable {
     /// Defines the language to use for the transcription. Required when languageBehaviour is 'manual'.
     public let language: GladiaTranscriberLanguage?
     /// Defines the languages to use for the transcription. Required when languageBehaviour is 'manual'.
-    public let languages: GladiaTranscriberLanguages?
+    public let languages: [GladiaTranscriberLanguagesItem]?
     /// Provides a custom vocabulary to the model to improve accuracy of transcribing context specific words, technical terms, names, etc. If empty, this argument is ignored.
     /// ⚠️ Warning ⚠️: Please be aware that the transcription_hint field has a character limit of 600. If you provide a transcription_hint longer than 600 characters, it will be automatically truncated to meet this limit.
     public let transcriptionHint: String?
@@ -41,7 +42,7 @@ public struct GladiaTranscriber: Codable, Hashable, Sendable {
         model: GladiaTranscriberModel? = nil,
         languageBehaviour: GladiaTranscriberLanguageBehaviour? = nil,
         language: GladiaTranscriberLanguage? = nil,
-        languages: GladiaTranscriberLanguages? = nil,
+        languages: [GladiaTranscriberLanguagesItem]? = nil,
         transcriptionHint: String? = nil,
         prosody: Bool? = nil,
         audioEnhancer: Bool? = nil,
@@ -78,7 +79,7 @@ public struct GladiaTranscriber: Codable, Hashable, Sendable {
         self.model = try container.decodeIfPresent(GladiaTranscriberModel.self, forKey: .model)
         self.languageBehaviour = try container.decodeIfPresent(GladiaTranscriberLanguageBehaviour.self, forKey: .languageBehaviour)
         self.language = try container.decodeIfPresent(GladiaTranscriberLanguage.self, forKey: .language)
-        self.languages = try container.decodeIfPresent(GladiaTranscriberLanguages.self, forKey: .languages)
+        self.languages = try container.decodeIfPresent([GladiaTranscriberLanguagesItem].self, forKey: .languages)
         self.transcriptionHint = try container.decodeIfPresent(String.self, forKey: .transcriptionHint)
         self.prosody = try container.decodeIfPresent(Bool.self, forKey: .prosody)
         self.audioEnhancer = try container.decodeIfPresent(Bool.self, forKey: .audioEnhancer)

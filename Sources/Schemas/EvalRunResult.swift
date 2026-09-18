@@ -1,5 +1,6 @@
 import Foundation
 
+/// The pass or fail result of an evaluation run, including its conversation messages and timing.
 public struct EvalRunResult: Codable, Hashable, Sendable {
     /// This is the status of the eval run result.
     /// The status is only 'pass' or 'fail' for an eval run result.

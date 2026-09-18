@@ -2,6 +2,8 @@ import Foundation
 
 /// This is the model that will be used. This is optional and will default to the correct model for the voiceId.
 public enum FallbackCartesiaVoiceModel: String, Codable, Hashable, CaseIterable, Sendable {
+    case sonic35 = "sonic-3.5"
+    case sonic3520260504 = "sonic-3.5-2026-05-04"
     case sonic3 = "sonic-3"
     case sonic320260112 = "sonic-3-2026-01-12"
     case sonic320251027 = "sonic-3-2025-10-27"

@@ -1,6 +1,7 @@
 import Foundation
 
 public struct UpdateCustomCredentialDto: Codable, Hashable, Sendable {
+    public let provider: UpdateCustomCredentialDtoProvider?
     /// This is the authentication plan. Supports OAuth2 RFC 6749, HMAC signing, and Bearer authentication.
     public let authenticationPlan: UpdateCustomCredentialDtoAuthenticationPlan?
     /// This is the encryption plan for encrypting sensitive data. Currently supports public-key encryption.
@@ -11,11 +12,13 @@ public struct UpdateCustomCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateCustomCredentialDtoProvider? = nil,
         authenticationPlan: UpdateCustomCredentialDtoAuthenticationPlan? = nil,
         encryptionPlan: UpdateCustomCredentialDtoEncryptionPlan? = nil,
         name: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.authenticationPlan = authenticationPlan
         self.encryptionPlan = encryptionPlan
         self.name = name
@@ -24,6 +27,7 @@ public struct UpdateCustomCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateCustomCredentialDtoProvider.self, forKey: .provider)
         self.authenticationPlan = try container.decodeIfPresent(UpdateCustomCredentialDtoAuthenticationPlan.self, forKey: .authenticationPlan)
         self.encryptionPlan = try container.decodeIfPresent(UpdateCustomCredentialDtoEncryptionPlan.self, forKey: .encryptionPlan)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -33,6 +37,7 @@ public struct UpdateCustomCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.authenticationPlan, forKey: .authenticationPlan)
         try container.encodeIfPresent(self.encryptionPlan, forKey: .encryptionPlan)
         try container.encodeIfPresent(self.name, forKey: .name)
@@ -40,6 +45,7 @@ public struct UpdateCustomCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case authenticationPlan
         case encryptionPlan
         case name

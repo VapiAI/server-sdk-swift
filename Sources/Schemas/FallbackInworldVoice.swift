@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for synthesizing assistant speech with Inworld, including voice and model selection, language, temperature, speaking rate, chunking, and caching.
 public struct FallbackInworldVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

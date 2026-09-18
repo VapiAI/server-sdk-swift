@@ -1,5 +1,6 @@
 import Foundation
 
+/// Per-call or handoff overrides for an assistant's providers, messages, tools, credentials, call behavior, and server configuration.
 public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// These are the options for the assistant's transcriber.
     public let transcriber: AssistantOverridesTranscriber?
@@ -11,6 +12,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// 
     /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
     public let firstMessage: String?
+    /// Set to `true` to allow the user to interrupt the assistant while it speaks the first message. Default is `false`.
     public let firstMessageInterruptionsEnabled: Bool?
     /// This is the mode for the first message. Default is 'assistant-speaks-first'.
     /// 
@@ -49,6 +51,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     public let credentials: [AssistantOverridesCredentialsItem]?
     /// This is a set of actions that will be performed on certain events.
     public let hooks: [AssistantOverridesHooksItem]?
+    /// Tools to append to the assistant's existing tool configuration.
     public let toolsAppend: [AssistantOverridesToolsAppendItem]?
     /// These are values that will be used to replace the template variables in the assistant messages and other text-based fields.
     /// This uses LiquidJS syntax. https://liquidjs.com/tutorials/intro-to-liquid.html
@@ -72,6 +75,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     public let endCallMessage: String?
     /// This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.
     public let endCallPhrases: [String]?
+    /// Compliance settings to apply, including HIPAA and PCI behavior, security filtering, and recording consent.
     public let compliancePlan: CompliancePlan?
     /// This is for metadata you want to store on the assistant.
     public let metadata: [String: JSONValue]?
@@ -124,6 +128,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// 2. phoneNumber.serverUrl
     /// 3. org.serverUrl
     public let server: Server?
+    /// Configuration for collecting and processing DTMF keypad input.
     public let keypadInputPlan: KeypadInputPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

@@ -1,6 +1,8 @@
 import Foundation
 
+/// Routes a handoff to a saved or transient assistant, with optional context engineering, variable extraction, and assistant overrides.
 public struct HandoffDestinationAssistant: Codable, Hashable, Sendable {
+    /// Selects an assistant as the handoff destination.
     public let type: HandoffDestinationAssistantType
     /// This is the plan for manipulating the message context before handing off the call to the next assistant.
     public let contextEngineeringPlan: HandoffDestinationAssistantContextEngineeringPlan?

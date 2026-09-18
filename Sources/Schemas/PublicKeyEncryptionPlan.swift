@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for encrypting sensitive outbound request data with a public key.
 public struct PublicKeyEncryptionPlan: Codable, Hashable, Sendable {
     /// The encryption algorithm to use.
     public let algorithm: PublicKeyEncryptionPlanAlgorithm

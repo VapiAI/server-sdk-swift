@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to import a Vonage phone number into Vapi with a stored credential and routing settings.
 public struct CreateVonagePhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

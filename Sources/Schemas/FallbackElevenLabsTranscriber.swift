@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with ElevenLabs, including model, language, and speech thresholds.
 public struct FallbackElevenLabsTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: FallbackElevenLabsTranscriberModel?

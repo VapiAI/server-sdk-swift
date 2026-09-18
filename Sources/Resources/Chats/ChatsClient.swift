@@ -7,7 +7,7 @@ public final class ChatsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
-    public func list(id: String? = nil, assistantId: String? = nil, assistantIdAny: String? = nil, squadId: String? = nil, sessionId: String? = nil, previousChatId: String? = nil, page: Double? = nil, sortOrder: ListChatsRequestSortOrder? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> ChatPaginatedResponse {
+    public func list(id: String? = nil, assistantId: String? = nil, assistantIdAny: String? = nil, squadId: String? = nil, sessionId: String? = nil, previousChatId: String? = nil, idAny: String? = nil, page: Double? = nil, sortOrder: ListChatsRequestSortOrder? = nil, sortBy: ListChatsRequestSortBy? = nil, limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> ChatPaginatedResponse {
         return try await httpClient.performRequest(
             method: .get,
             path: "/chat",
@@ -18,8 +18,10 @@ public final class ChatsClient: Sendable {
                 "squadId": squadId.map { .string($0) }, 
                 "sessionId": sessionId.map { .string($0) }, 
                 "previousChatId": previousChatId.map { .string($0) }, 
+                "idAny": idAny.map { .string($0) }, 
                 "page": page.map { .double($0) }, 
                 "sortOrder": sortOrder.map { .string($0.rawValue) }, 
+                "sortBy": sortBy.map { .string($0.rawValue) }, 
                 "limit": limit.map { .double($0) }, 
                 "createdAtGt": createdAtGt.map { .date($0) }, 
                 "createdAtLt": createdAtLt.map { .date($0) }, 

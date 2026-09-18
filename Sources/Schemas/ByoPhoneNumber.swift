@@ -1,5 +1,6 @@
 import Foundation
 
+/// A phone number connected to Vapi through a bring-your-own telephony provider, including its credential, routing, hooks, server settings, and lifecycle metadata.
 public struct ByoPhoneNumber: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

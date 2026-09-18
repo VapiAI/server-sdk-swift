@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls smart and Fourier denoising applied to customer audio before transcription.
 public struct BackgroundSpeechDenoisingPlan: Codable, Hashable, Sendable {
     /// Whether smart denoising using Krisp is enabled.
     public let smartDenoisingPlan: SmartDenoisingPlan?

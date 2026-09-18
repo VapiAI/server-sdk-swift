@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with AssemblyAI, including language, streaming model, endpointing, and vocabulary.
 public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
     /// This is the language that will be set for the transcription.
     public let language: FallbackAssemblyAiTranscriberLanguage?
@@ -33,8 +34,19 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
     /// 
     /// @default true
     public let vadAssistedEndpointingEnabled: Bool?
+    /// This is the transcription mode used by the `universal-3-5-pro` speech model. Only applies to the `universal-3-5-pro` speech model.
+    /// 
+    /// @default 'balanced'
+    public let mode: FallbackAssemblyAiTranscriberMode?
+    /// This is a prompt that provides additional context to the transcription model. Only applies to the `universal-3-5-pro` speech model.
+    public let prompt: String?
+    /// This is context about the voice agent that guides the transcription model. Only applies to the `universal-3-5-pro` speech model.
+    public let agentContext: String?
+    /// These are language codes used to steer automatic language detection. Only applies to the `universal-3-5-pro` speech model.
+    public let languageCodes: [FallbackAssemblyAiTranscriberLanguageCodesItem]?
     /// This is the speech model used for the streaming session.
-    /// Note: Keyterms prompting is not supported with multilingual streaming.
+    /// Keyterms prompting is supported on universal-streaming-english and universal-3-5-pro.
+    /// universal-3-5-pro is AssemblyAI's most accurate voice-agent model.
     /// @default 'universal-streaming-english'
     public let speechModel: FallbackAssemblyAiTranscriberSpeechModel?
     /// The WebSocket URL that the transcriber connects to.
@@ -43,7 +55,7 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
     public let wordBoost: [String]?
     /// Keyterms prompting improves recognition accuracy for specific words and phrases.
     /// Can include up to 100 keyterms, each up to 50 characters.
-    /// Costs an additional $0.04/hour when enabled.
+    /// Costs an additional $0.04/hour on universal-streaming-english and is included at no extra cost on universal-3-5-pro.
     public let keytermsPrompt: [String]?
     /// The duration of the end utterance silence threshold in milliseconds.
     public let endUtteranceSilenceThreshold: Double?
@@ -62,6 +74,10 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
         wordFinalizationMaxWaitTime: Double? = nil,
         maxTurnSilence: Double? = nil,
         vadAssistedEndpointingEnabled: Bool? = nil,
+        mode: FallbackAssemblyAiTranscriberMode? = nil,
+        prompt: String? = nil,
+        agentContext: String? = nil,
+        languageCodes: [FallbackAssemblyAiTranscriberLanguageCodesItem]? = nil,
         speechModel: FallbackAssemblyAiTranscriberSpeechModel? = nil,
         realtimeUrl: String? = nil,
         wordBoost: [String]? = nil,
@@ -78,6 +94,10 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
         self.wordFinalizationMaxWaitTime = wordFinalizationMaxWaitTime
         self.maxTurnSilence = maxTurnSilence
         self.vadAssistedEndpointingEnabled = vadAssistedEndpointingEnabled
+        self.mode = mode
+        self.prompt = prompt
+        self.agentContext = agentContext
+        self.languageCodes = languageCodes
         self.speechModel = speechModel
         self.realtimeUrl = realtimeUrl
         self.wordBoost = wordBoost
@@ -97,6 +117,10 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
         self.wordFinalizationMaxWaitTime = try container.decodeIfPresent(Double.self, forKey: .wordFinalizationMaxWaitTime)
         self.maxTurnSilence = try container.decodeIfPresent(Double.self, forKey: .maxTurnSilence)
         self.vadAssistedEndpointingEnabled = try container.decodeIfPresent(Bool.self, forKey: .vadAssistedEndpointingEnabled)
+        self.mode = try container.decodeIfPresent(FallbackAssemblyAiTranscriberMode.self, forKey: .mode)
+        self.prompt = try container.decodeIfPresent(String.self, forKey: .prompt)
+        self.agentContext = try container.decodeIfPresent(String.self, forKey: .agentContext)
+        self.languageCodes = try container.decodeIfPresent([FallbackAssemblyAiTranscriberLanguageCodesItem].self, forKey: .languageCodes)
         self.speechModel = try container.decodeIfPresent(FallbackAssemblyAiTranscriberSpeechModel.self, forKey: .speechModel)
         self.realtimeUrl = try container.decodeIfPresent(String.self, forKey: .realtimeUrl)
         self.wordBoost = try container.decodeIfPresent([String].self, forKey: .wordBoost)
@@ -117,6 +141,10 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.wordFinalizationMaxWaitTime, forKey: .wordFinalizationMaxWaitTime)
         try container.encodeIfPresent(self.maxTurnSilence, forKey: .maxTurnSilence)
         try container.encodeIfPresent(self.vadAssistedEndpointingEnabled, forKey: .vadAssistedEndpointingEnabled)
+        try container.encodeIfPresent(self.mode, forKey: .mode)
+        try container.encodeIfPresent(self.prompt, forKey: .prompt)
+        try container.encodeIfPresent(self.agentContext, forKey: .agentContext)
+        try container.encodeIfPresent(self.languageCodes, forKey: .languageCodes)
         try container.encodeIfPresent(self.speechModel, forKey: .speechModel)
         try container.encodeIfPresent(self.realtimeUrl, forKey: .realtimeUrl)
         try container.encodeIfPresent(self.wordBoost, forKey: .wordBoost)
@@ -135,6 +163,10 @@ public struct FallbackAssemblyAiTranscriber: Codable, Hashable, Sendable {
         case wordFinalizationMaxWaitTime
         case maxTurnSilence
         case vadAssistedEndpointingEnabled
+        case mode
+        case prompt
+        case agentContext
+        case languageCodes
         case speechModel
         case realtimeUrl
         case wordBoost

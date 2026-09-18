@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved structured-output definition containing its extraction schema, execution method, model or regular expression, linked resources, and lifecycle metadata.
 public struct StructuredOutput: Codable, Hashable, Sendable {
     /// This is the type of structured output.
     /// 
@@ -7,6 +8,15 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
     /// - 'regex': Uses a regex pattern to extract data from the transcript without an LLM.
     public let type: StructuredOutputType?
     /// This is the regex pattern to match against the transcript.
+    /// 
+    /// Simulation evaluations use a canonical transcript built from recorded messages:
+    /// User: and AI: dialogue, AI: tool_calls: JSON name/arguments records, and
+    /// AI: tool_call_results: JSON results. System messages are excluded. These
+    /// fixed labels apply even when custom artifact transcript labels are configured.
+    /// Tool payloads participate in first-match and all-match extraction in event order.
+    /// An empty message array falls back to the supplied transcript verbatim.
+    /// Production-call extraction and call preview use their existing transcripts,
+    /// so previewing the same output on a simulation's call can return a different result.
     /// 
     /// Only used when type is 'regex'. Supports both raw patterns (e.g. '\d+') and
     /// regex literal format (e.g. '/\d+/gi'). Uses RE2 syntax for safety.
@@ -33,6 +43,8 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
     public let model: StructuredOutputModel?
     /// Compliance configuration for this output. Only enable overrides if no sensitive data will be stored.
     public let compliancePlan: ComplianceOverride?
+    /// These are the conditions that gate the execution of this structured output. Every condition must pass for the structured output to run (AND semantics). When omitted or empty, no user-defined conditions gate this output. Send null to clear a previously saved gate.
+    public let conditions: Nullable<[StructuredOutputConditionsItem]>?
     /// This is the unique identifier for the structured output.
     public let id: String
     /// This is the unique identifier for the org that this structured output belongs to.
@@ -73,6 +85,7 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
         regex: String? = nil,
         model: StructuredOutputModel? = nil,
         compliancePlan: ComplianceOverride? = nil,
+        conditions: Nullable<[StructuredOutputConditionsItem]>? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -88,6 +101,7 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
         self.regex = regex
         self.model = model
         self.compliancePlan = compliancePlan
+        self.conditions = conditions
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -106,6 +120,7 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
         self.regex = try container.decodeIfPresent(String.self, forKey: .regex)
         self.model = try container.decodeIfPresent(StructuredOutputModel.self, forKey: .model)
         self.compliancePlan = try container.decodeIfPresent(ComplianceOverride.self, forKey: .compliancePlan)
+        self.conditions = try container.decodeNullableIfPresent([StructuredOutputConditionsItem].self, forKey: .conditions)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -125,6 +140,7 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.regex, forKey: .regex)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.compliancePlan, forKey: .compliancePlan)
+        try container.encodeNullableIfPresent(self.conditions, forKey: .conditions)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -142,6 +158,7 @@ public struct StructuredOutput: Codable, Hashable, Sendable {
         case regex
         case model
         case compliancePlan
+        case conditions
         case id
         case orgId
         case createdAt

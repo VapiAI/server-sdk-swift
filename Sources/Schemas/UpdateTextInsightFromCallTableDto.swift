@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fields used to update a text-value insight, including its queries, formula, time range, and name.
 public struct UpdateTextInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -19,6 +20,7 @@ public struct UpdateTextInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// 
     /// You can also use the query names as the variable in the formula.
     public let formula: [String: JSONValue]?
+    /// The time range used to query the text-value data.
     public let timeRange: InsightTimeRange?
     /// These are the queries to run to generate the insight.
     /// For Text Insights, we only allow a single query, or require a formula if multiple queries are provided

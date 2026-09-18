@@ -1,5 +1,6 @@
 import Foundation
 
+/// Lists backup voice configurations that can be used if the primary voice provider fails.
 public struct FallbackPlan: Codable, Hashable, Sendable {
     /// This is the list of voices to fallback to in the event that the primary voice provider fails.
     public let voices: [FallbackPlanVoicesItem]

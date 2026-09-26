@@ -1,5 +1,6 @@
 import Foundation
 
+/// A squad evaluation target provided as a saved squad ID or a transient squad, with optional assistant overrides.
 public struct EvalRunTargetSquad: Codable, Hashable, Sendable {
     /// This is the transient squad that will be run against the eval
     public let squad: CreateSquadDto?

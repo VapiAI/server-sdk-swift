@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating Vapi integrations with GoHighLevel.
 public struct CreateGoHighLevelCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

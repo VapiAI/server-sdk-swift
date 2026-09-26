@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating voice synthesis requests with Inworld.
 public struct CreateInworldCredentialDto: Codable, Hashable, Sendable {
     /// This is the Inworld Basic (Base64) authentication token. This is not returned in the API.
     public let apiKey: String

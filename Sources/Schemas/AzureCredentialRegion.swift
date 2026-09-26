@@ -20,6 +20,8 @@ public enum AzureCredentialRegion: String, Codable, Hashable, CaseIterable, Send
     case spaincentral
     case swedencentral
     case switzerland
+    case switzerlandnorth
+    case switzerlandwest
     case uaenorth
     case uk
     case westeurope

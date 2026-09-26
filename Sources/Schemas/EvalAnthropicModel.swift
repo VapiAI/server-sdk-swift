@@ -1,5 +1,6 @@
 import Foundation
 
+/// Anthropic model configuration for an LLM judge, including its messages, generation settings, and optional extended thinking.
 public struct EvalAnthropicModel: Codable, Hashable, Sendable {
     /// This is the specific model that will be used.
     public let model: EvalAnthropicModelModel

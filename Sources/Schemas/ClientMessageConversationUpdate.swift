@@ -3,6 +3,11 @@ import Foundation
 public struct ClientMessageConversationUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageConversationUpdatePhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "conversation-update" is sent when an update is committed to the conversation history.
     public let type: ClientMessageConversationUpdateType
     /// This is the most up-to-date conversation history at the time the message is sent.
@@ -22,6 +27,7 @@ public struct ClientMessageConversationUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageConversationUpdatePhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ClientMessageConversationUpdateType,
         messages: [ClientMessageConversationUpdateMessagesItem]? = nil,
         messagesOpenAiFormatted: [OpenAiMessage],
@@ -32,6 +38,7 @@ public struct ClientMessageConversationUpdate: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.messages = messages
         self.messagesOpenAiFormatted = messagesOpenAiFormatted
@@ -45,6 +52,7 @@ public struct ClientMessageConversationUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageConversationUpdatePhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ClientMessageConversationUpdateType.self, forKey: .type)
         self.messages = try container.decodeIfPresent([ClientMessageConversationUpdateMessagesItem].self, forKey: .messages)
         self.messagesOpenAiFormatted = try container.decode([OpenAiMessage].self, forKey: .messagesOpenAiFormatted)
@@ -59,6 +67,7 @@ public struct ClientMessageConversationUpdate: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.messagesOpenAiFormatted, forKey: .messagesOpenAiFormatted)
@@ -71,6 +80,7 @@ public struct ClientMessageConversationUpdate: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case messages
         case messagesOpenAiFormatted = "messagesOpenAIFormatted"

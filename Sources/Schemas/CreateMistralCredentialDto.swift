@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating assistant model requests with Mistral.
 public struct CreateMistralCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

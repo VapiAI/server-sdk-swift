@@ -1,5 +1,6 @@
 import Foundation
 
+/// A phone-number hook action that transfers the call to a phone number or SIP destination.
 public struct TransferPhoneNumberHookAction: Codable, Hashable, Sendable {
     /// This is the destination details for the transfer - can be a phone number or SIP URI
     public let destination: TransferPhoneNumberHookActionDestination?

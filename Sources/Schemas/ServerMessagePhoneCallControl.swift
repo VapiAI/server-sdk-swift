@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessagePhoneCallControlPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "phone-call-control" is an advanced type of message.
     /// 
     /// When it is requested in `assistant.serverMessages`, the hangup and forwarding responsibilities are delegated to your server. Vapi will no longer do the actual transfer and hangup.
@@ -30,6 +35,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessagePhoneCallControlPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessagePhoneCallControlType,
         request: ServerMessagePhoneCallControlRequest,
         destination: ServerMessagePhoneCallControlDestination? = nil,
@@ -42,6 +48,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.request = request
         self.destination = destination
@@ -57,6 +64,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessagePhoneCallControlPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessagePhoneCallControlType.self, forKey: .type)
         self.request = try container.decode(ServerMessagePhoneCallControlRequest.self, forKey: .request)
         self.destination = try container.decodeIfPresent(ServerMessagePhoneCallControlDestination.self, forKey: .destination)
@@ -73,6 +81,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.request, forKey: .request)
         try container.encodeIfPresent(self.destination, forKey: .destination)
@@ -87,6 +96,7 @@ public struct ServerMessagePhoneCallControl: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case request
         case destination

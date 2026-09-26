@@ -1,11 +1,10 @@
 import Foundation
 
 public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
+    public let sortBy: GetEvalRunPaginatedDtoSortBy?
+    /// Literal, case-insensitive search across eval and assistant names.
+    public let search: String?
     public let id: String?
-    /// This is the page number to return. Defaults to 1.
-    public let page: Double?
-    /// This is the sort order for pagination. Defaults to 'DESC'.
-    public let sortOrder: GetEvalRunPaginatedDtoSortOrder?
     /// This is the maximum number of items to return. Defaults to 100.
     public let limit: Double?
     /// This will return items where the createdAt is greater than the specified value.
@@ -24,13 +23,17 @@ public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
     public let updatedAtGe: Date?
     /// This will return items where the updatedAt is less than or equal to the specified value.
     public let updatedAtLe: Date?
+    /// This is the page number to return. Defaults to 1.
+    public let page: Double?
+    /// This is the sort order for pagination. Defaults to 'DESC'.
+    public let sortOrder: GetEvalRunPaginatedDtoSortOrder?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        sortBy: GetEvalRunPaginatedDtoSortBy? = nil,
+        search: String? = nil,
         id: String? = nil,
-        page: Double? = nil,
-        sortOrder: GetEvalRunPaginatedDtoSortOrder? = nil,
         limit: Double? = nil,
         createdAtGt: Date? = nil,
         createdAtLt: Date? = nil,
@@ -40,11 +43,13 @@ public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
         updatedAtLt: Date? = nil,
         updatedAtGe: Date? = nil,
         updatedAtLe: Date? = nil,
+        page: Double? = nil,
+        sortOrder: GetEvalRunPaginatedDtoSortOrder? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.sortBy = sortBy
+        self.search = search
         self.id = id
-        self.page = page
-        self.sortOrder = sortOrder
         self.limit = limit
         self.createdAtGt = createdAtGt
         self.createdAtLt = createdAtLt
@@ -54,14 +59,16 @@ public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
         self.updatedAtLt = updatedAtLt
         self.updatedAtGe = updatedAtGe
         self.updatedAtLe = updatedAtLe
+        self.page = page
+        self.sortOrder = sortOrder
         self.additionalProperties = additionalProperties
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.sortBy = try container.decodeIfPresent(GetEvalRunPaginatedDtoSortBy.self, forKey: .sortBy)
+        self.search = try container.decodeIfPresent(String.self, forKey: .search)
         self.id = try container.decodeIfPresent(String.self, forKey: .id)
-        self.page = try container.decodeIfPresent(Double.self, forKey: .page)
-        self.sortOrder = try container.decodeIfPresent(GetEvalRunPaginatedDtoSortOrder.self, forKey: .sortOrder)
         self.limit = try container.decodeIfPresent(Double.self, forKey: .limit)
         self.createdAtGt = try container.decodeIfPresent(Date.self, forKey: .createdAtGt)
         self.createdAtLt = try container.decodeIfPresent(Date.self, forKey: .createdAtLt)
@@ -71,15 +78,17 @@ public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
         self.updatedAtLt = try container.decodeIfPresent(Date.self, forKey: .updatedAtLt)
         self.updatedAtGe = try container.decodeIfPresent(Date.self, forKey: .updatedAtGe)
         self.updatedAtLe = try container.decodeIfPresent(Date.self, forKey: .updatedAtLe)
+        self.page = try container.decodeIfPresent(Double.self, forKey: .page)
+        self.sortOrder = try container.decodeIfPresent(GetEvalRunPaginatedDtoSortOrder.self, forKey: .sortOrder)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.sortBy, forKey: .sortBy)
+        try container.encodeIfPresent(self.search, forKey: .search)
         try container.encodeIfPresent(self.id, forKey: .id)
-        try container.encodeIfPresent(self.page, forKey: .page)
-        try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
         try container.encodeIfPresent(self.limit, forKey: .limit)
         try container.encodeIfPresent(self.createdAtGt, forKey: .createdAtGt)
         try container.encodeIfPresent(self.createdAtLt, forKey: .createdAtLt)
@@ -89,13 +98,15 @@ public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.updatedAtLt, forKey: .updatedAtLt)
         try container.encodeIfPresent(self.updatedAtGe, forKey: .updatedAtGe)
         try container.encodeIfPresent(self.updatedAtLe, forKey: .updatedAtLe)
+        try container.encodeIfPresent(self.page, forKey: .page)
+        try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case sortBy
+        case search
         case id
-        case page
-        case sortOrder
         case limit
         case createdAtGt
         case createdAtLt
@@ -105,5 +116,7 @@ public struct GetEvalRunPaginatedDto: Codable, Hashable, Sendable {
         case updatedAtLt
         case updatedAtGe
         case updatedAtLe
+        case page
+        case sortOrder
     }
 }

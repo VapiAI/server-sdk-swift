@@ -5,7 +5,7 @@ public struct SimulationRun: Codable, Hashable, Sendable {
     public let id: String
     /// Organization ID
     public let orgId: String
-    /// Current status of the run
+    /// The run's current status. One of `queued`, `running`, or `ended`.
     public let status: SimulationRunStatus
     /// When the run was queued
     public let queuedAt: Date
@@ -13,21 +13,21 @@ public struct SimulationRun: Codable, Hashable, Sendable {
     public let startedAt: Date?
     /// When the run ended
     public let endedAt: Date?
-    /// Reason the run ended
+    /// Why the run ended, when applicable.
     public let endedReason: String?
     /// ISO 8601 date-time when created
     public let createdAt: Date
     /// ISO 8601 date-time when last updated
     public let updatedAt: Date
-    /// Aggregate counts of run items by status
+    /// Aggregate counts of the run's items by status.
     public let itemCounts: SimulationRunItemCounts?
-    /// Array of simulations and/or suites to run
+    /// The simulations and suites included in the run.
     public let simulations: [SimulationRunSimulationsItem]
-    /// Target to test against
+    /// The assistant or squad the run was tested against.
     public let target: SimulationRunTarget
-    /// Number of times to run each simulation (default: 1)
+    /// The number of times each simulation was run. Defaults to 1.
     public let iterations: Double?
-    /// Transport configuration for the simulation runs
+    /// The transport used for the run, either voice or chat.
     public let transport: SimulationRunTransportConfiguration?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

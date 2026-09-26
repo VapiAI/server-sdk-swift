@@ -1,5 +1,6 @@
 import Foundation
 
+/// A simulated user message in an evaluation conversation.
 public struct ChatEvalUserMessageMock: Codable, Hashable, Sendable {
     /// This is the role of the message author.
     /// For a mock user message, the role is always 'user'

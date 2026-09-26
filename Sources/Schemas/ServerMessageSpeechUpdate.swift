@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageSpeechUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageSpeechUpdatePhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "speech-update" is sent whenever assistant or user start or stop speaking.
     public let type: ServerMessageSpeechUpdateType
     /// This is the status of the speech update.
@@ -30,6 +35,7 @@ public struct ServerMessageSpeechUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageSpeechUpdatePhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageSpeechUpdateType,
         status: ServerMessageSpeechUpdateStatus,
         role: ServerMessageSpeechUpdateRole,
@@ -43,6 +49,7 @@ public struct ServerMessageSpeechUpdate: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.status = status
         self.role = role
@@ -59,6 +66,7 @@ public struct ServerMessageSpeechUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageSpeechUpdatePhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageSpeechUpdateType.self, forKey: .type)
         self.status = try container.decode(ServerMessageSpeechUpdateStatus.self, forKey: .status)
         self.role = try container.decode(ServerMessageSpeechUpdateRole.self, forKey: .role)
@@ -76,6 +84,7 @@ public struct ServerMessageSpeechUpdate: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.status, forKey: .status)
         try container.encode(self.role, forKey: .role)
@@ -91,6 +100,7 @@ public struct ServerMessageSpeechUpdate: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case status
         case role

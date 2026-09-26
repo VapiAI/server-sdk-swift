@@ -1,5 +1,6 @@
 import Foundation
 
+/// Selects whether an insight run returns raw data or Recharts-formatted data.
 public struct InsightRunFormatPlan: Codable, Hashable, Sendable {
     /// This is the format of the data to return.
     /// If not provided, defaults to "raw".

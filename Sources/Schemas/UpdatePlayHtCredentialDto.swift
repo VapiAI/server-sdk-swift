@@ -1,6 +1,7 @@
 import Foundation
 
 public struct UpdatePlayHtCredentialDto: Codable, Hashable, Sendable {
+    public let provider: UpdatePlayHtCredentialDtoProvider?
     /// This is not returned in the API.
     public let apiKey: String?
     /// This is the name of credential. This is just for your reference.
@@ -10,11 +11,13 @@ public struct UpdatePlayHtCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdatePlayHtCredentialDtoProvider? = nil,
         apiKey: String? = nil,
         name: String? = nil,
         userId: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.apiKey = apiKey
         self.name = name
         self.userId = userId
@@ -23,6 +26,7 @@ public struct UpdatePlayHtCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdatePlayHtCredentialDtoProvider.self, forKey: .provider)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.userId = try container.decodeIfPresent(String.self, forKey: .userId)
@@ -32,6 +36,7 @@ public struct UpdatePlayHtCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.apiKey, forKey: .apiKey)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.userId, forKey: .userId)
@@ -39,6 +44,7 @@ public struct UpdatePlayHtCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case apiKey
         case name
         case userId

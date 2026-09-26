@@ -12,7 +12,6 @@ public enum GroqModelModel: String, Codable, Hashable, CaseIterable, Sendable {
     case llama370B8192 = "llama3-70b-8192"
     case gemma29BIt = "gemma2-9b-it"
     case moonshotaiKimiK2Instruct0905 = "moonshotai/kimi-k2-instruct-0905"
-    case metaLlamaLlama4Maverick17B128EInstruct = "meta-llama/llama-4-maverick-17b-128e-instruct"
     case metaLlamaLlama4Scout17B16EInstruct = "meta-llama/llama-4-scout-17b-16e-instruct"
     case mistralSaba24B = "mistral-saba-24b"
     case compoundBeta = "compound-beta"

@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageModelOutputPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "model-output" is sent as the model outputs tokens.
     public let type: ServerMessageModelOutputType
     /// This is the unique identifier for the current LLM turn. All tokens from the same
@@ -29,6 +34,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageModelOutputPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageModelOutputType,
         turnId: String? = nil,
         timestamp: Double? = nil,
@@ -41,6 +47,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.turnId = turnId
         self.timestamp = timestamp
@@ -56,6 +63,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageModelOutputPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageModelOutputType.self, forKey: .type)
         self.turnId = try container.decodeIfPresent(String.self, forKey: .turnId)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
@@ -72,6 +80,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.turnId, forKey: .turnId)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
@@ -86,6 +95,7 @@ public struct ServerMessageModelOutput: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case turnId
         case timestamp

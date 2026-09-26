@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating transcription requests with Gladia.
 public struct CreateGladiaCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

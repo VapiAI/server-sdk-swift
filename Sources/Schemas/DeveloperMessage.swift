@@ -1,5 +1,6 @@
 import Foundation
 
+/// A developer-authored instruction message supplied to the language model.
 public struct DeveloperMessage: Codable, Hashable, Sendable {
     /// This is the role of the message author
     public let role: DeveloperMessageRole

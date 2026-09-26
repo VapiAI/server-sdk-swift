@@ -1,5 +1,6 @@
 import Foundation
 
+/// Customer details used for call delivery and assistant personalization, including phone or SIP destination, contact identifiers, extension, and assistant overrides.
 public struct CreateCustomerDto: Codable, Hashable, Sendable {
     /// This is the flag to toggle the E164 check for the `number` field. This is an advanced property which should be used if you know your use case requires it.
     /// 
@@ -16,6 +17,10 @@ public struct CreateCustomerDto: Codable, Hashable, Sendable {
     /// These are the overrides for the assistant's settings and template variables specific to this customer.
     /// This allows customization of the assistant's behavior for individual customers in batch calls.
     public let assistantOverrides: AssistantOverrides?
+    /// These are the overrides applied when the call targets a `squadId`. Mirrors
+    /// the call-level `squadOverrides` — use this instead of `assistantOverrides`
+    /// when the campaign or call is squad-based.
+    public let squadOverrides: AssistantOverrides?
     /// This is the number of the customer.
     public let number: String?
     /// This is the SIP URI of the customer.
@@ -35,6 +40,7 @@ public struct CreateCustomerDto: Codable, Hashable, Sendable {
         numberE164CheckEnabled: Bool? = nil,
         extension: String? = nil,
         assistantOverrides: AssistantOverrides? = nil,
+        squadOverrides: AssistantOverrides? = nil,
         number: String? = nil,
         sipUri: String? = nil,
         name: String? = nil,
@@ -45,6 +51,7 @@ public struct CreateCustomerDto: Codable, Hashable, Sendable {
         self.numberE164CheckEnabled = numberE164CheckEnabled
         self.extension = `extension`
         self.assistantOverrides = assistantOverrides
+        self.squadOverrides = squadOverrides
         self.number = number
         self.sipUri = sipUri
         self.name = name
@@ -58,6 +65,7 @@ public struct CreateCustomerDto: Codable, Hashable, Sendable {
         self.numberE164CheckEnabled = try container.decodeIfPresent(Bool.self, forKey: .numberE164CheckEnabled)
         self.extension = try container.decodeIfPresent(String.self, forKey: .extension)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
+        self.squadOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .squadOverrides)
         self.number = try container.decodeIfPresent(String.self, forKey: .number)
         self.sipUri = try container.decodeIfPresent(String.self, forKey: .sipUri)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -72,6 +80,7 @@ public struct CreateCustomerDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.numberE164CheckEnabled, forKey: .numberE164CheckEnabled)
         try container.encodeIfPresent(self.extension, forKey: .extension)
         try container.encodeIfPresent(self.assistantOverrides, forKey: .assistantOverrides)
+        try container.encodeIfPresent(self.squadOverrides, forKey: .squadOverrides)
         try container.encodeIfPresent(self.number, forKey: .number)
         try container.encodeIfPresent(self.sipUri, forKey: .sipUri)
         try container.encodeIfPresent(self.name, forKey: .name)
@@ -84,6 +93,7 @@ public struct CreateCustomerDto: Codable, Hashable, Sendable {
         case numberE164CheckEnabled
         case `extension`
         case assistantOverrides
+        case squadOverrides
         case number
         case sipUri
         case name

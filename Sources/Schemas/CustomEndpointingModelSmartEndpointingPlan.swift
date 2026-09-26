@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for using a custom endpointing model, including its provider identifier and server connection.
 public struct CustomEndpointingModelSmartEndpointingPlan: Codable, Hashable, Sendable {
     /// This is the provider for the smart endpointing plan. Use `custom-endpointing-model` for custom endpointing providers that are not natively supported.
     public let provider: CustomEndpointingModelSmartEndpointingPlanProvider

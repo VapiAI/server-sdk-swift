@@ -19,6 +19,8 @@ public enum AzureOpenAiCredentialRegion: String, Codable, Hashable, CaseIterable
     case spaincentral
     case swedencentral
     case switzerland
+    case switzerlandnorth
+    case switzerlandwest
     case uaenorth
     case uk
     case westeurope

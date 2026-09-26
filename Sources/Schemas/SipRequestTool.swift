@@ -1,9 +1,9 @@
 import Foundation
 
+/// A reusable tool that sends SIP `INFO`, `MESSAGE`, or `NOTIFY` requests with configured headers and body.
 public struct SipRequestTool: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    public let latestVersion: Nullable<String>?
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [SipRequestToolMessagesItem]?
     /// The SIP method to send.
     public let verb: SipRequestToolVerb
@@ -102,6 +102,7 @@ public struct SipRequestTool: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        latestVersion: Nullable<String>? = nil,
         messages: [SipRequestToolMessagesItem]? = nil,
         verb: SipRequestToolVerb,
         headers: JsonSchema? = nil,
@@ -113,6 +114,7 @@ public struct SipRequestTool: Codable, Hashable, Sendable {
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.latestVersion = latestVersion
         self.messages = messages
         self.verb = verb
         self.headers = headers
@@ -127,6 +129,7 @@ public struct SipRequestTool: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
         self.messages = try container.decodeIfPresent([SipRequestToolMessagesItem].self, forKey: .messages)
         self.verb = try container.decode(SipRequestToolVerb.self, forKey: .verb)
         self.headers = try container.decodeIfPresent(JsonSchema.self, forKey: .headers)
@@ -142,6 +145,7 @@ public struct SipRequestTool: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.verb, forKey: .verb)
         try container.encodeIfPresent(self.headers, forKey: .headers)
@@ -155,6 +159,7 @@ public struct SipRequestTool: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case latestVersion
         case messages
         case verb
         case headers

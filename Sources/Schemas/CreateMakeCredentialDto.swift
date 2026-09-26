@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating Vapi integrations with Make, including team, region, and API key.
 public struct CreateMakeCredentialDto: Codable, Hashable, Sendable {
     /// Team ID
     public let teamId: String

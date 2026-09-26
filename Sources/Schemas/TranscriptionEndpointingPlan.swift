@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls endpointing delays based on whether customer speech ends with punctuation, without punctuation, or with a number.
 public struct TranscriptionEndpointingPlan: Codable, Hashable, Sendable {
     /// The minimum number of seconds to wait after transcription ending with punctuation before sending a request to the model. Defaults to 0.1.
     /// 

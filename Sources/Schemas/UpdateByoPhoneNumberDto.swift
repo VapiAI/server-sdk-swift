@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fields used to update a bring-your-own phone number, including its credential, number, routing, hooks, and server settings.
 public struct UpdateByoPhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

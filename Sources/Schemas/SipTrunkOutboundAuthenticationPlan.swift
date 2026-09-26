@@ -1,8 +1,10 @@
 import Foundation
 
+/// Credentials and optional SIP REGISTER settings used to authenticate outbound calls with a SIP trunk.
 public struct SipTrunkOutboundAuthenticationPlan: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let authPassword: String?
+    /// Username used to authenticate outbound SIP requests.
     public let authUsername: String?
     /// This can be used to configure if SIP register is required by the SIP trunk. If not provided, no SIP registration will be attempted.
     public let sipRegisterPlan: SipTrunkOutboundSipRegisterPlan?

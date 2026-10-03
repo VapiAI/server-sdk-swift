@@ -1,5 +1,6 @@
 import Foundation
 
+/// Includes only user and assistant messages when constructing context for a handoff.
 public struct ContextEngineeringPlanUserAndAssistantMessages: Codable, Hashable, Sendable {
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

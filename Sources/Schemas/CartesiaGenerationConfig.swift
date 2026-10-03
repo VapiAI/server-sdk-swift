@@ -1,5 +1,6 @@
 import Foundation
 
+/// Generation controls for Cartesia Sonic 3 voices, including speed, volume, and accent localization.
 public struct CartesiaGenerationConfig: Codable, Hashable, Sendable {
     /// Fine-grained speed control for sonic-3. Only available for sonic-3 model.
     public let speed: Double?

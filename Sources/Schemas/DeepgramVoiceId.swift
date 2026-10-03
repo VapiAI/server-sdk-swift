@@ -57,4 +57,47 @@ public enum DeepgramVoiceId: String, Codable, Hashable, CaseIterable, Sendable {
     case aquila
     case selena
     case javier
+    case viktoria
+    case kara
+    case fabian
+    case julius
+    case lara
+    case elara
+    case aurelia
+    case hannah
+    case kit
+    case alexis
+    case cliff
+    case sienna
+    case cole
+    case brooke
+    case colin
+    case gemma
+    case haley
+    case heather
+    case miles
+    case sean
+    case bree
+    case brittany
+    case bruce
+    case conor
+    case donovan
+    case drew
+    case elise
+    case jack
+    case kai
+    case kelsey
+    case maeve
+    case marcelo
+    case marcus
+    case meena
+    case meghan
+    case naveen
+    case paige
+    case priya
+    case rufus
+    case sharon
+    case tanner
+    case wade
+    case wes
 }

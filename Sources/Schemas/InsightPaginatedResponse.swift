@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of saved reporting insights and metadata describing the result set.
 public struct InsightPaginatedResponse: Codable, Hashable, Sendable {
+    /// The reporting insights returned for the current page.
     public let results: [Insight]
+    /// Pagination metadata for the insight result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

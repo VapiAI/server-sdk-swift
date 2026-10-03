@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to import a Twilio phone number into Vapi with its account credentials and routing settings.
 public struct CreateTwilioPhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

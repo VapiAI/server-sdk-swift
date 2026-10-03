@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to provision a Vapi-managed phone number or connect a SIP URI, with optional routing and authentication settings.
 public struct CreateVapiPhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

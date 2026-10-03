@@ -1,5 +1,6 @@
 import Foundation
 
+/// Static key-value parameter added to a tool request, with Liquid template support for string values.
 public struct ToolParameter: Codable, Hashable, Sendable {
     /// This is the key of the parameter.
     public let key: String

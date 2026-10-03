@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating requests to a custom language model with an API key or OAuth 2.0 authentication plan.
 public struct CreateCustomLlmCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters numeric call fields using a list of values or an emptiness test.
 public struct FilterNumberArrayTypeColumnOnCallTable: Codable, Hashable, Sendable {
     /// This is the column in the call table that will be filtered on.
     /// Number Array Type columns are the same as Number Type columns, but provides the ability to filter on multiple values provided as an array.

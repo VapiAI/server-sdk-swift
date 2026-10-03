@@ -7,6 +7,18 @@ public final class AssistantsClient: Sendable {
         self.httpClient = HTTPClient(config: config)
     }
 
+    /// Returns assistants for the authenticated organization. Filter results by creation or update timestamps and limit the number returned.
+    ///
+    /// - Parameter limit: This is the maximum number of items to return. Defaults to 100.
+    /// - Parameter createdAtGt: This will return items where the createdAt is greater than the specified value.
+    /// - Parameter createdAtLt: This will return items where the createdAt is less than the specified value.
+    /// - Parameter createdAtGe: This will return items where the createdAt is greater than or equal to the specified value.
+    /// - Parameter createdAtLe: This will return items where the createdAt is less than or equal to the specified value.
+    /// - Parameter updatedAtGt: This will return items where the updatedAt is greater than the specified value.
+    /// - Parameter updatedAtLt: This will return items where the updatedAt is less than the specified value.
+    /// - Parameter updatedAtGe: This will return items where the updatedAt is greater than or equal to the specified value.
+    /// - Parameter updatedAtLe: This will return items where the updatedAt is less than or equal to the specified value.
+    /// - Parameter requestOptions: Additional options for configuring the request, such as custom headers or timeout settings.
     public func list(limit: Double? = nil, createdAtGt: Date? = nil, createdAtLt: Date? = nil, createdAtGe: Date? = nil, createdAtLe: Date? = nil, updatedAtGt: Date? = nil, updatedAtLt: Date? = nil, updatedAtGe: Date? = nil, updatedAtLe: Date? = nil, requestOptions: RequestOptions? = nil) async throws -> [Assistant] {
         return try await httpClient.performRequest(
             method: .get,
@@ -27,6 +39,9 @@ public final class AssistantsClient: Sendable {
         )
     }
 
+    /// Creates a reusable assistant configuration containing the model, voice, transcriber, tools, prompts, and call behavior.
+    ///
+    /// - Parameter requestOptions: Additional options for configuring the request, such as custom headers or timeout settings.
     public func create(request: CreateAssistantDto, requestOptions: RequestOptions? = nil) async throws -> Assistant {
         return try await httpClient.performRequest(
             method: .post,
@@ -37,6 +52,20 @@ public final class AssistantsClient: Sendable {
         )
     }
 
+    public func assistantControllerValidateBackgroundSoundUrl(request: Requests.ValidateBackgroundSoundUrlDto, requestOptions: RequestOptions? = nil) async throws -> BackgroundSoundUrlValidationResult {
+        return try await httpClient.performRequest(
+            method: .post,
+            path: "/assistant/background-sound/validate",
+            body: request,
+            requestOptions: requestOptions,
+            responseType: BackgroundSoundUrlValidationResult.self
+        )
+    }
+
+    /// Returns the assistant identified by its ID.
+    ///
+    /// - Parameter id: The unique identifier of the assistant.
+    /// - Parameter requestOptions: Additional options for configuring the request, such as custom headers or timeout settings.
     public func get(id: String, requestOptions: RequestOptions? = nil) async throws -> Assistant {
         return try await httpClient.performRequest(
             method: .get,
@@ -46,6 +75,10 @@ public final class AssistantsClient: Sendable {
         )
     }
 
+    /// Deletes the assistant identified by its ID.
+    ///
+    /// - Parameter id: The unique identifier of the assistant.
+    /// - Parameter requestOptions: Additional options for configuring the request, such as custom headers or timeout settings.
     public func delete(id: String, requestOptions: RequestOptions? = nil) async throws -> Assistant {
         return try await httpClient.performRequest(
             method: .delete,
@@ -55,6 +88,10 @@ public final class AssistantsClient: Sendable {
         )
     }
 
+    /// Updates the specified fields of the assistant identified by its ID.
+    ///
+    /// - Parameter id: The unique identifier of the assistant.
+    /// - Parameter requestOptions: Additional options for configuring the request, such as custom headers or timeout settings.
     public func update(id: String, request: Requests.UpdateAssistantDto, requestOptions: RequestOptions? = nil) async throws -> Assistant {
         return try await httpClient.performRequest(
             method: .patch,

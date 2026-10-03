@@ -1,10 +1,10 @@
 import Foundation
 
 public struct UpdateCodeToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [UpdateCodeToolDtoMessagesItem]?
+    /// The type of tool. "code" for Code tool.
+    public let type: UpdateCodeToolDtoType?
     /// This determines if the tool is async.
     /// 
     ///   If async, the assistant will move forward without waiting for your server to respond. This is useful if you just want to trigger something on your server.
@@ -125,6 +125,7 @@ public struct UpdateCodeToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [UpdateCodeToolDtoMessagesItem]? = nil,
+        type: UpdateCodeToolDtoType? = nil,
         async: Bool? = nil,
         server: Server? = nil,
         code: String? = nil,
@@ -137,6 +138,7 @@ public struct UpdateCodeToolDto: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.type = type
         self.async = async
         self.server = server
         self.code = code
@@ -152,6 +154,7 @@ public struct UpdateCodeToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([UpdateCodeToolDtoMessagesItem].self, forKey: .messages)
+        self.type = try container.decodeIfPresent(UpdateCodeToolDtoType.self, forKey: .type)
         self.async = try container.decodeIfPresent(Bool.self, forKey: .async)
         self.server = try container.decodeIfPresent(Server.self, forKey: .server)
         self.code = try container.decodeIfPresent(String.self, forKey: .code)
@@ -168,6 +171,7 @@ public struct UpdateCodeToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.type, forKey: .type)
         try container.encodeIfPresent(self.async, forKey: .async)
         try container.encodeIfPresent(self.server, forKey: .server)
         try container.encodeIfPresent(self.code, forKey: .code)
@@ -182,6 +186,7 @@ public struct UpdateCodeToolDto: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case type
         case async
         case server
         case code

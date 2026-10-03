@@ -1,6 +1,6 @@
 import Foundation
 
-public enum VapiModelToolsItem: Codable, Hashable, Sendable {
+public indirect enum VapiModelToolsItem: Codable, Hashable, Sendable {
     case apiRequest(CreateApiRequestToolDto)
     case bash(CreateBashToolDto)
     case code(CreateCodeToolDto)

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Tavus conversation behavior and media settings, including duration, participant timeouts, recording, transcription, background, language, and recording storage.
 public struct TavusConversationProperties: Codable, Hashable, Sendable {
     /// The maximum duration of the call in seconds. The default `maxCallDuration` is 3600 seconds (1 hour).
     /// Once the time limit specified by this parameter has been reached, the conversation will automatically shut down.

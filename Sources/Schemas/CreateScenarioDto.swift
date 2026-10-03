@@ -1,18 +1,17 @@
 import Foundation
 
 public struct CreateScenarioDto: Codable, Hashable, Sendable {
-    /// This is the name of the scenario.
+    /// The display name of the scenario, for example `Book an appointment`.
     public let name: String
-    /// This is the script/instructions for the tester to follow during the simulation.
+    /// What the AI tester should try to accomplish in the conversation. Write it as the AI tester's goal, for example `Book an appointment for next week and confirm the time.`
     public let instructions: String
-    /// This is the structured output-based evaluation plan for the simulation.
-    /// Each item defines a structured output to extract and evaluate against an expected value.
+    /// The checks that decide whether a run passes. Each evaluation compares a structured output against an expected value. At least one evaluation is required to run.
     public let evaluations: [EvaluationPlanItem]
     /// Hooks to run on simulation lifecycle events
     public let hooks: [CreateScenarioDtoHooksItem]?
     /// Overrides to inject into the simulated target assistant or squad
     public let targetOverrides: AssistantOverrides?
-    /// Scenario-level tool call mocks to use during simulations.
+    /// Mock results for the assistant or squad's tools during the simulation, so the run stays deterministic without calling real services.
     public let toolMocks: [ScenarioToolMock]?
     /// Optional folder path for organizing scenarios.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").

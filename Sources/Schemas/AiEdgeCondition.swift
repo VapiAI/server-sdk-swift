@@ -1,6 +1,8 @@
 import Foundation
 
+/// An AI-evaluated boolean condition that determines whether a workflow follows an edge.
 public struct AiEdgeCondition: Codable, Hashable, Sendable {
+    /// Selects an AI-evaluated workflow edge condition.
     public let type: AiEdgeConditionType
     /// This is the prompt for the AI edge condition. It should evaluate to a boolean.
     public let prompt: String

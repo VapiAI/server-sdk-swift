@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to create a text-value insight from call data using metric queries, a formula, and a time range.
 public struct CreateTextInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -19,6 +20,7 @@ public struct CreateTextInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// 
     /// You can also use the query names as the variable in the formula.
     public let formula: [String: JSONValue]?
+    /// The time range used to query the text-value data.
     public let timeRange: InsightTimeRange?
     /// These are the queries to run to generate the insight.
     /// For Text Insights, we only allow a single query, or require a formula if multiple queries are provided

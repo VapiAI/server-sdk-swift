@@ -17,6 +17,7 @@ public enum AssistantModel: Codable, Hashable, Sendable {
     case openrouter(OpenRouterModel)
     case perplexityAi(PerplexityAiModel)
     case togetherAi(TogetherAiModel)
+    case vapi(VapiModel)
     case xai(XaiModel)
 
     public init(from decoder: Decoder) throws {
@@ -53,6 +54,8 @@ public enum AssistantModel: Codable, Hashable, Sendable {
             self = .perplexityAi(try PerplexityAiModel(from: decoder))
         case "together-ai":
             self = .togetherAi(try TogetherAiModel(from: decoder))
+        case "vapi":
+            self = .vapi(try VapiModel(from: decoder))
         case "xai":
             self = .xai(try XaiModel(from: decoder))
         default:
@@ -112,6 +115,9 @@ public enum AssistantModel: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .togetherAi(let data):
             try container.encode("together-ai", forKey: .provider)
+            try data.encode(to: encoder)
+        case .vapi(let data):
+            try container.encode("vapi", forKey: .provider)
             try data.encode(to: encoder)
         case .xai(let data):
             try container.encode("xai", forKey: .provider)

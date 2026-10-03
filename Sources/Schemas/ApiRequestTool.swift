@@ -1,10 +1,15 @@
 import Foundation
 
+/// A reusable tool that sends HTTP requests to a configured API and can authenticate, retry failures, and extract variables from responses.
 public struct ApiRequestTool: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    public let latestVersion: Nullable<String>?
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [ApiRequestToolMessagesItem]?
+    /// This is the name of the tool. This will be passed to the model.
+    /// 
+    /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
+    public let name: String?
+    /// The HTTP method used for the API request.
     public let method: ApiRequestToolMethod
     /// This is the timeout in seconds for the request. Defaults to 20 seconds.
     /// 
@@ -103,10 +108,6 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
     /// }
     /// ```
     public let rejectionPlan: ToolRejectionPlan?
-    /// This is the name of the tool. This will be passed to the model.
-    /// 
-    /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
-    public let name: String?
     /// This is the description of the tool. This will be passed to the model.
     public let description: String?
     /// This is where the request will be sent.
@@ -277,7 +278,9 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        latestVersion: Nullable<String>? = nil,
         messages: [ApiRequestToolMessagesItem]? = nil,
+        name: String? = nil,
         method: ApiRequestToolMethod,
         timeoutSeconds: Double? = nil,
         credentialId: String? = nil,
@@ -288,7 +291,6 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         createdAt: Date,
         updatedAt: Date,
         rejectionPlan: ToolRejectionPlan? = nil,
-        name: String? = nil,
         description: String? = nil,
         url: String,
         body: JsonSchema? = nil,
@@ -297,7 +299,9 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         variableExtractionPlan: VariableExtractionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.latestVersion = latestVersion
         self.messages = messages
+        self.name = name
         self.method = method
         self.timeoutSeconds = timeoutSeconds
         self.credentialId = credentialId
@@ -308,7 +312,6 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.rejectionPlan = rejectionPlan
-        self.name = name
         self.description = description
         self.url = url
         self.body = body
@@ -320,7 +323,9 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
         self.messages = try container.decodeIfPresent([ApiRequestToolMessagesItem].self, forKey: .messages)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.method = try container.decode(ApiRequestToolMethod.self, forKey: .method)
         self.timeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .timeoutSeconds)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
@@ -331,7 +336,6 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.rejectionPlan = try container.decodeIfPresent(ToolRejectionPlan.self, forKey: .rejectionPlan)
-        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.url = try container.decode(String.self, forKey: .url)
         self.body = try container.decodeIfPresent(JsonSchema.self, forKey: .body)
@@ -344,7 +348,9 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.method, forKey: .method)
         try container.encodeIfPresent(self.timeoutSeconds, forKey: .timeoutSeconds)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
@@ -355,7 +361,6 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.rejectionPlan, forKey: .rejectionPlan)
-        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encode(self.url, forKey: .url)
         try container.encodeIfPresent(self.body, forKey: .body)
@@ -366,7 +371,9 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case latestVersion
         case messages
+        case name
         case method
         case timeoutSeconds
         case credentialId
@@ -377,7 +384,6 @@ public struct ApiRequestTool: Codable, Hashable, Sendable {
         case createdAt
         case updatedAt
         case rejectionPlan
-        case name
         case description
         case url
         case body

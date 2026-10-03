@@ -1,8 +1,10 @@
 import Foundation
 
+/// Credentials for authenticating telephony requests with Vonage.
 public struct CreateVonageCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiSecret: String
+    /// Vonage API key associated with the credential.
     public let apiKey: String
     /// This is the name of credential. This is just for your reference.
     public let name: String?

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A paginated collection of phone numbers and metadata describing the result set.
 public struct PhoneNumberPaginatedResponse: Codable, Hashable, Sendable {
     /// A list of phone numbers, which can be of any provider type.
     public let results: [PhoneNumberPaginatedResponseResultsItem]

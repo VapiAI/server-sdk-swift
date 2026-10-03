@@ -1,5 +1,6 @@
 import Foundation
 
+/// The result of a batch call creation request, containing successfully created calls, per-call failures, and subscription limits recorded at the end of the batch.
 public struct CallBatchResponse: Codable, Hashable, Sendable {
     /// Subscription limits at the end of this batch
     public let subscriptionLimits: SubscriptionLimits?

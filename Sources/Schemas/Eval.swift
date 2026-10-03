@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved eval definition containing its mock conversation, checkpoints, descriptive metadata, type, and lifecycle information.
 public struct Eval: Codable, Hashable, Sendable {
     /// This is the mock conversation that will be used to evaluate the flow of the conversation.
     /// 
@@ -7,9 +8,13 @@ public struct Eval: Codable, Hashable, Sendable {
     /// 
     /// Evaluation Messages are used as checkpoints in the flow where the model's response to previous conversation needs to be evaluated to check the content and tool calls
     public let messages: [EvalMessagesItem]
+    /// The unique identifier for the eval.
     public let id: String
+    /// The unique identifier for the organization that owns the eval.
     public let orgId: String
+    /// The ISO 8601 timestamp when the eval was created.
     public let createdAt: Date
+    /// The ISO 8601 timestamp when the eval was last updated.
     public let updatedAt: Date
     /// This is the name of the eval.
     /// It helps identify what the eval is checking for.

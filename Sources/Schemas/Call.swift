@@ -1,10 +1,12 @@
 import Foundation
 
+/// A call record returned by Vapi. It contains the configuration and resources used for the call, its lifecycle status and timestamps, conversation messages, artifacts, analysis, and costs.
 public struct Call: Codable, Hashable, Sendable {
     /// This is the type of call.
     public let type: CallType?
     /// These are the costs of individual components of the call in USD.
     public let costs: [CallCostsItem]?
+    /// Messages exchanged during the call, including user, assistant, system, tool-call, and tool-result messages.
     public let messages: [CallMessagesItem]?
     /// This is the provider of the call.
     /// 
@@ -22,6 +24,18 @@ public struct Call: Codable, Hashable, Sendable {
     public let endedMessage: String?
     /// This is the destination where the call ended up being transferred to. If the call was not transferred, this will be empty.
     public let destination: CallDestination?
+    /// This is the assistant version to use for this call. Supported only with
+    /// direct `assistantId`. Omit to follow the latest version.
+    public let assistantVersion: Nullable<String>?
+    /// This is the squad version to use for this call. Supported only with
+    /// direct `squadId`. Omit to follow the latest version.
+    public let squadVersion: Nullable<String>?
+    /// This is the transport of the call.
+    public let transport: CallTransport?
+    /// This is the phone number that will be used for the call. To use an existing number, use `phoneNumberId` instead.
+    /// 
+    /// Only relevant for `outboundPhoneCall` and `inboundPhoneCall` type.
+    public let phoneNumber: TransientTwilioPhoneNumber?
     /// This is the unique identifier for the call.
     public let id: String
     /// This is the unique identifier for the org that this call belongs to.
@@ -107,10 +121,6 @@ public struct Call: Codable, Hashable, Sendable {
     /// 
     /// Only relevant for `outboundPhoneCall` and `inboundPhoneCall` type.
     public let phoneNumberId: String?
-    /// This is the phone number that will be used for the call. To use an existing number, use `phoneNumberId` instead.
-    /// 
-    /// Only relevant for `outboundPhoneCall` and `inboundPhoneCall` type.
-    public let phoneNumber: ImportTwilioPhoneNumberDto?
     /// This is the customer that will be called. To call a transient customer , use `customer` instead.
     /// 
     /// Only relevant for `outboundPhoneCall` and `inboundPhoneCall` type.
@@ -123,10 +133,6 @@ public struct Call: Codable, Hashable, Sendable {
     public let name: String?
     /// This is the schedule plan of the call.
     public let schedulePlan: SchedulePlan?
-    /// This is the transport of the call.
-    public let transport: [String: JSONValue]?
-    /// These are the subscription limits for the org at the time of the call. Includes concurrency limit information.
-    public let subscriptionLimits: SubscriptionLimits?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -140,6 +146,10 @@ public struct Call: Codable, Hashable, Sendable {
         endedReason: CallEndedReason? = nil,
         endedMessage: String? = nil,
         destination: CallDestination? = nil,
+        assistantVersion: Nullable<String>? = nil,
+        squadVersion: Nullable<String>? = nil,
+        transport: CallTransport? = nil,
+        phoneNumber: TransientTwilioPhoneNumber? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -165,13 +175,10 @@ public struct Call: Codable, Hashable, Sendable {
         workflow: CreateWorkflowDto? = nil,
         workflowOverrides: WorkflowOverrides? = nil,
         phoneNumberId: String? = nil,
-        phoneNumber: ImportTwilioPhoneNumberDto? = nil,
         customerId: String? = nil,
         customer: CreateCustomerDto? = nil,
         name: String? = nil,
         schedulePlan: SchedulePlan? = nil,
-        transport: [String: JSONValue]? = nil,
-        subscriptionLimits: SubscriptionLimits? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.type = type
@@ -183,6 +190,10 @@ public struct Call: Codable, Hashable, Sendable {
         self.endedReason = endedReason
         self.endedMessage = endedMessage
         self.destination = destination
+        self.assistantVersion = assistantVersion
+        self.squadVersion = squadVersion
+        self.transport = transport
+        self.phoneNumber = phoneNumber
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -208,13 +219,10 @@ public struct Call: Codable, Hashable, Sendable {
         self.workflow = workflow
         self.workflowOverrides = workflowOverrides
         self.phoneNumberId = phoneNumberId
-        self.phoneNumber = phoneNumber
         self.customerId = customerId
         self.customer = customer
         self.name = name
         self.schedulePlan = schedulePlan
-        self.transport = transport
-        self.subscriptionLimits = subscriptionLimits
         self.additionalProperties = additionalProperties
     }
 
@@ -229,6 +237,10 @@ public struct Call: Codable, Hashable, Sendable {
         self.endedReason = try container.decodeIfPresent(CallEndedReason.self, forKey: .endedReason)
         self.endedMessage = try container.decodeIfPresent(String.self, forKey: .endedMessage)
         self.destination = try container.decodeIfPresent(CallDestination.self, forKey: .destination)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
+        self.squadVersion = try container.decodeNullableIfPresent(String.self, forKey: .squadVersion)
+        self.transport = try container.decodeIfPresent(CallTransport.self, forKey: .transport)
+        self.phoneNumber = try container.decodeIfPresent(TransientTwilioPhoneNumber.self, forKey: .phoneNumber)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -254,13 +266,10 @@ public struct Call: Codable, Hashable, Sendable {
         self.workflow = try container.decodeIfPresent(CreateWorkflowDto.self, forKey: .workflow)
         self.workflowOverrides = try container.decodeIfPresent(WorkflowOverrides.self, forKey: .workflowOverrides)
         self.phoneNumberId = try container.decodeIfPresent(String.self, forKey: .phoneNumberId)
-        self.phoneNumber = try container.decodeIfPresent(ImportTwilioPhoneNumberDto.self, forKey: .phoneNumber)
         self.customerId = try container.decodeIfPresent(String.self, forKey: .customerId)
         self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.schedulePlan = try container.decodeIfPresent(SchedulePlan.self, forKey: .schedulePlan)
-        self.transport = try container.decodeIfPresent([String: JSONValue].self, forKey: .transport)
-        self.subscriptionLimits = try container.decodeIfPresent(SubscriptionLimits.self, forKey: .subscriptionLimits)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -276,6 +285,10 @@ public struct Call: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.endedReason, forKey: .endedReason)
         try container.encodeIfPresent(self.endedMessage, forKey: .endedMessage)
         try container.encodeIfPresent(self.destination, forKey: .destination)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
+        try container.encodeNullableIfPresent(self.squadVersion, forKey: .squadVersion)
+        try container.encodeIfPresent(self.transport, forKey: .transport)
+        try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -301,13 +314,10 @@ public struct Call: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.workflow, forKey: .workflow)
         try container.encodeIfPresent(self.workflowOverrides, forKey: .workflowOverrides)
         try container.encodeIfPresent(self.phoneNumberId, forKey: .phoneNumberId)
-        try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
         try container.encodeIfPresent(self.customerId, forKey: .customerId)
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.schedulePlan, forKey: .schedulePlan)
-        try container.encodeIfPresent(self.transport, forKey: .transport)
-        try container.encodeIfPresent(self.subscriptionLimits, forKey: .subscriptionLimits)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -321,6 +331,10 @@ public struct Call: Codable, Hashable, Sendable {
         case endedReason
         case endedMessage
         case destination
+        case assistantVersion
+        case squadVersion
+        case transport
+        case phoneNumber
         case id
         case orgId
         case createdAt
@@ -346,12 +360,9 @@ public struct Call: Codable, Hashable, Sendable {
         case workflow
         case workflowOverrides
         case phoneNumberId
-        case phoneNumber
         case customerId
         case customer
         case name
         case schedulePlan
-        case transport
-        case subscriptionLimits
     }
 }

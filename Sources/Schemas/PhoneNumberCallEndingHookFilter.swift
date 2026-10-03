@@ -1,5 +1,6 @@
 import Foundation
 
+/// Matches the call's ended reason against configured assistant-request failure reasons before an ending hook runs.
 public struct PhoneNumberCallEndingHookFilter: Codable, Hashable, Sendable {
     /// This is the type of filter - currently only "oneOf" is supported
     public let type: PhoneNumberCallEndingHookFilterType

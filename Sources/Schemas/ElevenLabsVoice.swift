@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with ElevenLabs, including voice and model selection, language, voice tuning, streaming, Speech Synthesis Markup Language parsing, pronunciation dictionaries, chunking, caching, and fallback settings.
 public struct ElevenLabsVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
@@ -7,25 +8,25 @@ public struct ElevenLabsVoice: Codable, Hashable, Sendable {
     public let voiceId: ElevenLabsVoiceId
     /// Defines the stability for voice settings.
     public let stability: Double?
-    /// Defines the similarity boost for voice settings.
+    /// Defines the similarity boost for voice settings. Ignored by `eleven_v4_turbo`.
     public let similarityBoost: Double?
-    /// Defines the style for voice settings.
+    /// Defines the style for voice settings. Ignored by `eleven_v4_turbo`.
     public let style: Double?
-    /// Defines the use speaker boost for voice settings.
+    /// Defines the use speaker boost for voice settings. Ignored by `eleven_v4_turbo`.
     public let useSpeakerBoost: Bool?
-    /// Defines the speed for voice settings.
+    /// Defines the speed for voice settings. Ignored by `eleven_v4_turbo`.
     public let speed: Double?
-    /// Defines the optimize streaming latency for voice settings. Defaults to 3.
+    /// Defines the optimize streaming latency for voice settings. Defaults to 3. Ignored by `eleven_v4_turbo`.
     public let optimizeStreamingLatency: Double?
-    /// This enables the use of https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation. Defaults to false to save latency.
+    /// This enables the use of https://elevenlabs.io/docs/speech-synthesis/prompting#pronunciation. Defaults to false to save latency. Ignored by `eleven_v4_turbo`.
     /// 
     /// @default false
     public let enableSsmlParsing: Bool?
-    /// Defines the auto mode for voice settings. Defaults to false.
+    /// Defines the auto mode for voice settings. Defaults to false. Ignored by `eleven_v4_turbo`.
     public let autoMode: Bool?
     /// This is the model that will be used. Defaults to 'eleven_turbo_v2' if not specified.
     public let model: ElevenLabsVoiceModel?
-    /// This is the language (ISO 639-1) that is enforced for the model. Currently only Turbo v2.5 supports language enforcement. For other models, an error will be returned if language code is provided.
+    /// This is the language (ISO 639-1) that is enforced for the model. Currently only Turbo v2.5, Flash v2.5 and v4 Turbo support language enforcement; other models ignore it.
     public let language: String?
     /// This is the plan for chunking the model output before it is sent to the voice provider.
     public let chunkPlan: ChunkPlan?

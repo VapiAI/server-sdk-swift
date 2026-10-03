@@ -1,5 +1,6 @@
 import Foundation
 
+/// Stored OAuth 2.0 authorization for Slack operations.
 public struct CreateSlackOAuth2AuthorizationCredentialDto: Codable, Hashable, Sendable {
     /// The authorization ID for the OAuth2 authorization
     public let authorizationId: String

@@ -1,5 +1,6 @@
 import Foundation
 
+/// OpenAI-compatible custom model configuration for an LLM judge, including its endpoint, headers, messages, and generation settings.
 public struct EvalCustomModel: Codable, Hashable, Sendable {
     /// These is the URL we'll use for the OpenAI client's `baseURL`. Ex. https://openrouter.ai/api/v1
     public let url: String

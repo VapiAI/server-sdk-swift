@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for storing call artifacts in Cloudflare R2, including account details, bucket configuration, and upload fallback order.
 public struct CreateCloudflareCredentialDto: Codable, Hashable, Sendable {
     /// Cloudflare Account Id.
     public let accountId: String?

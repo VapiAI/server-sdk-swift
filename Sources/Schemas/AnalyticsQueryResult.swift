@@ -1,5 +1,6 @@
 import Foundation
 
+/// The result of a named analytics query, including the evaluated time range and returned metric data.
 public struct AnalyticsQueryResult: Codable, Hashable, Sendable {
     /// This is the unique key for the query.
     public let name: String

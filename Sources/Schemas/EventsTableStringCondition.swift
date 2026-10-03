@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters event data by comparing or searching a string field.
 public struct EventsTableStringCondition: Codable, Hashable, Sendable {
     /// The string field name from the event data
     public let column: String

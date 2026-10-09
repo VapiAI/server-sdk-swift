@@ -4,4 +4,6 @@ import Foundation
 public enum DeepSeekModelModel: String, Codable, Hashable, CaseIterable, Sendable {
     case deepseekChat = "deepseek-chat"
     case deepseekReasoner = "deepseek-reasoner"
+    case deepseekFlash = "deepseek-flash"
+    case deepseekFlashThinking = "deepseek-flash-thinking"
 }

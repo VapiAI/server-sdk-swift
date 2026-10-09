@@ -1,5 +1,6 @@
 import Foundation
 
+/// OpenAI model configuration for an LLM judge, including its messages and generation settings.
 public struct EvalOpenAiModel: Codable, Hashable, Sendable {
     /// This is the OpenAI model that will be used.
     /// 

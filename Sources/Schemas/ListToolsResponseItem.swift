@@ -8,6 +8,7 @@ public enum ListToolsResponseItem: Codable, Hashable, Sendable {
     case dtmf(DtmfTool)
     case endCall(EndCallTool)
     case function(FunctionTool)
+    case ghl(GhlTool)
     case gohighlevelCalendarAvailabilityCheck(GoHighLevelCalendarAvailabilityTool)
     case gohighlevelCalendarEventCreate(GoHighLevelCalendarEventCreateTool)
     case gohighlevelContactCreate(GoHighLevelContactCreateTool)
@@ -16,6 +17,7 @@ public enum ListToolsResponseItem: Codable, Hashable, Sendable {
     case googleCalendarEventCreate(GoogleCalendarCreateEventTool)
     case googleSheetsRowAppend(GoogleSheetsRowAppendTool)
     case handoff(HandoffTool)
+    case knowledgeBase(KnowledgeBaseTool)
     case mcp(McpTool)
     case query(QueryTool)
     case sipRequest(SipRequestTool)
@@ -43,6 +45,8 @@ public enum ListToolsResponseItem: Codable, Hashable, Sendable {
             self = .endCall(try EndCallTool(from: decoder))
         case "function":
             self = .function(try FunctionTool(from: decoder))
+        case "ghl":
+            self = .ghl(try GhlTool(from: decoder))
         case "gohighlevel.calendar.availability.check":
             self = .gohighlevelCalendarAvailabilityCheck(try GoHighLevelCalendarAvailabilityTool(from: decoder))
         case "gohighlevel.calendar.event.create":
@@ -59,6 +63,8 @@ public enum ListToolsResponseItem: Codable, Hashable, Sendable {
             self = .googleSheetsRowAppend(try GoogleSheetsRowAppendTool(from: decoder))
         case "handoff":
             self = .handoff(try HandoffTool(from: decoder))
+        case "knowledgeBase":
+            self = .knowledgeBase(try KnowledgeBaseTool(from: decoder))
         case "mcp":
             self = .mcp(try McpTool(from: decoder))
         case "query":
@@ -109,6 +115,9 @@ public enum ListToolsResponseItem: Codable, Hashable, Sendable {
         case .function(let data):
             try container.encode("function", forKey: .type)
             try data.encode(to: encoder)
+        case .ghl(let data):
+            try container.encode("ghl", forKey: .type)
+            try data.encode(to: encoder)
         case .gohighlevelCalendarAvailabilityCheck(let data):
             try container.encode("gohighlevel.calendar.availability.check", forKey: .type)
             try data.encode(to: encoder)
@@ -132,6 +141,9 @@ public enum ListToolsResponseItem: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .handoff(let data):
             try container.encode("handoff", forKey: .type)
+            try data.encode(to: encoder)
+        case .knowledgeBase(let data):
+            try container.encode("knowledgeBase", forKey: .type)
             try data.encode(to: encoder)
         case .mcp(let data):
             try container.encode("mcp", forKey: .type)

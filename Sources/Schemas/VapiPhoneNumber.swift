@@ -1,5 +1,6 @@
 import Foundation
 
+/// A Vapi-managed phone number or SIP URI, including its authentication, routing, hooks, server settings, and lifecycle metadata.
 public struct VapiPhoneNumber: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

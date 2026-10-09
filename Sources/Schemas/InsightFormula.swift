@@ -1,5 +1,6 @@
 import Foundation
 
+/// A formula used to calculate an insight from its query results, with an optional display name.
 public struct InsightFormula: Codable, Hashable, Sendable {
     /// This is the name of the formula.
     /// It will be used to label the formula in the insight board on the UI.

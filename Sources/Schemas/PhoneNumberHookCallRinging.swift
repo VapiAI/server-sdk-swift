@@ -1,5 +1,6 @@
 import Foundation
 
+/// Runs configured transfer or message actions when an incoming call rings and its caller-number prefix filters match.
 public struct PhoneNumberHookCallRinging: Codable, Hashable, Sendable {
     /// Optional filters to decide when to trigger the hook. Currently supports filtering by caller country code.
     public let filters: [PhoneNumberCallRingingHookFilter]?

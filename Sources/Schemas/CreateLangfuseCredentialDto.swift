@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for sending assistant call traces to a Langfuse project, including its public key, secret key, and host URL.
 public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
     /// The public key for Langfuse project. Eg: pk-lf-...
     public let publicKey: String

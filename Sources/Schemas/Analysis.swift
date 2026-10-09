@@ -1,5 +1,6 @@
 import Foundation
 
+/// Post-call analysis results, including summary, structured data, and success evaluation outputs.
 public struct Analysis: Codable, Hashable, Sendable {
     /// This is the summary of the call. Customize by setting `assistant.analysisPlan.summaryPrompt`.
     public let summary: String?

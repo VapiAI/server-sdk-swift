@@ -15,5 +15,6 @@ public enum AnthropicModelModel: String, Codable, Hashable, CaseIterable, Sendab
     case claudeSonnet420250514 = "claude-sonnet-4-20250514"
     case claudeSonnet4520250929 = "claude-sonnet-4-5-20250929"
     case claudeSonnet46 = "claude-sonnet-4-6"
+    case claudeSonnet5 = "claude-sonnet-5"
     case claudeHaiku4520251001 = "claude-haiku-4-5-20251001"
 }

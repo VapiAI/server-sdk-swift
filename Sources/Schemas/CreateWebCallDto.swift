@@ -1,6 +1,12 @@
 import Foundation
 
 public struct CreateWebCallDto: Codable, Hashable, Sendable {
+    /// This is the assistant version to use for this call. Supported only with
+    /// direct `assistantId`. Omit to follow the latest version.
+    public let assistantVersion: Nullable<String>?
+    /// This is the squad version to use for this call. Supported only with
+    /// direct `squadId`. Omit to follow the latest version.
+    public let squadVersion: Nullable<String>?
     public let roomDeleteOnUserLeaveEnabled: Bool?
     /// This is the assistant ID that will be used for the call. To use a transient assistant, use `assistant` instead.
     /// 
@@ -55,6 +61,8 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        assistantVersion: Nullable<String>? = nil,
+        squadVersion: Nullable<String>? = nil,
         roomDeleteOnUserLeaveEnabled: Bool? = nil,
         assistantId: String? = nil,
         assistant: CreateAssistantDto? = nil,
@@ -67,6 +75,8 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
         workflowOverrides: WorkflowOverrides? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.assistantVersion = assistantVersion
+        self.squadVersion = squadVersion
         self.roomDeleteOnUserLeaveEnabled = roomDeleteOnUserLeaveEnabled
         self.assistantId = assistantId
         self.assistant = assistant
@@ -82,6 +92,8 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
+        self.squadVersion = try container.decodeNullableIfPresent(String.self, forKey: .squadVersion)
         self.roomDeleteOnUserLeaveEnabled = try container.decodeIfPresent(Bool.self, forKey: .roomDeleteOnUserLeaveEnabled)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
         self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
@@ -98,6 +110,8 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
+        try container.encodeNullableIfPresent(self.squadVersion, forKey: .squadVersion)
         try container.encodeIfPresent(self.roomDeleteOnUserLeaveEnabled, forKey: .roomDeleteOnUserLeaveEnabled)
         try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
@@ -112,6 +126,8 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case assistantVersion
+        case squadVersion
         case roomDeleteOnUserLeaveEnabled
         case assistantId
         case assistant

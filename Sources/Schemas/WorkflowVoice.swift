@@ -12,6 +12,7 @@ public enum WorkflowVoice: Codable, Hashable, Sendable {
     case hume(HumeVoice)
     case inworld(InworldVoice)
     case lmnt(LmntVoice)
+    case microsoft(MicrosoftVoice)
     case minimax(MinimaxVoice)
     case neuphonic(NeuphonicVoice)
     case openai(OpenAiVoice)
@@ -22,6 +23,7 @@ public enum WorkflowVoice: Codable, Hashable, Sendable {
     case tavus(TavusVoice)
     case vapi(VapiVoice)
     case wellsaid(WellSaidVoice)
+    case xai(XaiVoice)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -43,6 +45,8 @@ public enum WorkflowVoice: Codable, Hashable, Sendable {
             self = .inworld(try InworldVoice(from: decoder))
         case "lmnt":
             self = .lmnt(try LmntVoice(from: decoder))
+        case "microsoft":
+            self = .microsoft(try MicrosoftVoice(from: decoder))
         case "minimax":
             self = .minimax(try MinimaxVoice(from: decoder))
         case "neuphonic":
@@ -63,6 +67,8 @@ public enum WorkflowVoice: Codable, Hashable, Sendable {
             self = .vapi(try VapiVoice(from: decoder))
         case "wellsaid":
             self = .wellsaid(try WellSaidVoice(from: decoder))
+        case "xai":
+            self = .xai(try XaiVoice(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -100,6 +106,9 @@ public enum WorkflowVoice: Codable, Hashable, Sendable {
         case .lmnt(let data):
             try container.encode("lmnt", forKey: .provider)
             try data.encode(to: encoder)
+        case .microsoft(let data):
+            try container.encode("microsoft", forKey: .provider)
+            try data.encode(to: encoder)
         case .minimax(let data):
             try container.encode("minimax", forKey: .provider)
             try data.encode(to: encoder)
@@ -129,6 +138,9 @@ public enum WorkflowVoice: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .wellsaid(let data):
             try container.encode("wellsaid", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

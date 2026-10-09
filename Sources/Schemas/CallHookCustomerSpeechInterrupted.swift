@@ -1,5 +1,6 @@
 import Foundation
 
+/// Runs configured actions when the assistant interrupts the customer's speech.
 public struct CallHookCustomerSpeechInterrupted: Codable, Hashable, Sendable {
     /// This is the event that triggers this hook
     public let on: CallHookCustomerSpeechInterruptedOn

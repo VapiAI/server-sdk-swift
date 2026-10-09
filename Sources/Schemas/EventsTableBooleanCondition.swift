@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters event data by comparing a boolean field with an expected value.
 public struct EventsTableBooleanCondition: Codable, Hashable, Sendable {
     /// The boolean field name from the event data
     public let column: String

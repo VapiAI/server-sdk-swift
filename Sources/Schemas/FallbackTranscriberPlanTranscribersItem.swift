@@ -13,6 +13,7 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
     case soniox(FallbackSonioxTranscriber)
     case speechmatics(FallbackSpeechmaticsTranscriber)
     case talkscriber(FallbackTalkscriberTranscriber)
+    case xai(FallbackXaiTranscriber)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -42,6 +43,8 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
             self = .speechmatics(try FallbackSpeechmaticsTranscriber(from: decoder))
         case "talkscriber":
             self = .talkscriber(try FallbackTalkscriberTranscriber(from: decoder))
+        case "xai":
+            self = .xai(try FallbackXaiTranscriber(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -90,6 +93,9 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
             try data.encode(to: encoder)
         case .talkscriber(let data):
             try container.encode("talkscriber", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

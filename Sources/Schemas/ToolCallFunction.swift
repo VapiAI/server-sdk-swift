@@ -1,5 +1,6 @@
 import Foundation
 
+/// The function name and serialized arguments associated with a tool call.
 public struct ToolCallFunction: Codable, Hashable, Sendable {
     /// This is the arguments to call the function with
     public let arguments: String

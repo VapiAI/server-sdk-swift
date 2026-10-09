@@ -20,4 +20,6 @@ public enum SyncVoiceLibraryDtoProvidersItem: String, Codable, Hashable, CaseIte
     case minimax
     case wellsaid
     case orpheus
+    case xai
+    case microsoft
 }

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A custom endpointing rule that matches the customer's current speech and applies a configured timeout.
 public struct CustomerCustomEndpointingRule: Codable, Hashable, Sendable {
     /// This is the regex pattern to match.
     /// 

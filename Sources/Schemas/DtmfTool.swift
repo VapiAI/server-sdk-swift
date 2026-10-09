@@ -1,9 +1,9 @@
 import Foundation
 
+/// A reusable tool that lets an assistant send DTMF keypad tones during a call.
 public struct DtmfTool: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    public let latestVersion: Nullable<String>?
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [DtmfToolMessagesItem]?
     /// This enables sending DTMF tones via SIP INFO messages instead of RFC 2833 (RTP events). When enabled, DTMF digits will be sent using the SIP INFO method, which can be more reliable in some network configurations. Only relevant when using the `vapi.sip` transport.
     public let sipInfoDtmfEnabled: Bool?
@@ -98,6 +98,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        latestVersion: Nullable<String>? = nil,
         messages: [DtmfToolMessagesItem]? = nil,
         sipInfoDtmfEnabled: Bool? = nil,
         id: String,
@@ -107,6 +108,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.latestVersion = latestVersion
         self.messages = messages
         self.sipInfoDtmfEnabled = sipInfoDtmfEnabled
         self.id = id
@@ -119,6 +121,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
         self.messages = try container.decodeIfPresent([DtmfToolMessagesItem].self, forKey: .messages)
         self.sipInfoDtmfEnabled = try container.decodeIfPresent(Bool.self, forKey: .sipInfoDtmfEnabled)
         self.id = try container.decode(String.self, forKey: .id)
@@ -132,6 +135,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.sipInfoDtmfEnabled, forKey: .sipInfoDtmfEnabled)
         try container.encode(self.id, forKey: .id)
@@ -143,6 +147,7 @@ public struct DtmfTool: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case latestVersion
         case messages
         case sipInfoDtmfEnabled
         case id

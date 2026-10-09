@@ -6,6 +6,8 @@ public struct GetEvalPaginatedDto: Codable, Hashable, Sendable {
     public let page: Double?
     /// This is the sort order for pagination. Defaults to 'DESC'.
     public let sortOrder: GetEvalPaginatedDtoSortOrder?
+    /// This is the column to sort by. Defaults to 'createdAt'.
+    public let sortBy: GetEvalPaginatedDtoSortBy?
     /// This is the maximum number of items to return. Defaults to 100.
     public let limit: Double?
     /// This will return items where the createdAt is greater than the specified value.
@@ -31,6 +33,7 @@ public struct GetEvalPaginatedDto: Codable, Hashable, Sendable {
         id: String? = nil,
         page: Double? = nil,
         sortOrder: GetEvalPaginatedDtoSortOrder? = nil,
+        sortBy: GetEvalPaginatedDtoSortBy? = nil,
         limit: Double? = nil,
         createdAtGt: Date? = nil,
         createdAtLt: Date? = nil,
@@ -45,6 +48,7 @@ public struct GetEvalPaginatedDto: Codable, Hashable, Sendable {
         self.id = id
         self.page = page
         self.sortOrder = sortOrder
+        self.sortBy = sortBy
         self.limit = limit
         self.createdAtGt = createdAtGt
         self.createdAtLt = createdAtLt
@@ -62,6 +66,7 @@ public struct GetEvalPaginatedDto: Codable, Hashable, Sendable {
         self.id = try container.decodeIfPresent(String.self, forKey: .id)
         self.page = try container.decodeIfPresent(Double.self, forKey: .page)
         self.sortOrder = try container.decodeIfPresent(GetEvalPaginatedDtoSortOrder.self, forKey: .sortOrder)
+        self.sortBy = try container.decodeIfPresent(GetEvalPaginatedDtoSortBy.self, forKey: .sortBy)
         self.limit = try container.decodeIfPresent(Double.self, forKey: .limit)
         self.createdAtGt = try container.decodeIfPresent(Date.self, forKey: .createdAtGt)
         self.createdAtLt = try container.decodeIfPresent(Date.self, forKey: .createdAtLt)
@@ -80,6 +85,7 @@ public struct GetEvalPaginatedDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.id, forKey: .id)
         try container.encodeIfPresent(self.page, forKey: .page)
         try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
+        try container.encodeIfPresent(self.sortBy, forKey: .sortBy)
         try container.encodeIfPresent(self.limit, forKey: .limit)
         try container.encodeIfPresent(self.createdAtGt, forKey: .createdAtGt)
         try container.encodeIfPresent(self.createdAtLt, forKey: .createdAtLt)
@@ -96,6 +102,7 @@ public struct GetEvalPaginatedDto: Codable, Hashable, Sendable {
         case id
         case page
         case sortOrder
+        case sortBy
         case limit
         case createdAtGt
         case createdAtLt

@@ -1,3 +1,6 @@
 # Specify files that shouldn't be modified by Fern
 .github/workflows/sdk-release-pr-notification.yml
 changelog.md
+.fern/replay.lock
+.fern/replay.yml
+.gitattributes

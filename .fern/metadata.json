@@ -8,5 +8,5 @@
     "environmentEnumName": "VapiEnvironment"
   },
   "originGitCommit": "cde27d5393fe676274462916f1c7fb9b2c95abeb",
-  "sdkVersion": "0.0.0-fern-placeholder"
+  "sdkVersion": "2.0.0"
 }

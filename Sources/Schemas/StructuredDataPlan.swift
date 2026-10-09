@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls extraction of post-call structured data, including prompt messages, JSON schema, enablement, and request timeout.
 public struct StructuredDataPlan: Codable, Hashable, Sendable {
     /// These are the messages used to generate the structured data.
     /// 

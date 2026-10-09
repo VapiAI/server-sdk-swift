@@ -1,5 +1,6 @@
 import Foundation
 
+/// OAuth 2.0 session tokens and expiration used to authenticate integration requests.
 public struct Oauth2AuthenticationSession: Codable, Hashable, Sendable {
     /// This is the OAuth2 access token.
     public let accessToken: String?

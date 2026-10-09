@@ -13,10 +13,14 @@ public struct GetChatPaginatedDto: Codable, Hashable, Sendable {
     public let sessionId: String?
     /// This is the unique identifier for the previous chat to filter by.
     public let previousChatId: String?
+    /// Filter by multiple chat IDs. Provide as comma-separated values.
+    public let idAny: String?
     /// This is the page number to return. Defaults to 1.
     public let page: Double?
     /// This is the sort order for pagination. Defaults to 'DESC'.
     public let sortOrder: GetChatPaginatedDtoSortOrder?
+    /// This is the column to sort by. Defaults to 'createdAt'.
+    public let sortBy: GetChatPaginatedDtoSortBy?
     /// This is the maximum number of items to return. Defaults to 100.
     public let limit: Double?
     /// This will return items where the createdAt is greater than the specified value.
@@ -45,8 +49,10 @@ public struct GetChatPaginatedDto: Codable, Hashable, Sendable {
         squadId: String? = nil,
         sessionId: String? = nil,
         previousChatId: String? = nil,
+        idAny: String? = nil,
         page: Double? = nil,
         sortOrder: GetChatPaginatedDtoSortOrder? = nil,
+        sortBy: GetChatPaginatedDtoSortBy? = nil,
         limit: Double? = nil,
         createdAtGt: Date? = nil,
         createdAtLt: Date? = nil,
@@ -64,8 +70,10 @@ public struct GetChatPaginatedDto: Codable, Hashable, Sendable {
         self.squadId = squadId
         self.sessionId = sessionId
         self.previousChatId = previousChatId
+        self.idAny = idAny
         self.page = page
         self.sortOrder = sortOrder
+        self.sortBy = sortBy
         self.limit = limit
         self.createdAtGt = createdAtGt
         self.createdAtLt = createdAtLt
@@ -86,8 +94,10 @@ public struct GetChatPaginatedDto: Codable, Hashable, Sendable {
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.sessionId = try container.decodeIfPresent(String.self, forKey: .sessionId)
         self.previousChatId = try container.decodeIfPresent(String.self, forKey: .previousChatId)
+        self.idAny = try container.decodeIfPresent(String.self, forKey: .idAny)
         self.page = try container.decodeIfPresent(Double.self, forKey: .page)
         self.sortOrder = try container.decodeIfPresent(GetChatPaginatedDtoSortOrder.self, forKey: .sortOrder)
+        self.sortBy = try container.decodeIfPresent(GetChatPaginatedDtoSortBy.self, forKey: .sortBy)
         self.limit = try container.decodeIfPresent(Double.self, forKey: .limit)
         self.createdAtGt = try container.decodeIfPresent(Date.self, forKey: .createdAtGt)
         self.createdAtLt = try container.decodeIfPresent(Date.self, forKey: .createdAtLt)
@@ -109,8 +119,10 @@ public struct GetChatPaginatedDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.squadId, forKey: .squadId)
         try container.encodeIfPresent(self.sessionId, forKey: .sessionId)
         try container.encodeIfPresent(self.previousChatId, forKey: .previousChatId)
+        try container.encodeIfPresent(self.idAny, forKey: .idAny)
         try container.encodeIfPresent(self.page, forKey: .page)
         try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
+        try container.encodeIfPresent(self.sortBy, forKey: .sortBy)
         try container.encodeIfPresent(self.limit, forKey: .limit)
         try container.encodeIfPresent(self.createdAtGt, forKey: .createdAtGt)
         try container.encodeIfPresent(self.createdAtLt, forKey: .createdAtLt)
@@ -130,8 +142,10 @@ public struct GetChatPaginatedDto: Codable, Hashable, Sendable {
         case squadId
         case sessionId
         case previousChatId
+        case idAny
         case page
         case sortOrder
+        case sortBy
         case limit
         case createdAtGt
         case createdAtLt

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to create a structured-output definition that extracts validated data from calls using an AI model or regular expression.
 public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
     /// This is the type of structured output.
     /// 
@@ -9,6 +10,15 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
     /// Defaults to 'ai' if not specified.
     public let type: CreateStructuredOutputDtoType?
     /// This is the regex pattern to match against the transcript.
+    /// 
+    /// Simulation evaluations use a canonical transcript built from recorded messages:
+    /// User: and AI: dialogue, AI: tool_calls: JSON name/arguments records, and
+    /// AI: tool_call_results: JSON results. System messages are excluded. These
+    /// fixed labels apply even when custom artifact transcript labels are configured.
+    /// Tool payloads participate in first-match and all-match extraction in event order.
+    /// An empty message array falls back to the supplied transcript verbatim.
+    /// Production-call extraction and call preview use their existing transcripts,
+    /// so previewing the same output on a simulation's call can return a different result.
     /// 
     /// Only used when type is 'regex'. Supports both raw patterns (e.g. '\d+') and
     /// regex literal format (e.g. '/\d+/gi'). Uses RE2 syntax for safety.
@@ -35,6 +45,8 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
     public let model: CreateStructuredOutputDtoModel?
     /// Compliance configuration for this output. Only enable overrides if no sensitive data will be stored.
     public let compliancePlan: ComplianceOverride?
+    /// These are the conditions that gate the execution of this structured output. Every condition must pass for the structured output to run (AND semantics). When omitted or empty, no user-defined conditions gate this output. Send null to clear a previously saved gate.
+    public let conditions: Nullable<[CreateStructuredOutputDtoConditionsItem]>?
     /// This is the name of the structured output.
     public let name: String
     /// This is the JSON Schema definition for the structured output.
@@ -67,6 +79,7 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
         regex: String? = nil,
         model: CreateStructuredOutputDtoModel? = nil,
         compliancePlan: ComplianceOverride? = nil,
+        conditions: Nullable<[CreateStructuredOutputDtoConditionsItem]>? = nil,
         name: String,
         schema: JsonSchema,
         description: String? = nil,
@@ -78,6 +91,7 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
         self.regex = regex
         self.model = model
         self.compliancePlan = compliancePlan
+        self.conditions = conditions
         self.name = name
         self.schema = schema
         self.description = description
@@ -92,6 +106,7 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
         self.regex = try container.decodeIfPresent(String.self, forKey: .regex)
         self.model = try container.decodeIfPresent(CreateStructuredOutputDtoModel.self, forKey: .model)
         self.compliancePlan = try container.decodeIfPresent(ComplianceOverride.self, forKey: .compliancePlan)
+        self.conditions = try container.decodeNullableIfPresent([CreateStructuredOutputDtoConditionsItem].self, forKey: .conditions)
         self.name = try container.decode(String.self, forKey: .name)
         self.schema = try container.decode(JsonSchema.self, forKey: .schema)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
@@ -107,6 +122,7 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.regex, forKey: .regex)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.compliancePlan, forKey: .compliancePlan)
+        try container.encodeNullableIfPresent(self.conditions, forKey: .conditions)
         try container.encode(self.name, forKey: .name)
         try container.encode(self.schema, forKey: .schema)
         try container.encodeIfPresent(self.description, forKey: .description)
@@ -120,6 +136,7 @@ public struct CreateStructuredOutputDto: Codable, Hashable, Sendable {
         case regex
         case model
         case compliancePlan
+        case conditions
         case name
         case schema
         case description

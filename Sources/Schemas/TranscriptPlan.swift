@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls whether the call transcript is stored and the speaker names used in the transcript.
 public struct TranscriptPlan: Codable, Hashable, Sendable {
     /// This determines whether the transcript is stored in `call.artifact.transcript`. Defaults to true.
     /// 

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls filtering of transcripts for security threats before content is sent to the assistant's language model, including filter selection, handling mode, and replacement text.
 public struct SecurityFilterPlan: Codable, Hashable, Sendable {
     /// Whether the security filter is enabled.
     /// @default false

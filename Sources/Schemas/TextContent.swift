@@ -1,8 +1,12 @@
 import Foundation
 
+/// Localized text content used as a language-specific message variant.
 public struct TextContent: Codable, Hashable, Sendable {
+    /// Selects text as the content type.
     public let type: TextContentType
+    /// Text spoken or displayed for this content variant.
     public let text: String
+    /// Language code associated with this text variant.
     public let language: TextContentLanguage
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

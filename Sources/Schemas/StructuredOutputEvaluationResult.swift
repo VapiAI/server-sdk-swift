@@ -6,6 +6,12 @@ public struct StructuredOutputEvaluationResult: Codable, Hashable, Sendable {
     public let structuredOutputId: String
     /// This is the name of the structured output.
     public let name: String
+    /// This is the optional dot-notation path evaluated within an object structured output.
+    public let path: String?
+    /// This is the structured output description captured when the evaluation ran.
+    public let description: String?
+    /// This is the structured output schema captured when the evaluation ran.
+    public let schema: JsonSchema?
     /// This is the value extracted from the call by the structured output.
     public let extractedValue: Nullable<StructuredOutputEvaluationResultExtractedValue>
     /// This is the expected value that was defined in the evaluation plan.
@@ -28,6 +34,9 @@ public struct StructuredOutputEvaluationResult: Codable, Hashable, Sendable {
     public init(
         structuredOutputId: String,
         name: String,
+        path: String? = nil,
+        description: String? = nil,
+        schema: JsonSchema? = nil,
         extractedValue: Nullable<StructuredOutputEvaluationResultExtractedValue>,
         expectedValue: StructuredOutputEvaluationResultExpectedValue,
         comparator: StructuredOutputEvaluationResultComparator,
@@ -40,6 +49,9 @@ public struct StructuredOutputEvaluationResult: Codable, Hashable, Sendable {
     ) {
         self.structuredOutputId = structuredOutputId
         self.name = name
+        self.path = path
+        self.description = description
+        self.schema = schema
         self.extractedValue = extractedValue
         self.expectedValue = expectedValue
         self.comparator = comparator
@@ -55,6 +67,9 @@ public struct StructuredOutputEvaluationResult: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.structuredOutputId = try container.decode(String.self, forKey: .structuredOutputId)
         self.name = try container.decode(String.self, forKey: .name)
+        self.path = try container.decodeIfPresent(String.self, forKey: .path)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.schema = try container.decodeIfPresent(JsonSchema.self, forKey: .schema)
         self.extractedValue = try container.decode(Nullable<StructuredOutputEvaluationResultExtractedValue>.self, forKey: .extractedValue)
         self.expectedValue = try container.decode(StructuredOutputEvaluationResultExpectedValue.self, forKey: .expectedValue)
         self.comparator = try container.decode(StructuredOutputEvaluationResultComparator.self, forKey: .comparator)
@@ -71,6 +86,9 @@ public struct StructuredOutputEvaluationResult: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.structuredOutputId, forKey: .structuredOutputId)
         try container.encode(self.name, forKey: .name)
+        try container.encodeIfPresent(self.path, forKey: .path)
+        try container.encodeIfPresent(self.description, forKey: .description)
+        try container.encodeIfPresent(self.schema, forKey: .schema)
         try container.encode(self.extractedValue, forKey: .extractedValue)
         try container.encode(self.expectedValue, forKey: .expectedValue)
         try container.encode(self.comparator, forKey: .comparator)
@@ -85,6 +103,9 @@ public struct StructuredOutputEvaluationResult: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case structuredOutputId
         case name
+        case path
+        case description
+        case schema
         case extractedValue
         case expectedValue
         case comparator

@@ -1,7 +1,10 @@
 import Foundation
 
+/// Cartesia voice controls for speed and emotion.
 public struct CartesiaExperimentalControls: Codable, Hashable, Sendable {
+    /// Speaking-speed control expressed as a preset or a value from -1 to 1.
     public let speed: CartesiaSpeedControl?
+    /// Emotion and intensity applied to the Cartesia voice.
     public let emotion: CartesiaExperimentalControlsEmotion?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

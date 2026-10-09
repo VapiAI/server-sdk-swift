@@ -1,5 +1,6 @@
 import Foundation
 
+/// Speaking-speed control expressed as a preset or a value from -1 to 1.
 public enum CartesiaSpeedControl: Codable, Hashable, Sendable {
     case cartesiaSpeedControlZero(CartesiaSpeedControlZero)
     case double(Double)

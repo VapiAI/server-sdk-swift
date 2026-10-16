@@ -1,5 +1,6 @@
 import Foundation
 
+/// A simulated assistant turn in an evaluation conversation, with optional message content and tool calls.
 public struct ChatEvalAssistantMessageMock: Codable, Hashable, Sendable {
     /// This is the role of the message author.
     /// For a mock assistant message, the role is always 'assistant'

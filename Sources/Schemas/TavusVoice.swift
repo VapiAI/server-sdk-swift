@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for using Tavus as the assistant's voice provider, including persona, callback, context, greeting, conversation properties, chunking, caching, and fallback settings.
 public struct TavusVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

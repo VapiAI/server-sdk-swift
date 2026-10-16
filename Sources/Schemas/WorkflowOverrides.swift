@@ -1,5 +1,6 @@
 import Foundation
 
+/// Per-call overrides for values used in workflow template variables.
 public struct WorkflowOverrides: Codable, Hashable, Sendable {
     /// These are values that will be used to replace the template variables in the workflow messages and other text-based fields.
     /// This uses LiquidJS syntax. https://liquidjs.com/tutorials/intro-to-liquid.html

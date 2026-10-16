@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageTransferDestinationRequestPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "transfer-destination-request" is sent when the model is requesting transfer but destination is unknown.
     public let type: ServerMessageTransferDestinationRequestType
     /// This is the timestamp of the message.
@@ -24,6 +29,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
 
     public init(
         phoneNumber: ServerMessageTransferDestinationRequestPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageTransferDestinationRequestType,
         timestamp: Double? = nil,
         artifact: Artifact? = nil,
@@ -34,6 +40,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.timestamp = timestamp
         self.artifact = artifact
@@ -47,6 +54,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageTransferDestinationRequestPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageTransferDestinationRequestType.self, forKey: .type)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
         self.artifact = try container.decodeIfPresent(Artifact.self, forKey: .artifact)
@@ -61,6 +69,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
         try container.encodeIfPresent(self.artifact, forKey: .artifact)
@@ -73,6 +82,7 @@ public struct ServerMessageTransferDestinationRequest: Codable, Hashable, Sendab
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case timestamp
         case artifact

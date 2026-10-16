@@ -1,8 +1,10 @@
 import Foundation
 
+/// Credentials for storing call artifacts in Supabase's S3-compatible storage, including bucket configuration and upload fallback order.
 public struct CreateSupabaseCredentialDto: Codable, Hashable, Sendable {
     /// This is the order in which this storage provider is tried during upload retries. Lower numbers are tried first in increasing order.
     public let fallbackIndex: Double?
+    /// Supabase S3-compatible bucket configuration used to store call artifacts.
     public let bucketPlan: SupabaseBucketPlan?
     /// This is the name of credential. This is just for your reference.
     public let name: String?

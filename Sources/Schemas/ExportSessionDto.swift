@@ -17,6 +17,8 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
     public let customer: CreateCustomerDto?
     /// Filter by any of the specified customer phone numbers (comma-separated).
     public let customerNumberAny: String?
+    /// Filter by multiple session IDs. Provide as comma-separated values.
+    public let idAny: String?
     /// Columns to include in the CSV export
     public let columns: ExportSessionDtoColumns?
     /// This is the email address to send the export to.
@@ -34,6 +36,8 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
     public let page: Double?
     /// This is the sort order for pagination. Defaults to 'DESC'.
     public let sortOrder: ExportSessionDtoSortOrder?
+    /// This is the column to sort by. Defaults to 'createdAt'.
+    public let sortBy: ExportSessionDtoSortBy?
     /// This is the maximum number of items to return. Defaults to 100.
     public let limit: Double?
     /// This will return items where the createdAt is greater than the specified value.
@@ -64,6 +68,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         workflowId: String? = nil,
         customer: CreateCustomerDto? = nil,
         customerNumberAny: String? = nil,
+        idAny: String? = nil,
         columns: ExportSessionDtoColumns? = nil,
         email: String? = nil,
         format: ExportSessionDtoFormat? = nil,
@@ -71,6 +76,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         phoneNumberIdAny: [String]? = nil,
         page: Double? = nil,
         sortOrder: ExportSessionDtoSortOrder? = nil,
+        sortBy: ExportSessionDtoSortBy? = nil,
         limit: Double? = nil,
         createdAtGt: Date? = nil,
         createdAtLt: Date? = nil,
@@ -90,6 +96,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         self.workflowId = workflowId
         self.customer = customer
         self.customerNumberAny = customerNumberAny
+        self.idAny = idAny
         self.columns = columns
         self.email = email
         self.format = format
@@ -97,6 +104,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         self.phoneNumberIdAny = phoneNumberIdAny
         self.page = page
         self.sortOrder = sortOrder
+        self.sortBy = sortBy
         self.limit = limit
         self.createdAtGt = createdAtGt
         self.createdAtLt = createdAtLt
@@ -119,6 +127,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         self.workflowId = try container.decodeIfPresent(String.self, forKey: .workflowId)
         self.customer = try container.decodeIfPresent(CreateCustomerDto.self, forKey: .customer)
         self.customerNumberAny = try container.decodeIfPresent(String.self, forKey: .customerNumberAny)
+        self.idAny = try container.decodeIfPresent(String.self, forKey: .idAny)
         self.columns = try container.decodeIfPresent(ExportSessionDtoColumns.self, forKey: .columns)
         self.email = try container.decodeIfPresent(String.self, forKey: .email)
         self.format = try container.decodeIfPresent(ExportSessionDtoFormat.self, forKey: .format)
@@ -126,6 +135,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         self.phoneNumberIdAny = try container.decodeIfPresent([String].self, forKey: .phoneNumberIdAny)
         self.page = try container.decodeIfPresent(Double.self, forKey: .page)
         self.sortOrder = try container.decodeIfPresent(ExportSessionDtoSortOrder.self, forKey: .sortOrder)
+        self.sortBy = try container.decodeIfPresent(ExportSessionDtoSortBy.self, forKey: .sortBy)
         self.limit = try container.decodeIfPresent(Double.self, forKey: .limit)
         self.createdAtGt = try container.decodeIfPresent(Date.self, forKey: .createdAtGt)
         self.createdAtLt = try container.decodeIfPresent(Date.self, forKey: .createdAtLt)
@@ -149,6 +159,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.workflowId, forKey: .workflowId)
         try container.encodeIfPresent(self.customer, forKey: .customer)
         try container.encodeIfPresent(self.customerNumberAny, forKey: .customerNumberAny)
+        try container.encodeIfPresent(self.idAny, forKey: .idAny)
         try container.encodeIfPresent(self.columns, forKey: .columns)
         try container.encodeIfPresent(self.email, forKey: .email)
         try container.encodeIfPresent(self.format, forKey: .format)
@@ -156,6 +167,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.phoneNumberIdAny, forKey: .phoneNumberIdAny)
         try container.encodeIfPresent(self.page, forKey: .page)
         try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
+        try container.encodeIfPresent(self.sortBy, forKey: .sortBy)
         try container.encodeIfPresent(self.limit, forKey: .limit)
         try container.encodeIfPresent(self.createdAtGt, forKey: .createdAtGt)
         try container.encodeIfPresent(self.createdAtLt, forKey: .createdAtLt)
@@ -177,6 +189,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         case workflowId
         case customer
         case customerNumberAny
+        case idAny
         case columns
         case email
         case format
@@ -184,6 +197,7 @@ public struct ExportSessionDto: Codable, Hashable, Sendable {
         case phoneNumberIdAny
         case page
         case sortOrder
+        case sortBy
         case limit
         case createdAtGt
         case createdAtLt

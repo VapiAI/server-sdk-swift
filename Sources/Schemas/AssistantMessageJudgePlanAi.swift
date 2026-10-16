@@ -1,5 +1,6 @@
 import Foundation
 
+/// Evaluates an assistant message with an LLM judge and a configured evaluation model.
 public struct AssistantMessageJudgePlanAi: Codable, Hashable, Sendable {
     /// This is the model to use for the LLM-as-a-judge.
     /// If not provided, will default to the assistant's model.

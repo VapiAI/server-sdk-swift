@@ -3,16 +3,20 @@ import Foundation
 public struct SimulationRunSuiteEntry: Codable, Hashable, Sendable {
     /// ID of the simulation suite to run
     public let simulationSuiteId: String?
+    /// Historical suite name captured when the run was created
+    public let name: String?
     public let suiteId: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         simulationSuiteId: String? = nil,
+        name: String? = nil,
         suiteId: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.simulationSuiteId = simulationSuiteId
+        self.name = name
         self.suiteId = suiteId
         self.additionalProperties = additionalProperties
     }
@@ -20,6 +24,7 @@ public struct SimulationRunSuiteEntry: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.simulationSuiteId = try container.decodeIfPresent(String.self, forKey: .simulationSuiteId)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.suiteId = try container.decodeIfPresent(String.self, forKey: .suiteId)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -28,12 +33,14 @@ public struct SimulationRunSuiteEntry: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.simulationSuiteId, forKey: .simulationSuiteId)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.suiteId, forKey: .suiteId)
     }
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case simulationSuiteId
+        case name
         case suiteId
     }
 }

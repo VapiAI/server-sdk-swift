@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for connecting Vapi to a bring-your-own SIP trunk or carrier, including gateways, outbound authentication, number handling, and optional session border controller routing.
 public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
     /// This is the list of SIP trunk's gateways.
     public let gateways: [SipTrunkGateway]
@@ -16,8 +17,6 @@ public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
     public let techPrefix: String?
     /// This can be used to enable the SIP diversion header for authenticating the calling number if the SIP trunk supports it. This is an advanced property.
     public let sipDiversionHeader: String?
-    /// This is an advanced configuration for enterprise deployments. This uses the onprem SBC to trunk into the SIP trunk's `gateways`, rather than the managed SBC provided by Vapi.
-    public let sbcConfiguration: SbcConfiguration?
     /// This is the name of credential. This is just for your reference.
     public let name: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -29,7 +28,6 @@ public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
         outboundLeadingPlusEnabled: Bool? = nil,
         techPrefix: String? = nil,
         sipDiversionHeader: String? = nil,
-        sbcConfiguration: SbcConfiguration? = nil,
         name: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -38,7 +36,6 @@ public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
         self.outboundLeadingPlusEnabled = outboundLeadingPlusEnabled
         self.techPrefix = techPrefix
         self.sipDiversionHeader = sipDiversionHeader
-        self.sbcConfiguration = sbcConfiguration
         self.name = name
         self.additionalProperties = additionalProperties
     }
@@ -50,7 +47,6 @@ public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
         self.outboundLeadingPlusEnabled = try container.decodeIfPresent(Bool.self, forKey: .outboundLeadingPlusEnabled)
         self.techPrefix = try container.decodeIfPresent(String.self, forKey: .techPrefix)
         self.sipDiversionHeader = try container.decodeIfPresent(String.self, forKey: .sipDiversionHeader)
-        self.sbcConfiguration = try container.decodeIfPresent(SbcConfiguration.self, forKey: .sbcConfiguration)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -63,7 +59,6 @@ public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.outboundLeadingPlusEnabled, forKey: .outboundLeadingPlusEnabled)
         try container.encodeIfPresent(self.techPrefix, forKey: .techPrefix)
         try container.encodeIfPresent(self.sipDiversionHeader, forKey: .sipDiversionHeader)
-        try container.encodeIfPresent(self.sbcConfiguration, forKey: .sbcConfiguration)
         try container.encodeIfPresent(self.name, forKey: .name)
     }
 
@@ -74,7 +69,6 @@ public struct CreateByoSipTrunkCredentialDto: Codable, Hashable, Sendable {
         case outboundLeadingPlusEnabled
         case techPrefix
         case sipDiversionHeader
-        case sbcConfiguration
         case name
     }
 }

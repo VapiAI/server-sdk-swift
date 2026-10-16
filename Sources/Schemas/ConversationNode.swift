@@ -1,5 +1,6 @@
 import Foundation
 
+/// A workflow node where the assistant conducts a conversation using optional node-specific providers, tools, prompt, and variable extraction.
 public struct ConversationNode: Codable, Hashable, Sendable {
     /// This is the model for the node.
     /// 
@@ -21,6 +22,7 @@ public struct ConversationNode: Codable, Hashable, Sendable {
     /// 
     /// Both `tools` and `toolIds` can be used together.
     public let toolIds: [String]?
+    /// Prompt that guides the assistant while this node is active.
     public let prompt: String?
     /// This is the plan for the global node.
     public let globalNodePlan: GlobalNodePlan?
@@ -72,6 +74,7 @@ public struct ConversationNode: Codable, Hashable, Sendable {
     /// 
     /// Note: The `schema` field is required for Conversation nodes if you want to extract variables from the user's responses. `aliases` is just a convenience.
     public let variableExtractionPlan: VariableExtractionPlan?
+    /// Unique name used to identify this workflow node.
     public let name: String
     /// This is whether or not the node is the start of the workflow.
     public let isStart: Bool?

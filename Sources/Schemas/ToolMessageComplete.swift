@@ -1,5 +1,6 @@
 import Foundation
 
+/// Message spoken when a tool call completes, with optional language variants, argument conditions, role, and end-call behavior.
 public struct ToolMessageComplete: Codable, Hashable, Sendable {
     /// This is an alternative to the `content` property. It allows to specify variants of the same content, one per language.
     /// 

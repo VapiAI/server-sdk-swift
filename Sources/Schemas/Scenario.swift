@@ -22,6 +22,12 @@ public struct Scenario: Codable, Hashable, Sendable {
     public let targetOverrides: AssistantOverrides?
     /// Scenario-level tool call mocks to use during simulations.
     public let toolMocks: [ScenarioToolMock]?
+    /// Latency ceilings for voice simulations. Each expectation aggregates the
+    /// target call's per-turn latencies and fails the simulation (when required)
+    /// if the aggregated value exceeds its threshold. Skipped for chat simulations
+    /// and GPT Live targets; on any other voice simulation, a metric that no turn
+    /// measured fails.
+    public let latencyExpectations: [LatencyExpectation]?
     /// Optional folder path for organizing scenarios.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").
     /// Maps to GitOps resource folder structure.
@@ -40,6 +46,7 @@ public struct Scenario: Codable, Hashable, Sendable {
         hooks: [ScenarioHooksItem]? = nil,
         targetOverrides: AssistantOverrides? = nil,
         toolMocks: [ScenarioToolMock]? = nil,
+        latencyExpectations: [LatencyExpectation]? = nil,
         path: Nullable<String>? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -53,6 +60,7 @@ public struct Scenario: Codable, Hashable, Sendable {
         self.hooks = hooks
         self.targetOverrides = targetOverrides
         self.toolMocks = toolMocks
+        self.latencyExpectations = latencyExpectations
         self.path = path
         self.additionalProperties = additionalProperties
     }
@@ -69,6 +77,7 @@ public struct Scenario: Codable, Hashable, Sendable {
         self.hooks = try container.decodeIfPresent([ScenarioHooksItem].self, forKey: .hooks)
         self.targetOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .targetOverrides)
         self.toolMocks = try container.decodeIfPresent([ScenarioToolMock].self, forKey: .toolMocks)
+        self.latencyExpectations = try container.decodeIfPresent([LatencyExpectation].self, forKey: .latencyExpectations)
         self.path = try container.decodeNullableIfPresent(String.self, forKey: .path)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -86,6 +95,7 @@ public struct Scenario: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.hooks, forKey: .hooks)
         try container.encodeIfPresent(self.targetOverrides, forKey: .targetOverrides)
         try container.encodeIfPresent(self.toolMocks, forKey: .toolMocks)
+        try container.encodeIfPresent(self.latencyExpectations, forKey: .latencyExpectations)
         try container.encodeNullableIfPresent(self.path, forKey: .path)
     }
 
@@ -101,6 +111,7 @@ public struct Scenario: Codable, Hashable, Sendable {
         case hooks
         case targetOverrides
         case toolMocks
+        case latencyExpectations
         case path
     }
 }

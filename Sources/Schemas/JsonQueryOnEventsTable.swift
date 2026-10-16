@@ -1,5 +1,6 @@
 import Foundation
 
+/// VapiQL JSON query that counts or calculates the percentage of matching events using optional typed event-data filters.
 public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
     /// This is the type of query. Only allowed type is "vapiql-json".
     public let type: JsonQueryOnEventsTableType

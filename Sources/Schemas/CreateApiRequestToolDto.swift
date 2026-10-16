@@ -1,10 +1,14 @@
 import Foundation
 
+/// Configuration for a reusable tool that sends HTTP requests to an API and supports authentication and response variable extraction.
 public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [CreateApiRequestToolDtoMessagesItem]?
+    /// This is the name of the tool. This will be passed to the model.
+    /// 
+    /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
+    public let name: String?
+    /// The HTTP method used for the API request.
     public let method: CreateApiRequestToolDtoMethod
     /// This is the timeout in seconds for the request. Defaults to 20 seconds.
     /// 
@@ -16,10 +20,6 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
     public let encryptedPaths: [String]?
     /// Static key-value pairs merged into the request body. Values support Liquid templates.
     public let parameters: [ToolParameter]?
-    /// This is the name of the tool. This will be passed to the model.
-    /// 
-    /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 40.
-    public let name: String?
     /// This is the description of the tool. This will be passed to the model.
     public let description: String?
     /// This is where the request will be sent.
@@ -28,9 +28,7 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
     public let body: JsonSchema?
     /// These are the headers to send with the request.
     public let headers: JsonSchema?
-    /// This is the backoff plan if the request fails. Defaults to undefined (the request will not be retried).
-    /// 
-    /// @default undefined (the request will not be retried)
+    /// A backoff plan can be saved on an API Request Tool, but API Request Tools do not currently retry after a non-2xx response or a timeout.
     public let backoffPlan: BackoffPlan?
     /// This is the plan to extract variables from the tool's response. These will be accessible during the call and stored in `call.artifact.variableValues` after the call.
     /// 
@@ -270,12 +268,12 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
 
     public init(
         messages: [CreateApiRequestToolDtoMessagesItem]? = nil,
+        name: String? = nil,
         method: CreateApiRequestToolDtoMethod,
         timeoutSeconds: Double? = nil,
         credentialId: String? = nil,
         encryptedPaths: [String]? = nil,
         parameters: [ToolParameter]? = nil,
-        name: String? = nil,
         description: String? = nil,
         url: String,
         body: JsonSchema? = nil,
@@ -286,12 +284,12 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.messages = messages
+        self.name = name
         self.method = method
         self.timeoutSeconds = timeoutSeconds
         self.credentialId = credentialId
         self.encryptedPaths = encryptedPaths
         self.parameters = parameters
-        self.name = name
         self.description = description
         self.url = url
         self.body = body
@@ -305,12 +303,12 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.messages = try container.decodeIfPresent([CreateApiRequestToolDtoMessagesItem].self, forKey: .messages)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.method = try container.decode(CreateApiRequestToolDtoMethod.self, forKey: .method)
         self.timeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .timeoutSeconds)
         self.credentialId = try container.decodeIfPresent(String.self, forKey: .credentialId)
         self.encryptedPaths = try container.decodeIfPresent([String].self, forKey: .encryptedPaths)
         self.parameters = try container.decodeIfPresent([ToolParameter].self, forKey: .parameters)
-        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.url = try container.decode(String.self, forKey: .url)
         self.body = try container.decodeIfPresent(JsonSchema.self, forKey: .body)
@@ -325,12 +323,12 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.messages, forKey: .messages)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encode(self.method, forKey: .method)
         try container.encodeIfPresent(self.timeoutSeconds, forKey: .timeoutSeconds)
         try container.encodeIfPresent(self.credentialId, forKey: .credentialId)
         try container.encodeIfPresent(self.encryptedPaths, forKey: .encryptedPaths)
         try container.encodeIfPresent(self.parameters, forKey: .parameters)
-        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encode(self.url, forKey: .url)
         try container.encodeIfPresent(self.body, forKey: .body)
@@ -343,12 +341,12 @@ public struct CreateApiRequestToolDto: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case messages
+        case name
         case method
         case timeoutSeconds
         case credentialId
         case encryptedPaths
         case parameters
-        case name
         case description
         case url
         case body

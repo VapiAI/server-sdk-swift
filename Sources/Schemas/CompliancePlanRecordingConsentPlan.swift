@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls how recording consent is requested before the assistant joins the call.
 public enum CompliancePlanRecordingConsentPlan: Codable, Hashable, Sendable {
     case stayOnLine(RecordingConsentPlanStayOnLine)
     case verbal(RecordingConsentPlanVerbal)

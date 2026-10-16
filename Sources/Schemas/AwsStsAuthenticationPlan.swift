@@ -1,5 +1,6 @@
 import Foundation
 
+/// AWS Security Token Service role-assumption configuration used to authenticate requests.
 public struct AwsStsAuthenticationPlan: Codable, Hashable, Sendable {
     /// This is the role ARN for the AWS credential
     public let roleArn: String

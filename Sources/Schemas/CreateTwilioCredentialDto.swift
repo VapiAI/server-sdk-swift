@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating telephony requests with Twilio using an account SID and either an auth token or API key credentials.
 public struct CreateTwilioCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let authToken: String?
@@ -7,6 +8,7 @@ public struct CreateTwilioCredentialDto: Codable, Hashable, Sendable {
     public let apiKey: String?
     /// This is not returned in the API.
     public let apiSecret: String?
+    /// Twilio Account SID associated with the credential.
     public let accountSid: String
     /// This is the name of credential. This is just for your reference.
     public let name: String?

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters potential cross-site scripting (XSS) patterns from transcripts.
 public struct XssSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
     public let type: XssSecurityFilterType

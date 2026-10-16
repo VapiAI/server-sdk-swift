@@ -33,6 +33,7 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
     case langfuse(CreateLangfuseCredentialDto)
     case lmnt(CreateLmntCredentialDto)
     case make(CreateMakeCredentialDto)
+    case microsoft(CreateMicrosoftCredentialDto)
     case minimax(CreateMinimaxCredentialDto)
     case mistral(CreateMistralCredentialDto)
     case neuphonic(CreateNeuphonicCredentialDto)
@@ -43,6 +44,7 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
     case rimeAi(CreateRimeAiCredentialDto)
     case runpod(CreateRunpodCredentialDto)
     case s3(CreateS3CredentialDto)
+    case s3Compatible(CreateS3CompatibleCredentialDto)
     case slackOauth2Authorization(CreateSlackOAuth2AuthorizationCredentialDto)
     case slackWebhook(CreateSlackWebhookCredentialDto)
     case smallestAi(CreateSmallestAiCredentialDto)
@@ -51,7 +53,6 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
     case supabase(CreateSupabaseCredentialDto)
     case tavus(CreateTavusCredentialDto)
     case togetherAi(CreateTogetherAiCredentialDto)
-    case trieve(CreateTrieveCredentialDto)
     case twilio(CreateTwilioCredentialDto)
     case vonage(CreateVonageCredentialDto)
     case webhook(CreateWebhookCredentialDto)
@@ -126,6 +127,8 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
             self = .lmnt(try CreateLmntCredentialDto(from: decoder))
         case "make":
             self = .make(try CreateMakeCredentialDto(from: decoder))
+        case "microsoft":
+            self = .microsoft(try CreateMicrosoftCredentialDto(from: decoder))
         case "minimax":
             self = .minimax(try CreateMinimaxCredentialDto(from: decoder))
         case "mistral":
@@ -146,6 +149,8 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
             self = .runpod(try CreateRunpodCredentialDto(from: decoder))
         case "s3":
             self = .s3(try CreateS3CredentialDto(from: decoder))
+        case "s3-compatible":
+            self = .s3Compatible(try CreateS3CompatibleCredentialDto(from: decoder))
         case "slack.oauth2-authorization":
             self = .slackOauth2Authorization(try CreateSlackOAuth2AuthorizationCredentialDto(from: decoder))
         case "slack-webhook":
@@ -162,8 +167,6 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
             self = .tavus(try CreateTavusCredentialDto(from: decoder))
         case "together-ai":
             self = .togetherAi(try CreateTogetherAiCredentialDto(from: decoder))
-        case "trieve":
-            self = .trieve(try CreateTrieveCredentialDto(from: decoder))
         case "twilio":
             self = .twilio(try CreateTwilioCredentialDto(from: decoder))
         case "vonage":
@@ -283,6 +286,9 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
         case .make(let data):
             try container.encode("make", forKey: .provider)
             try data.encode(to: encoder)
+        case .microsoft(let data):
+            try container.encode("microsoft", forKey: .provider)
+            try data.encode(to: encoder)
         case .minimax(let data):
             try container.encode("minimax", forKey: .provider)
             try data.encode(to: encoder)
@@ -313,6 +319,9 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
         case .s3(let data):
             try container.encode("s3", forKey: .provider)
             try data.encode(to: encoder)
+        case .s3Compatible(let data):
+            try container.encode("s3-compatible", forKey: .provider)
+            try data.encode(to: encoder)
         case .slackOauth2Authorization(let data):
             try container.encode("slack.oauth2-authorization", forKey: .provider)
             try data.encode(to: encoder)
@@ -336,9 +345,6 @@ public enum UpdateAssistantDtoCredentialsItem: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .togetherAi(let data):
             try container.encode("together-ai", forKey: .provider)
-            try data.encode(to: encoder)
-        case .trieve(let data):
-            try container.encode("trieve", forKey: .provider)
             try data.encode(to: encoder)
         case .twilio(let data):
             try container.encode("twilio", forKey: .provider)

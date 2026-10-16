@@ -1,5 +1,6 @@
 import Foundation
 
+/// Evaluates whether targeted conversation-message content matches a regular expression.
 public struct RegexCondition: Codable, Hashable, Sendable {
     /// This is the regular expression pattern to match against message content.
     /// 

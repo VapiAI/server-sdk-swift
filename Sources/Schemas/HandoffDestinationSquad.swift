@@ -1,5 +1,6 @@
 import Foundation
 
+/// Routes a handoff to a saved or transient squad, with optional entry assistant, context engineering, variable extraction, and overrides.
 public struct HandoffDestinationSquad: Codable, Hashable, Sendable {
     /// This is the plan for manipulating the message context before handing off the call to the squad.
     public let contextEngineeringPlan: HandoffDestinationSquadContextEngineeringPlan?

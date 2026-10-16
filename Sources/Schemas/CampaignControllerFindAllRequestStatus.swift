@@ -4,4 +4,6 @@ public enum CampaignControllerFindAllRequestStatus: String, Codable, Hashable, C
     case scheduled
     case inProgress = "in-progress"
     case ended
+    case cancelled
+    case archived
 }

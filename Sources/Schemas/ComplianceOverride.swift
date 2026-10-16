@@ -1,5 +1,6 @@
 import Foundation
 
+/// Overrides storage behavior for an output when HIPAA compliance is enabled.
 public struct ComplianceOverride: Codable, Hashable, Sendable {
     /// Force storage for this output under HIPAA. Only enable if output contains no sensitive data.
     public let forceStoreOnHipaaEnabled: Bool?

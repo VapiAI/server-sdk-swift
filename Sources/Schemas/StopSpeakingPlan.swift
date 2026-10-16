@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls when the assistant stops speaking after a customer interruption, including word and voice thresholds, restart delay, and phrase exceptions.
 public struct StopSpeakingPlan: Codable, Hashable, Sendable {
     /// This is the number of words that the customer has to say before the assistant will stop talking.
     /// 

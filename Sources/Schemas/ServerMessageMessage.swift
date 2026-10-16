@@ -11,9 +11,11 @@ import Foundation
 public enum ServerMessageMessage: Codable, Hashable, Sendable {
     case serverMessageAssistantRequest(ServerMessageAssistantRequest)
     case serverMessageAssistantSpeech(ServerMessageAssistantSpeech)
+    case serverMessageCallArtifactUpload(ServerMessageCallArtifactUpload)
     case serverMessageCallDeleted(ServerMessageCallDeleted)
     case serverMessageCallDeleteFailed(ServerMessageCallDeleteFailed)
     case serverMessageCallEndpointingRequest(ServerMessageCallEndpointingRequest)
+    case serverMessageCampaignPredial(ServerMessageCampaignPredial)
     case serverMessageChatCreated(ServerMessageChatCreated)
     case serverMessageChatDeleted(ServerMessageChatDeleted)
     case serverMessageConversationUpdate(ServerMessageConversationUpdate)
@@ -43,12 +45,16 @@ public enum ServerMessageMessage: Codable, Hashable, Sendable {
             self = .serverMessageAssistantRequest(value)
         } else if let value = try? container.decode(ServerMessageAssistantSpeech.self) {
             self = .serverMessageAssistantSpeech(value)
+        } else if let value = try? container.decode(ServerMessageCallArtifactUpload.self) {
+            self = .serverMessageCallArtifactUpload(value)
         } else if let value = try? container.decode(ServerMessageCallDeleted.self) {
             self = .serverMessageCallDeleted(value)
         } else if let value = try? container.decode(ServerMessageCallDeleteFailed.self) {
             self = .serverMessageCallDeleteFailed(value)
         } else if let value = try? container.decode(ServerMessageCallEndpointingRequest.self) {
             self = .serverMessageCallEndpointingRequest(value)
+        } else if let value = try? container.decode(ServerMessageCampaignPredial.self) {
+            self = .serverMessageCampaignPredial(value)
         } else if let value = try? container.decode(ServerMessageChatCreated.self) {
             self = .serverMessageChatCreated(value)
         } else if let value = try? container.decode(ServerMessageChatDeleted.self) {
@@ -108,11 +114,15 @@ public enum ServerMessageMessage: Codable, Hashable, Sendable {
             try container.encode(value)
         case .serverMessageAssistantSpeech(let value):
             try container.encode(value)
+        case .serverMessageCallArtifactUpload(let value):
+            try container.encode(value)
         case .serverMessageCallDeleted(let value):
             try container.encode(value)
         case .serverMessageCallDeleteFailed(let value):
             try container.encode(value)
         case .serverMessageCallEndpointingRequest(let value):
+            try container.encode(value)
+        case .serverMessageCampaignPredial(let value):
             try container.encode(value)
         case .serverMessageChatCreated(let value):
             try container.encode(value)

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters a structured-output value stored on a call using comparison, membership, containment, or emptiness operators.
 public struct FilterStructuredOutputColumnOnCallTable: Codable, Hashable, Sendable {
     /// This is the column in the call table that will be filtered on.
     /// Structured Output Type columns are only to filter on artifact.structuredOutputs[OutputID] column.

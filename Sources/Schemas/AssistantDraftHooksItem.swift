@@ -1,0 +1,45 @@
+import Foundation
+
+public enum AssistantDraftHooksItem: Codable, Hashable, Sendable {
+    case callHookAssistantSpeechInterrupted(CallHookAssistantSpeechInterrupted)
+    case callHookCallEnding(CallHookCallEnding)
+    case callHookCustomerSpeechInterrupted(CallHookCustomerSpeechInterrupted)
+    case callHookCustomerSpeechTimeout(CallHookCustomerSpeechTimeout)
+    case sessionCreatedHook(SessionCreatedHook)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(CallHookAssistantSpeechInterrupted.self) {
+            self = .callHookAssistantSpeechInterrupted(value)
+        } else if let value = try? container.decode(CallHookCallEnding.self) {
+            self = .callHookCallEnding(value)
+        } else if let value = try? container.decode(CallHookCustomerSpeechInterrupted.self) {
+            self = .callHookCustomerSpeechInterrupted(value)
+        } else if let value = try? container.decode(CallHookCustomerSpeechTimeout.self) {
+            self = .callHookCustomerSpeechTimeout(value)
+        } else if let value = try? container.decode(SessionCreatedHook.self) {
+            self = .sessionCreatedHook(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Unexpected value."
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .callHookAssistantSpeechInterrupted(let value):
+            try container.encode(value)
+        case .callHookCallEnding(let value):
+            try container.encode(value)
+        case .callHookCustomerSpeechInterrupted(let value):
+            try container.encode(value)
+        case .callHookCustomerSpeechTimeout(let value):
+            try container.encode(value)
+        case .sessionCreatedHook(let value):
+            try container.encode(value)
+        }
+    }
+}

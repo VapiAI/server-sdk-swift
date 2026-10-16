@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with OpenAI, including model and language.
 public struct FallbackOpenAiTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: FallbackOpenAiTranscriberModel

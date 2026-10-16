@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fields used to update a pie-chart insight, including its queries, formulas, grouping, time range, and name.
 public struct UpdatePieInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -19,6 +20,7 @@ public struct UpdatePieInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// 
     /// You can also use the query names as the variable in the formula.
     public let formulas: [InsightFormula]?
+    /// The time range used to query the pie-chart data.
     public let timeRange: InsightTimeRange?
     /// This is the group by column for the insight when table is `call`.
     /// These are the columns to group the results by.

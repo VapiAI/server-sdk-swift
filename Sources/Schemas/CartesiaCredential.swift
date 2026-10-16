@@ -14,6 +14,8 @@ public struct CartesiaCredential: Codable, Hashable, Sendable {
     public let updatedAt: Date
     /// This is the name of credential. This is just for your reference.
     public let name: String?
+    /// This can be used to point to an onprem Cartesia instance. Defaults to api.cartesia.ai.
+    public let apiUrl: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -25,6 +27,7 @@ public struct CartesiaCredential: Codable, Hashable, Sendable {
         createdAt: Date,
         updatedAt: Date,
         name: String? = nil,
+        apiUrl: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.provider = provider
@@ -34,6 +37,7 @@ public struct CartesiaCredential: Codable, Hashable, Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
+        self.apiUrl = apiUrl
         self.additionalProperties = additionalProperties
     }
 
@@ -46,6 +50,7 @@ public struct CartesiaCredential: Codable, Hashable, Sendable {
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.apiUrl = try container.decodeIfPresent(String.self, forKey: .apiUrl)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -59,6 +64,7 @@ public struct CartesiaCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.apiUrl, forKey: .apiUrl)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -70,5 +76,6 @@ public struct CartesiaCredential: Codable, Hashable, Sendable {
         case createdAt
         case updatedAt
         case name
+        case apiUrl
     }
 }

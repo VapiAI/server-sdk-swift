@@ -1,6 +1,8 @@
 import Foundation
 
 public struct UpdateCloudflareCredentialDto: Codable, Hashable, Sendable {
+    /// Credential provider. Only allowed value is cloudflare
+    public let provider: UpdateCloudflareCredentialDtoProvider?
     /// Cloudflare Account Id.
     public let accountId: String?
     /// Cloudflare API Key / Token.
@@ -17,6 +19,7 @@ public struct UpdateCloudflareCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateCloudflareCredentialDtoProvider? = nil,
         accountId: String? = nil,
         apiKey: String? = nil,
         accountEmail: String? = nil,
@@ -25,6 +28,7 @@ public struct UpdateCloudflareCredentialDto: Codable, Hashable, Sendable {
         bucketPlan: CloudflareR2BucketPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.accountId = accountId
         self.apiKey = apiKey
         self.accountEmail = accountEmail
@@ -36,6 +40,7 @@ public struct UpdateCloudflareCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateCloudflareCredentialDtoProvider.self, forKey: .provider)
         self.accountId = try container.decodeIfPresent(String.self, forKey: .accountId)
         self.apiKey = try container.decodeIfPresent(String.self, forKey: .apiKey)
         self.accountEmail = try container.decodeIfPresent(String.self, forKey: .accountEmail)
@@ -48,6 +53,7 @@ public struct UpdateCloudflareCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.accountId, forKey: .accountId)
         try container.encodeIfPresent(self.apiKey, forKey: .apiKey)
         try container.encodeIfPresent(self.accountEmail, forKey: .accountEmail)
@@ -58,6 +64,7 @@ public struct UpdateCloudflareCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case accountId
         case apiKey
         case accountEmail

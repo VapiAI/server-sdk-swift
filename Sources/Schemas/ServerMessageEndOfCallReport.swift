@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageEndOfCallReportPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "end-of-call-report" is sent when the call ends and post-processing is complete.
     public let type: ServerMessageEndOfCallReportType
     /// This is the reason the call ended. This can also be found at `call.endedReason` on GET /call/:id.
@@ -39,6 +44,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageEndOfCallReportPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageEndOfCallReportType,
         endedReason: ServerMessageEndOfCallReportEndedReason,
         cost: Double? = nil,
@@ -57,6 +63,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.endedReason = endedReason
         self.cost = cost
@@ -78,6 +85,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageEndOfCallReportPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageEndOfCallReportType.self, forKey: .type)
         self.endedReason = try container.decode(ServerMessageEndOfCallReportEndedReason.self, forKey: .endedReason)
         self.cost = try container.decodeIfPresent(Double.self, forKey: .cost)
@@ -100,6 +108,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.endedReason, forKey: .endedReason)
         try container.encodeIfPresent(self.cost, forKey: .cost)
@@ -120,6 +129,7 @@ public struct ServerMessageEndOfCallReport: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case endedReason
         case cost

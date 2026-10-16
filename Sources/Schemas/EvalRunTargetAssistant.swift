@@ -1,5 +1,6 @@
 import Foundation
 
+/// An assistant evaluation target provided as a saved assistant ID or a transient assistant, with optional assistant overrides.
 public struct EvalRunTargetAssistant: Codable, Hashable, Sendable {
     /// This is the transient assistant that will be run against the eval
     public let assistant: CreateAssistantDto?

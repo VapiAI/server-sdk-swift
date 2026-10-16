@@ -1,5 +1,6 @@
 import Foundation
 
+/// An expected tool-response turn evaluated by a configured LLM judge.
 public struct ChatEvalToolResponseMessageEvaluation: Codable, Hashable, Sendable {
     /// This is the role of the message author.
     /// For a tool response message evaluation, the role is always 'tool'

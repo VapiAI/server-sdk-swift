@@ -1,5 +1,6 @@
 import Foundation
 
+/// Runs configured actions when a call is ending, optionally only when its filters match.
 public struct CallHookCallEnding: Codable, Hashable, Sendable {
     /// This is the event that triggers this hook
     public let on: CallHookCallEndingOn

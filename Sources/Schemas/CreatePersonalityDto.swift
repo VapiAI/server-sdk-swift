@@ -1,10 +1,9 @@
 import Foundation
 
 public struct CreatePersonalityDto: Codable, Hashable, Sendable {
-    /// This is the name of the personality (e.g., "Confused Carl", "Rude Rob").
+    /// The display name of the personality, for example `Impatient customer`.
     public let name: String
-    /// This is the full assistant configuration for this personality.
-    /// It defines the tester's voice, model, behavior via system prompt, and other settings.
+    /// The assistant configuration for the AI tester: the model, voice, and system prompt that determine how the AI tester behaves during the conversation.
     public let assistant: CreateAssistantDto
     /// Optional folder path for organizing personalities.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Message spoken when a tool call starts, with optional language variants, argument conditions, and blocking behavior.
 public struct ToolMessageStart: Codable, Hashable, Sendable {
     /// This is an alternative to the `content` property. It allows to specify variants of the same content, one per language.
     /// 

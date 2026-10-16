@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of provider resources and metadata describing the result set.
 public struct ProviderResourcePaginatedResponse: Codable, Hashable, Sendable {
+    /// The provider resources returned for the current page.
     public let results: [ProviderResource]
+    /// Pagination metadata for the provider-resource result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

@@ -1,7 +1,7 @@
 import Foundation
 
 /// This is the tool to call. To use an existing tool, send `toolId` instead.
-public enum ToolNodeTool: Codable, Hashable, Sendable {
+public indirect enum ToolNodeTool: Codable, Hashable, Sendable {
     case apiRequest(CreateApiRequestToolDto)
     case bash(CreateBashToolDto)
     case code(CreateCodeToolDto)

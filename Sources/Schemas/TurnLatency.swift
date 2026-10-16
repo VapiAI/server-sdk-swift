@@ -1,5 +1,6 @@
 import Foundation
 
+/// Model, voice, transcription, endpointing, and total latency measurements for a conversation turn.
 public struct TurnLatency: Codable, Hashable, Sendable {
     /// This is the model latency for the first token.
     public let modelLatency: Double?

@@ -1,10 +1,6 @@
 import Foundation
 
-/// This is the comparison operator to use when evaluating the extracted value against the expected value.
-/// Available operators depend on the structured output's schema type:
-/// - boolean: '=', '!='
-/// - string: '=', '!='
-/// - number/integer: '=', '!=', '>', '<', '>=', '<='
+/// How the structured output value is compared against `value`. Available operators depend on the output type. Boolean and string support `=` and `!=`; number and integer support `=`, `!=`, `>`, `<`, `>=`, `<=`.
 public enum EvaluationPlanItemComparator: String, Codable, Hashable, CaseIterable, Sendable {
     case equalTo = "="
     case notEquals = "!="

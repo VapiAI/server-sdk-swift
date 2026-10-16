@@ -1,5 +1,6 @@
 import Foundation
 
+/// Selects Vapi smart endpointing to determine when customer speech is complete.
 public struct VapiSmartEndpointingPlan: Codable, Hashable, Sendable {
     /// This is the provider for the smart endpointing plan.
     public let provider: VapiSmartEndpointingPlanProvider

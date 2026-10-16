@@ -1,5 +1,6 @@
 import Foundation
 
+/// Language used for transcription. Set to `auto` to detect the language automatically.
 public enum FallbackSpeechmaticsTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case auto
     case ar

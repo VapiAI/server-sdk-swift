@@ -1,5 +1,6 @@
 import Foundation
 
+/// JSON Schema definition used to describe structured data for extraction, validation, or model output.
 public struct JsonSchema: Codable, Hashable, Sendable {
     /// This is the type of output you'd like.
     /// 

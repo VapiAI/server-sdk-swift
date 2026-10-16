@@ -1,6 +1,6 @@
 import Foundation
 
-/// Target to test against
+/// The assistant or squad the run was tested against.
 public enum SimulationRunTarget: Codable, Hashable, Sendable {
     case assistant(SimulationRunTargetAssistant)
     case squad(SimulationRunTargetSquad)

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Cartesia Sonic 3 generation controls, including accent localization.
 public struct CartesiaGenerationConfigExperimental: Codable, Hashable, Sendable {
     /// Toggle accent localization for sonic-3: 0 (disabled, default) or 1 (enabled). When enabled, the voice adapts to match the transcript language accent while preserving vocal characteristics.
     public let accentLocalization: Int?

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Cloudflare R2 bucket configuration for call-artifact storage, including access keys, base URL, bucket name, and path.
 public struct CloudflareR2BucketPlan: Codable, Hashable, Sendable {
     /// Cloudflare R2 Access key ID.
     public let accessKeyId: String?

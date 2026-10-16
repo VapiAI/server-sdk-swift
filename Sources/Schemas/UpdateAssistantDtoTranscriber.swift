@@ -14,6 +14,8 @@ public enum UpdateAssistantDtoTranscriber: Codable, Hashable, Sendable {
     case soniox(SonioxTranscriber)
     case speechmatics(SpeechmaticsTranscriber)
     case talkscriber(TalkscriberTranscriber)
+    case vapi(VapiTranscriber)
+    case xai(XaiTranscriber)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -43,6 +45,10 @@ public enum UpdateAssistantDtoTranscriber: Codable, Hashable, Sendable {
             self = .speechmatics(try SpeechmaticsTranscriber(from: decoder))
         case "talkscriber":
             self = .talkscriber(try TalkscriberTranscriber(from: decoder))
+        case "vapi":
+            self = .vapi(try VapiTranscriber(from: decoder))
+        case "xai":
+            self = .xai(try XaiTranscriber(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -91,6 +97,12 @@ public enum UpdateAssistantDtoTranscriber: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .talkscriber(let data):
             try container.encode("talkscriber", forKey: .provider)
+            try data.encode(to: encoder)
+        case .vapi(let data):
+            try container.encode("vapi", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

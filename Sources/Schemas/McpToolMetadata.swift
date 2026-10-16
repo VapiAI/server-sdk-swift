@@ -1,5 +1,6 @@
 import Foundation
 
+/// Protocol metadata used to communicate with an MCP server.
 public struct McpToolMetadata: Codable, Hashable, Sendable {
     /// This is the protocol used for MCP communication. Defaults to Streamable HTTP.
     public let `protocol`: McpToolMetadataProtocol?

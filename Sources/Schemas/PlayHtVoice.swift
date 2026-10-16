@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with PlayHT, including voice and model selection, language, emotion and style guidance, chunking, caching, and fallback settings.
 public struct PlayHtVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

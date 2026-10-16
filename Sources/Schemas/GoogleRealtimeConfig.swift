@@ -1,5 +1,6 @@
 import Foundation
 
+/// Realtime Gemini generation and speech-output settings, including sampling, repetition penalties, and voice configuration.
 public struct GoogleRealtimeConfig: Codable, Hashable, Sendable {
     /// This is the nucleus sampling parameter that controls the cumulative probability of tokens considered during text generation.
     /// Only applicable with the Gemini Flash 2.0 Multimodal Live API.

@@ -1,5 +1,6 @@
 import Foundation
 
+/// OAuth 2.0 session credentials for authenticating GoHighLevel MCP requests.
 public struct CreateGoHighLevelMcpCredentialDto: Codable, Hashable, Sendable {
     /// This is the authentication session for the credential.
     public let authenticationSession: Oauth2AuthenticationSession

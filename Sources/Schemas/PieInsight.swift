@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved pie-chart insight containing its call-data queries, formulas, grouping, time range, and lifecycle information.
 public struct PieInsight: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -19,6 +20,7 @@ public struct PieInsight: Codable, Hashable, Sendable {
     /// 
     /// You can also use the query names as the variable in the formula.
     public let formulas: [InsightFormula]?
+    /// The time range used to query the pie-chart data.
     public let timeRange: InsightTimeRange?
     /// This is the group by column for the insight when table is `call`.
     /// These are the columns to group the results by.
@@ -34,6 +36,8 @@ public struct PieInsight: Codable, Hashable, Sendable {
     public let createdAt: Date
     /// This is the ISO 8601 date-time string of when the Insight was last updated.
     public let updatedAt: Date
+    /// Stable server-owned identifier for system-created insights.
+    public let systemKey: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -47,6 +51,7 @@ public struct PieInsight: Codable, Hashable, Sendable {
         orgId: String,
         createdAt: Date,
         updatedAt: Date,
+        systemKey: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.name = name
@@ -58,6 +63,7 @@ public struct PieInsight: Codable, Hashable, Sendable {
         self.orgId = orgId
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.systemKey = systemKey
         self.additionalProperties = additionalProperties
     }
 
@@ -72,6 +78,7 @@ public struct PieInsight: Codable, Hashable, Sendable {
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        self.systemKey = try container.decodeIfPresent(String.self, forKey: .systemKey)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -87,6 +94,7 @@ public struct PieInsight: Codable, Hashable, Sendable {
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
+        try container.encodeIfPresent(self.systemKey, forKey: .systemKey)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -100,5 +108,6 @@ public struct PieInsight: Codable, Hashable, Sendable {
         case orgId
         case createdAt
         case updatedAt
+        case systemKey
     }
 }

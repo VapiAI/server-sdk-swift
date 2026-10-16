@@ -1,6 +1,18 @@
 import Foundation
 
+/// Workflow model configuration for OpenAI, including model selection, temperature, and maximum output tokens.
 public struct WorkflowOpenAiModel: Codable, Hashable, Sendable {
+    /// These are the messages used to customize the prompt used for structured output extraction.
+    /// 
+    /// When provided, these messages replace the default prompts. For text extraction, message contents support LiquidJS templating with the following variables:
+    /// - `{{transcript}}`, `{{messages}}`, or `{{messagesWithConfidence}}` to reference the conversation (one is required)
+    /// - `{{structuredOutput.name}}`, `{{structuredOutput.description}}`, or `{{structuredOutput.schema}}` to reference the structured output definition (one is required)
+    /// - `{{systemPrompt}}`, `{{callEndedReason}}`, `{{duration}}`, `{{startedAt}}`, `{{endedAt}}`, and any `assistantOverrides.variableValues`
+    /// 
+    /// In structured outputs, `{{messages}}` includes conversation text and tool calls/results, but omits caller transcription-confidence fields. For text extraction, `{{messagesWithConfidence}}` includes the original message history with transcription confidence for outputs that explicitly need it. These variables also apply in structured-output schema descriptions. Audio-targeted (`messages-with-audio`) extraction ignores custom messages. Stored call artifacts and API messages retain their confidence data. `{{transcript}}` is the spoken text only, which uses significantly fewer tokens.
+    /// 
+    /// If not provided, default system and user prompts are used.
+    public let messages: [OpenAiMessage]?
     /// This is the OpenAI model that will be used.
     /// 
     /// When using Vapi OpenAI or your own Azure Credentials, you have the option to specify the region for the selected model. This shouldn't be specified unless you have a specific reason to do so. Vapi will automatically find the fastest region that make sense.
@@ -14,11 +26,13 @@ public struct WorkflowOpenAiModel: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        messages: [OpenAiMessage]? = nil,
         model: WorkflowOpenAiModelModel,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.messages = messages
         self.model = model
         self.temperature = temperature
         self.maxTokens = maxTokens
@@ -27,6 +41,7 @@ public struct WorkflowOpenAiModel: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.messages = try container.decodeIfPresent([OpenAiMessage].self, forKey: .messages)
         self.model = try container.decode(WorkflowOpenAiModelModel.self, forKey: .model)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
@@ -36,6 +51,7 @@ public struct WorkflowOpenAiModel: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
@@ -43,6 +59,7 @@ public struct WorkflowOpenAiModel: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case messages
         case model
         case temperature
         case maxTokens

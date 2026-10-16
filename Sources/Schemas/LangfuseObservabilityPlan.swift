@@ -1,6 +1,8 @@
 import Foundation
 
+/// Configuration for sending assistant call traces to Langfuse, including prompt version linkage, trace naming, tags, and metadata.
 public struct LangfuseObservabilityPlan: Codable, Hashable, Sendable {
+    /// Routes assistant call observability data to Langfuse.
     public let provider: LangfuseObservabilityPlanProvider
     /// The name of a Langfuse prompt to link generations to. This enables tracking which prompt version was used for each generation. https://langfuse.com/docs/prompt-management/features/link-to-traces
     public let promptName: String?

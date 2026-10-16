@@ -1,5 +1,6 @@
 import Foundation
 
+/// Runs configured transfer or message actions when a call ends with a matching assistant-request failure reason.
 public struct PhoneNumberHookCallEnding: Codable, Hashable, Sendable {
     /// Optional filters to decide when to trigger - restricted to assistant-request related ended reasons
     public let filters: [PhoneNumberCallEndingHookFilter]?

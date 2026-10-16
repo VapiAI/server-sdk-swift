@@ -1,9 +1,10 @@
 import Foundation
 
+/// Subscription concurrency limits and remaining concurrent call capacity.
 public struct SubscriptionLimits: Codable, Hashable, Sendable {
     /// True if this call was blocked by the Call Concurrency limit
     public let concurrencyBlocked: Bool?
-    /// Account Call Concurrency limit
+    /// The total concurrent call limit for the subscription.
     public let concurrencyLimit: Double?
     /// Incremental number of concurrent calls that will be allowed, including this call
     public let remainingConcurrentCalls: Double?

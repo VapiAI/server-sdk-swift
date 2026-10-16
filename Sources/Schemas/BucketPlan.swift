@@ -1,5 +1,6 @@
 import Foundation
 
+/// Google Cloud Storage bucket configuration for call artifacts, including bucket name, region, path, and optional HMAC credentials.
 public struct BucketPlan: Codable, Hashable, Sendable {
     /// This is the name of the bucket.
     public let name: String

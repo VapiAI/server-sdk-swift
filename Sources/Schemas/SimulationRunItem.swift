@@ -7,7 +7,7 @@ public struct SimulationRunItem: Codable, Hashable, Sendable {
     public let orgId: String
     /// This is the ID of the simulation this run belongs to.
     public let simulationId: String
-    /// This is the current status of the run.
+    /// The run item's current status.
     public let status: SimulationRunItemStatus
     /// This is the ISO 8601 date-time string of when the run was queued.
     public let queuedAt: Date
@@ -19,9 +19,9 @@ public struct SimulationRunItem: Codable, Hashable, Sendable {
     public let failedAt: Date?
     /// This is the ISO 8601 date-time string of when the run was canceled.
     public let canceledAt: Date?
-    /// This is the reason for failure.
+    /// Why the run item failed, when applicable.
     public let failureReason: String?
-    /// This is the ID of the target Vapi call (the assistant being tested).
+    /// The ID of the call that ran this item.
     public let callId: String?
     /// This is the ISO 8601 date-time string of when the run item was created.
     public let createdAt: Date
@@ -31,19 +31,19 @@ public struct SimulationRunItem: Codable, Hashable, Sendable {
     public let runId: String?
     /// Hooks configured for this simulation run item
     public let hooks: [SimulationRunItemHooksItem]?
-    /// This is the iteration number (1-indexed) when run with iterations > 1.
+    /// Which iteration of the simulation this item represents.
     public let iterationNumber: Double?
     /// This is the session ID for chat-based simulations (webchat transport).
     public let sessionId: String?
-    /// This is the scenario ID at run creation time.
+    /// The ID of the scenario used for this run item.
     public let scenarioId: String?
-    /// This is the personality ID at run creation time.
+    /// The ID of the personality used for this run item.
     public let personalityId: String?
     /// This is the metadata containing snapshots and call data.
     public let metadata: SimulationRunItemMetadata?
-    /// This is the results of the simulation run.
+    /// The evaluation results for this run item.
     public let results: SimulationRunItemResults?
-    /// This is the AI-generated improvement suggestions for failed runs.
+    /// AI-generated suggestions for improving the assistant or squad's system prompt, tools, and scenarios after a failed run.
     public let improvementSuggestions: SimulationRunItemImprovements?
     /// This is the configuration for how this simulation run executes.
     public let configurations: SimulationRunConfiguration?

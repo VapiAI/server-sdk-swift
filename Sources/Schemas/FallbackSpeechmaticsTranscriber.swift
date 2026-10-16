@@ -1,8 +1,10 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with Speechmatics, including language, region, diarization, vocabulary, endpointing, and formatting.
 public struct FallbackSpeechmaticsTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: FallbackSpeechmaticsTranscriberModel?
+    /// Language used for transcription. Set to `auto` to detect the language automatically.
     public let language: FallbackSpeechmaticsTranscriberLanguage?
     /// This is the operating point for the transcription. Choose between `standard` for faster turnaround with strong accuracy or `enhanced` for highest accuracy when precision is critical.
     /// 
@@ -20,6 +22,7 @@ public struct FallbackSpeechmaticsTranscriber: Codable, Hashable, Sendable {
     /// 
     /// @default 3000
     public let maxDelay: Double?
+    /// Words and phrases that Speechmatics should recognize more accurately, with optional phonetic alternatives.
     public let customVocabulary: [SpeechmaticsCustomVocabularyItem]
     /// This controls how numbers, dates, currencies, and other entities are formatted in the transcription output.
     /// 

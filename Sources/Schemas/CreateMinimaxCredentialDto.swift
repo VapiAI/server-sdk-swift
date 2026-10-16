@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating assistant model and voice synthesis requests with MiniMax, including the MiniMax group identifier.
 public struct CreateMinimaxCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

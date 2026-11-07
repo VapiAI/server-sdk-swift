@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters transcript content that matches a custom regular expression.
 public struct RegexSecurityFilter: Codable, Hashable, Sendable {
     /// The type of security threat to filter.
     public let type: RegexSecurityFilterType

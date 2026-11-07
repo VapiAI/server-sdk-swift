@@ -4,7 +4,7 @@ public struct CreateWebChatDto: Codable, Hashable, Sendable {
     /// This is the assistant ID to use for this chat. To use a transient assistant, use `assistant` instead.
     public let assistantId: String?
     /// This is the transient assistant configuration for this chat. To use an existing assistant, use `assistantId` instead.
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// This is the ID of the session that will be used for the chat.
     /// If provided, the conversation will continue from the previous state.
     /// If not provided or expired, a new session will be created.
@@ -33,7 +33,7 @@ public struct CreateWebChatDto: Codable, Hashable, Sendable {
 
     public init(
         assistantId: String? = nil,
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         sessionId: String? = nil,
         sessionExpirationSeconds: Double? = nil,
         assistantOverrides: ChatAssistantOverrides? = nil,
@@ -58,7 +58,7 @@ public struct CreateWebChatDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.sessionId = try container.decodeIfPresent(String.self, forKey: .sessionId)
         self.sessionExpirationSeconds = try container.decodeIfPresent(Double.self, forKey: .sessionExpirationSeconds)
         self.assistantOverrides = try container.decodeIfPresent(ChatAssistantOverrides.self, forKey: .assistantOverrides)

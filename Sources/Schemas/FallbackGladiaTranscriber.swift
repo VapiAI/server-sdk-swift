@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for transcribing speech with Gladia, including language behavior, audio processing, endpointing, vocabulary, and region.
 public struct FallbackGladiaTranscriber: Codable, Hashable, Sendable {
     /// This is the Gladia model that will be used. Default is 'fast'
     public let model: FallbackGladiaTranscriberModel?
@@ -8,7 +9,7 @@ public struct FallbackGladiaTranscriber: Codable, Hashable, Sendable {
     /// Defines the language to use for the transcription. Required when languageBehaviour is 'manual'.
     public let language: FallbackGladiaTranscriberLanguage?
     /// Defines the languages to use for the transcription. Required when languageBehaviour is 'manual'.
-    public let languages: FallbackGladiaTranscriberLanguages?
+    public let languages: [FallbackGladiaTranscriberLanguagesItem]?
     /// Provides a custom vocabulary to the model to improve accuracy of transcribing context specific words, technical terms, names, etc. If empty, this argument is ignored.
     /// ⚠️ Warning ⚠️: Please be aware that the transcription_hint field has a character limit of 600. If you provide a transcription_hint longer than 600 characters, it will be automatically truncated to meet this limit.
     public let transcriptionHint: String?
@@ -39,7 +40,7 @@ public struct FallbackGladiaTranscriber: Codable, Hashable, Sendable {
         model: FallbackGladiaTranscriberModel? = nil,
         languageBehaviour: FallbackGladiaTranscriberLanguageBehaviour? = nil,
         language: FallbackGladiaTranscriberLanguage? = nil,
-        languages: FallbackGladiaTranscriberLanguages? = nil,
+        languages: [FallbackGladiaTranscriberLanguagesItem]? = nil,
         transcriptionHint: String? = nil,
         prosody: Bool? = nil,
         audioEnhancer: Bool? = nil,
@@ -74,7 +75,7 @@ public struct FallbackGladiaTranscriber: Codable, Hashable, Sendable {
         self.model = try container.decodeIfPresent(FallbackGladiaTranscriberModel.self, forKey: .model)
         self.languageBehaviour = try container.decodeIfPresent(FallbackGladiaTranscriberLanguageBehaviour.self, forKey: .languageBehaviour)
         self.language = try container.decodeIfPresent(FallbackGladiaTranscriberLanguage.self, forKey: .language)
-        self.languages = try container.decodeIfPresent(FallbackGladiaTranscriberLanguages.self, forKey: .languages)
+        self.languages = try container.decodeIfPresent([FallbackGladiaTranscriberLanguagesItem].self, forKey: .languages)
         self.transcriptionHint = try container.decodeIfPresent(String.self, forKey: .transcriptionHint)
         self.prosody = try container.decodeIfPresent(Bool.self, forKey: .prosody)
         self.audioEnhancer = try container.decodeIfPresent(Bool.self, forKey: .audioEnhancer)

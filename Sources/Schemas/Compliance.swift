@@ -1,5 +1,6 @@
 import Foundation
 
+/// Compliance information captured for a call, including recording consent.
 public struct Compliance: Codable, Hashable, Sendable {
     /// This is the recording consent of the call. Configure in `assistant.compliancePlan.recordingConsentPlan`.
     public let recordingConsent: RecordingConsent?

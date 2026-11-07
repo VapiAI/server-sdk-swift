@@ -1,5 +1,6 @@
 import Foundation
 
+/// Includes all available messages when constructing context for a handoff.
 public struct ContextEngineeringPlanAll: Codable, Hashable, Sendable {
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

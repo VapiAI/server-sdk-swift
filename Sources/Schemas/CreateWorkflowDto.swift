@@ -1,6 +1,8 @@
 import Foundation
 
+/// Configuration for creating a graph-based workflow, including conversation and tool nodes, directed edges, global prompts, shared providers, hooks, credentials, and call behavior.
 public struct CreateWorkflowDto: Codable, Hashable, Sendable {
+    /// Nodes that make up the workflow graph. Conversation nodes interact with the customer, while tool nodes invoke configured tools.
     public let nodes: [CreateWorkflowDtoNodesItem]
     /// This is the model for the workflow.
     /// 
@@ -19,6 +21,7 @@ public struct CreateWorkflowDto: Codable, Hashable, Sendable {
     /// Currently, only Langfuse is supported.
     public let observabilityPlan: LangfuseObservabilityPlan?
     /// This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+    /// Bundled sounds: 'office', 'white-noise', 'city', 'crowd' and 'farm'. GPT Live assistants don't play 'office'.
     /// You can also provide a custom sound by providing a URL to an audio file.
     public let backgroundSound: CreateWorkflowDtoBackgroundSound?
     /// This is a set of actions that will be performed on certain events.
@@ -33,8 +36,11 @@ public struct CreateWorkflowDto: Codable, Hashable, Sendable {
     /// 
     /// Default is 1800 (30 minutes), max is 43200 (12 hours), and min is 10 seconds.
     public let maxDurationSeconds: Double?
+    /// Name used to identify the workflow.
     public let name: String
+    /// Directed connections that determine transitions between nodes.
     public let edges: [Edge]
+    /// Prompt applied across the workflow's conversation nodes.
     public let globalPrompt: String?
     /// This is where Vapi will send webhooks. You can find all webhooks available along with their shape in ServerMessage schema.
     /// 

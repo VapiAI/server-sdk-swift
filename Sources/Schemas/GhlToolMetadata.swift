@@ -1,7 +1,10 @@
 import Foundation
 
+/// GHL workflow and location identifiers attached to a tool.
 public struct GhlToolMetadata: Codable, Hashable, Sendable {
+    /// GHL workflow identifier associated with the tool.
     public let workflowId: String?
+    /// GHL location identifier associated with the tool.
     public let locationId: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

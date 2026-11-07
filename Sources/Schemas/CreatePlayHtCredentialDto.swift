@@ -1,8 +1,10 @@
 import Foundation
 
+/// Credentials for authenticating voice synthesis requests with PlayHT, including the PlayHT user identifier.
 public struct CreatePlayHtCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String
+    /// PlayHT user identifier associated with the API key.
     public let userId: String
     /// This is the name of credential. This is just for your reference.
     public let name: String?

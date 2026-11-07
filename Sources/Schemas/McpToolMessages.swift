@@ -1,9 +1,10 @@
 import Foundation
 
+/// Per-tool message overrides for a tool discovered through an MCP server.
 public struct McpToolMessages: Codable, Hashable, Sendable {
     /// The name of the tool from the MCP server.
     public let name: String
-    /// Custom messages for this specific tool. Set to an empty array to suppress all messages for this tool. If not provided, the tool will use the default messages from the parent MCP tool configuration.
+    /// Custom messages for this specific tool. Set to an empty array to suppress all messages for this tool. If not provided, the tool will use the default messages from the parent MCP tool configuration. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [McpToolMessagesMessagesItem]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

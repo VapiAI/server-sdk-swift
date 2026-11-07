@@ -1,5 +1,6 @@
 import Foundation
 
+/// Mono recording URLs for the combined call and isolated assistant and customer audio.
 public struct Mono: Codable, Hashable, Sendable {
     /// This is the combined recording url for the call. To enable, set `assistant.artifactPlan.recordingEnabled`.
     public let combinedUrl: String?

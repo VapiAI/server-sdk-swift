@@ -1,5 +1,6 @@
 import Foundation
 
+/// Aggregated call costs and usage, including transport, transcription, model, voice, Vapi, analysis, token, and character totals.
 public struct CostBreakdown: Codable, Hashable, Sendable {
     /// This is the cost of the transport provider, like Twilio or Vonage.
     public let transport: Double?

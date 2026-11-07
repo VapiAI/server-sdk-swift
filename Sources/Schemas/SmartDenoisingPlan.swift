@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls whether Krisp smart denoising filters background speech and noise.
 public struct SmartDenoisingPlan: Codable, Hashable, Sendable {
     /// Whether smart denoising using Krisp is enabled.
     public let enabled: Bool?

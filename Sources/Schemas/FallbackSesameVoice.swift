@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fallback configuration for synthesizing assistant speech with Sesame, including voice and model selection, chunking, and caching.
 public struct FallbackSesameVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

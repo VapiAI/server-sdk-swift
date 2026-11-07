@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating voice synthesis requests with Hume.
 public struct CreateHumeCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

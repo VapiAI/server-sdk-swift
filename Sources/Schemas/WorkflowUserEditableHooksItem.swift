@@ -1,6 +1,6 @@
 import Foundation
 
-public enum WorkflowUserEditableHooksItem: Codable, Hashable, Sendable {
+public indirect enum WorkflowUserEditableHooksItem: Codable, Hashable, Sendable {
     case callHookAssistantSpeechInterrupted(CallHookAssistantSpeechInterrupted)
     case callHookCallEnding(CallHookCallEnding)
     case callHookCustomerSpeechInterrupted(CallHookCustomerSpeechInterrupted)

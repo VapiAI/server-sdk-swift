@@ -1,6 +1,8 @@
 import Foundation
 
+/// Routes a handoff to a saved or transient assistant, with optional context engineering, variable extraction, and assistant overrides.
 public struct HandoffDestinationAssistant: Codable, Hashable, Sendable {
+    /// Selects an assistant as the handoff destination.
     public let type: HandoffDestinationAssistantType
     /// This is the plan for manipulating the message context before handing off the call to the next assistant.
     public let contextEngineeringPlan: HandoffDestinationAssistantContextEngineeringPlan?
@@ -9,7 +11,7 @@ public struct HandoffDestinationAssistant: Codable, Hashable, Sendable {
     /// This is the assistant id to transfer the call to. You must provide either assistantName or assistantId.
     public let assistantId: String?
     /// This is a transient assistant to transfer the call to. You may provide a transient assistant in the response  `handoff-destination-request` in a dynamic handoff.
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// This is the variable extraction plan for the handoff tool.
     public let variableExtractionPlan: VariableExtractionPlan?
     /// These are the assistant overrides to apply to the destination assistant.
@@ -24,7 +26,7 @@ public struct HandoffDestinationAssistant: Codable, Hashable, Sendable {
         contextEngineeringPlan: HandoffDestinationAssistantContextEngineeringPlan? = nil,
         assistantName: String? = nil,
         assistantId: String? = nil,
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         variableExtractionPlan: VariableExtractionPlan? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         description: String? = nil,
@@ -47,7 +49,7 @@ public struct HandoffDestinationAssistant: Codable, Hashable, Sendable {
         self.contextEngineeringPlan = try container.decodeIfPresent(HandoffDestinationAssistantContextEngineeringPlan.self, forKey: .contextEngineeringPlan)
         self.assistantName = try container.decodeIfPresent(String.self, forKey: .assistantName)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.variableExtractionPlan = try container.decodeIfPresent(VariableExtractionPlan.self, forKey: .variableExtractionPlan)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)

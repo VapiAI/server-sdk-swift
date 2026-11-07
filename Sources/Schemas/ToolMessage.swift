@@ -1,5 +1,6 @@
 import Foundation
 
+/// A tool-result message associated with a specific tool call.
 public struct ToolMessage: Codable, Hashable, Sendable {
     /// This is the role of the message author
     public let role: ToolMessageRole

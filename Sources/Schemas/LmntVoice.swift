@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with LMNT, including voice selection, language, speed, chunking, caching, and fallback settings.
 public struct LmntVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

@@ -1,5 +1,6 @@
 import Foundation
 
+/// The language code used for transcription.
 public enum CartesiaTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case aa
     case ab

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A Gladia custom vocabulary word or phrase with optional pronunciations, intensity, and language.
 public struct GladiaVocabularyItemDto: Codable, Hashable, Sendable {
     /// The vocabulary word or phrase
     public let value: String

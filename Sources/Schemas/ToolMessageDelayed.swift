@@ -1,5 +1,6 @@
 import Foundation
 
+/// Message spoken when a tool call exceeds a configured response delay, with optional language variants and argument conditions.
 public struct ToolMessageDelayed: Codable, Hashable, Sendable {
     /// This is an alternative to the `content` property. It allows to specify variants of the same content, one per language.
     /// 
@@ -9,7 +10,7 @@ public struct ToolMessageDelayed: Codable, Hashable, Sendable {
     /// 
     /// This will override the `content` property.
     public let contents: [TextContent]?
-    /// The number of milliseconds to wait for the server response before saying this message.
+    /// The number of milliseconds to wait for the server response before saying this delayed message.
     public let timingMilliseconds: Double?
     /// This is the content that the assistant says when this message is triggered.
     public let content: String?

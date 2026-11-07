@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls generation of a post-call summary, including prompt messages, enablement, and request timeout.
 public struct SummaryPlan: Codable, Hashable, Sendable {
     /// These are the messages used to generate the summary.
     /// 

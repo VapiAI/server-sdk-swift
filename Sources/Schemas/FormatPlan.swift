@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls text normalization before voice synthesis, including built-in formatters, number handling, and custom replacements.
 public struct FormatPlan: Codable, Hashable, Sendable {
     /// This determines whether the chunk is formatted before being sent to the voice provider. This helps with enunciation. This includes phone numbers, emails and addresses. Default `true`.
     /// 

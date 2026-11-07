@@ -1,0 +1,33 @@
+import Foundation
+
+/// This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+/// Bundled sounds: 'office', 'white-noise', 'city', 'crowd' and 'farm'. GPT Live assistants don't play 'office'.
+/// You can also provide a custom sound by providing a URL to an audio file.
+public enum TransientAssistantDtoBackgroundSound: Codable, Hashable, Sendable {
+    case string(String)
+    case transientAssistantDtoBackgroundSoundZero(TransientAssistantDtoBackgroundSoundZero)
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = try? container.decode(String.self) {
+            self = .string(value)
+        } else if let value = try? container.decode(TransientAssistantDtoBackgroundSoundZero.self) {
+            self = .transientAssistantDtoBackgroundSoundZero(value)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Unexpected value."
+            )
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .string(let value):
+            try container.encode(value)
+        case .transientAssistantDtoBackgroundSoundZero(let value):
+            try container.encode(value)
+        }
+    }
+}

@@ -1,20 +1,34 @@
 import Foundation
 
+/// An uploaded file record, including its processing status, storage details, extracted-text location, metadata, and lifecycle timestamps.
 public struct File: Codable, Hashable, Sendable {
+    /// The object type. This is always `file`.
     public let object: FileObject?
+    /// The current processing status of the uploaded file.
     public let status: FileStatus?
     /// This is the name of the file. This is just for your own reference.
     public let name: String?
+    /// The original name of the uploaded file.
     public let originalName: String?
+    /// The size of the uploaded file in bytes.
     public let bytes: Double?
+    /// The intended use assigned to the uploaded file.
     public let purpose: String?
+    /// The MIME type of the uploaded file.
     public let mimetype: String?
+    /// The object-storage key for the uploaded file.
     public let key: String?
+    /// The object-storage path for the uploaded file.
     public let path: String?
+    /// The object-storage bucket containing the uploaded file.
     public let bucket: String?
+    /// The URL used to access the uploaded file.
     public let url: String?
+    /// The URL used to access text extracted from the file.
     public let parsedTextUrl: String?
+    /// The size of the extracted text in bytes.
     public let parsedTextBytes: Double?
+    /// Additional metadata associated with the uploaded file.
     public let metadata: [String: JSONValue]?
     /// This is the unique identifier for the file.
     public let id: String

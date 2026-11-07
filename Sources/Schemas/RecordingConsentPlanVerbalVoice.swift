@@ -11,6 +11,7 @@ public enum RecordingConsentPlanVerbalVoice: Codable, Hashable, Sendable {
     case hume(HumeVoice)
     case inworld(InworldVoice)
     case lmnt(LmntVoice)
+    case microsoft(MicrosoftVoice)
     case minimax(MinimaxVoice)
     case neuphonic(NeuphonicVoice)
     case openai(OpenAiVoice)
@@ -18,9 +19,9 @@ public enum RecordingConsentPlanVerbalVoice: Codable, Hashable, Sendable {
     case rimeAi(RimeAiVoice)
     case sesame(SesameVoice)
     case smallestAi(SmallestAiVoice)
-    case tavus(TavusVoice)
     case vapi(VapiVoice)
     case wellsaid(WellSaidVoice)
+    case xai(XaiVoice)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -42,6 +43,8 @@ public enum RecordingConsentPlanVerbalVoice: Codable, Hashable, Sendable {
             self = .inworld(try InworldVoice(from: decoder))
         case "lmnt":
             self = .lmnt(try LmntVoice(from: decoder))
+        case "microsoft":
+            self = .microsoft(try MicrosoftVoice(from: decoder))
         case "minimax":
             self = .minimax(try MinimaxVoice(from: decoder))
         case "neuphonic":
@@ -56,12 +59,12 @@ public enum RecordingConsentPlanVerbalVoice: Codable, Hashable, Sendable {
             self = .sesame(try SesameVoice(from: decoder))
         case "smallest-ai":
             self = .smallestAi(try SmallestAiVoice(from: decoder))
-        case "tavus":
-            self = .tavus(try TavusVoice(from: decoder))
         case "vapi":
             self = .vapi(try VapiVoice(from: decoder))
         case "wellsaid":
             self = .wellsaid(try WellSaidVoice(from: decoder))
+        case "xai":
+            self = .xai(try XaiVoice(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -99,6 +102,9 @@ public enum RecordingConsentPlanVerbalVoice: Codable, Hashable, Sendable {
         case .lmnt(let data):
             try container.encode("lmnt", forKey: .provider)
             try data.encode(to: encoder)
+        case .microsoft(let data):
+            try container.encode("microsoft", forKey: .provider)
+            try data.encode(to: encoder)
         case .minimax(let data):
             try container.encode("minimax", forKey: .provider)
             try data.encode(to: encoder)
@@ -120,14 +126,14 @@ public enum RecordingConsentPlanVerbalVoice: Codable, Hashable, Sendable {
         case .smallestAi(let data):
             try container.encode("smallest-ai", forKey: .provider)
             try data.encode(to: encoder)
-        case .tavus(let data):
-            try container.encode("tavus", forKey: .provider)
-            try data.encode(to: encoder)
         case .vapi(let data):
             try container.encode("vapi", forKey: .provider)
             try data.encode(to: encoder)
         case .wellsaid(let data):
             try container.encode("wellsaid", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

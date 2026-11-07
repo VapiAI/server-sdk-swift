@@ -28,8 +28,6 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
     public let techPrefix: String?
     /// This can be used to enable the SIP diversion header for authenticating the calling number if the SIP trunk supports it. This is an advanced property.
     public let sipDiversionHeader: String?
-    /// This is an advanced configuration for enterprise deployments. This uses the onprem SBC to trunk into the SIP trunk's `gateways`, rather than the managed SBC provided by Vapi.
-    public let sbcConfiguration: SbcConfiguration?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -45,7 +43,6 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
         outboundLeadingPlusEnabled: Bool? = nil,
         techPrefix: String? = nil,
         sipDiversionHeader: String? = nil,
-        sbcConfiguration: SbcConfiguration? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.provider = provider
@@ -59,7 +56,6 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
         self.outboundLeadingPlusEnabled = outboundLeadingPlusEnabled
         self.techPrefix = techPrefix
         self.sipDiversionHeader = sipDiversionHeader
-        self.sbcConfiguration = sbcConfiguration
         self.additionalProperties = additionalProperties
     }
 
@@ -76,7 +72,6 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
         self.outboundLeadingPlusEnabled = try container.decodeIfPresent(Bool.self, forKey: .outboundLeadingPlusEnabled)
         self.techPrefix = try container.decodeIfPresent(String.self, forKey: .techPrefix)
         self.sipDiversionHeader = try container.decodeIfPresent(String.self, forKey: .sipDiversionHeader)
-        self.sbcConfiguration = try container.decodeIfPresent(SbcConfiguration.self, forKey: .sbcConfiguration)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -94,7 +89,6 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.outboundLeadingPlusEnabled, forKey: .outboundLeadingPlusEnabled)
         try container.encodeIfPresent(self.techPrefix, forKey: .techPrefix)
         try container.encodeIfPresent(self.sipDiversionHeader, forKey: .sipDiversionHeader)
-        try container.encodeIfPresent(self.sbcConfiguration, forKey: .sbcConfiguration)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -110,6 +104,5 @@ public struct ByoSipTrunkCredential: Codable, Hashable, Sendable {
         case outboundLeadingPlusEnabled
         case techPrefix
         case sipDiversionHeader
-        case sbcConfiguration
     }
 }

@@ -12,7 +12,7 @@ extension Requests {
         public let assistantId: String?
         /// This is the assistant configuration for this session. Use this when creating a new assistant configuration.
         /// If assistantId is provided, this will be ignored.
-        public let assistant: CreateAssistantDto?
+        public let assistant: TransientAssistantDto?
         /// These are the overrides for the assistant configuration.
         /// Use this to provide variable values and other overrides when using assistantId.
         /// Variable substitution will be applied to the assistant's messages and other text-based fields.
@@ -40,7 +40,7 @@ extension Requests {
             status: CreateSessionDtoStatus? = nil,
             expirationSeconds: Double? = nil,
             assistantId: String? = nil,
-            assistant: CreateAssistantDto? = nil,
+            assistant: TransientAssistantDto? = nil,
             assistantOverrides: AssistantOverrides? = nil,
             squadId: String? = nil,
             squad: CreateSquadDto? = nil,
@@ -73,7 +73,7 @@ extension Requests {
             self.status = try container.decodeIfPresent(CreateSessionDtoStatus.self, forKey: .status)
             self.expirationSeconds = try container.decodeIfPresent(Double.self, forKey: .expirationSeconds)
             self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-            self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+            self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
             self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
             self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
             self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)

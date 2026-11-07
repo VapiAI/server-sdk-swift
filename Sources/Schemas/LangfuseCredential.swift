@@ -8,6 +8,8 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
     public let apiKey: String
     /// The host URL for Langfuse project. Eg: https://cloud.langfuse.com
     public let apiUrl: String
+    /// The semver version of your Langfuse server, e.g. 3.63.0, as its /api/public/health endpoint reports it. Optional.
+    public let serverVersion: String?
     /// This is the unique identifier for the credential.
     public let id: String
     /// This is the unique identifier for the org that this credential belongs to.
@@ -26,6 +28,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
         publicKey: String,
         apiKey: String,
         apiUrl: String,
+        serverVersion: String? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -37,6 +40,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
         self.publicKey = publicKey
         self.apiKey = apiKey
         self.apiUrl = apiUrl
+        self.serverVersion = serverVersion
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -51,6 +55,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
         self.publicKey = try container.decode(String.self, forKey: .publicKey)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.apiUrl = try container.decode(String.self, forKey: .apiUrl)
+        self.serverVersion = try container.decodeIfPresent(String.self, forKey: .serverVersion)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -66,6 +71,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
         try container.encode(self.publicKey, forKey: .publicKey)
         try container.encode(self.apiKey, forKey: .apiKey)
         try container.encode(self.apiUrl, forKey: .apiUrl)
+        try container.encodeIfPresent(self.serverVersion, forKey: .serverVersion)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -79,6 +85,7 @@ public struct LangfuseCredential: Codable, Hashable, Sendable {
         case publicKey
         case apiKey
         case apiUrl
+        case serverVersion
         case id
         case orgId
         case createdAt

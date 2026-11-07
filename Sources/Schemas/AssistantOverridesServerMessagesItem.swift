@@ -28,4 +28,5 @@ public enum AssistantOverridesServerMessagesItem: String, Codable, Hashable, Cas
     case sessionDeleted = "session.deleted"
     case callDeleted = "call.deleted"
     case callDeleteFailed = "call.delete.failed"
+    case callArtifactUpload = "call.artifact.upload"
 }

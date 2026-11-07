@@ -1,5 +1,6 @@
 import Foundation
 
+/// Knowledge-base model cost, including model, token usage, and amount.
 public struct KnowledgeBaseCost: Codable, Hashable, Sendable {
     /// This is the model that was used for processing the knowledge base.
     public let model: [String: JSONValue]

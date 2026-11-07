@@ -1,5 +1,6 @@
 import Foundation
 
+/// Transfers a call to another assistant by name, with an optional message and assistant-transfer mode.
 public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
     /// This is spoken to the customer before connecting them to the destination.
     /// 
@@ -9,6 +10,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
     /// 
     /// This accepts a string or a ToolMessageStart class. Latter is useful if you want to specify multiple messages for different languages through the `contents` field.
     public let message: TransferDestinationAssistantMessage?
+    /// Selects another assistant as the transfer destination.
     public let type: TransferDestinationAssistantType
     /// This is the mode to use for the transfer. Defaults to `rolling-history`.
     /// 
@@ -101,6 +103,17 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
     public let transferMode: TransferMode?
     /// This is the assistant to transfer the call to.
     public let assistantName: String
+    /// This is the name of the transfer destination. This is just for your own reference.
+    /// 
+    /// Usage:
+    /// - Optional. Stored with the destination wherever it is supplied. For `number`
+    ///   and `sip` destinations it is also persisted on the transfer record in the
+    ///   call artifact after a transfer and displayed in the dashboard call log (on
+    ///   the transfer divider in the transcript view) alongside the destination.
+    ///   When omitted, everything behaves exactly as before.
+    /// - Display-only. Unlike `description`, it is never included in prompts or tool
+    ///   descriptions and has no effect on model behavior or destination choice.
+    public let name: String?
     /// This is the description of the destination, used by the AI to choose when and how to transfer the call.
     public let description: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -111,6 +124,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
         type: TransferDestinationAssistantType,
         transferMode: TransferMode? = nil,
         assistantName: String,
+        name: String? = nil,
         description: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -118,6 +132,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
         self.type = type
         self.transferMode = transferMode
         self.assistantName = assistantName
+        self.name = name
         self.description = description
         self.additionalProperties = additionalProperties
     }
@@ -128,6 +143,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
         self.type = try container.decode(TransferDestinationAssistantType.self, forKey: .type)
         self.transferMode = try container.decodeIfPresent(TransferMode.self, forKey: .transferMode)
         self.assistantName = try container.decode(String.self, forKey: .assistantName)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -139,6 +155,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.transferMode, forKey: .transferMode)
         try container.encode(self.assistantName, forKey: .assistantName)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
     }
 
@@ -148,6 +165,7 @@ public struct TransferDestinationAssistant: Codable, Hashable, Sendable {
         case type
         case transferMode
         case assistantName
+        case name
         case description
     }
 }

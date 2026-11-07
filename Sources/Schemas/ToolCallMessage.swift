@@ -1,5 +1,6 @@
 import Foundation
 
+/// An entry in the call message history that records one or more tool calls requested during the conversation.
 public struct ToolCallMessage: Codable, Hashable, Sendable {
     /// The role of the tool call in the conversation.
     public let role: String

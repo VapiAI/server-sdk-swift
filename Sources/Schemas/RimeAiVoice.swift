@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with Rime AI, including voice and model selection, language, speed, pauses, phonemization, latency, chunking, caching, and fallback settings.
 public struct RimeAiVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

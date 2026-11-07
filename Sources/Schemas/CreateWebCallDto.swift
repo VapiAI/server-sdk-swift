@@ -1,7 +1,26 @@
 import Foundation
 
 public struct CreateWebCallDto: Codable, Hashable, Sendable {
+    /// This is the assistant version to use for this call. Supported only with
+    /// direct `assistantId`. Omit to follow the latest version.
+    public let assistantVersion: Nullable<String>?
+    /// This is the squad version to use for this call. Supported only with
+    /// direct `squadId`. Omit to follow the latest version.
+    public let squadVersion: Nullable<String>?
     public let roomDeleteOnUserLeaveEnabled: Bool?
+    /// This determines who starts the video recording. Only applies when video
+    /// recording is enabled (`artifactPlan.videoRecordingEnabled`).
+    /// 
+    /// - `client`: the web client starts the recording when it joins.
+    /// - `server`: Vapi starts the recording once when the user first joins, so a
+    ///   weak client connection can't stop it from starting. The returned
+    ///   `transport.callToken` doesn't start the recording, and the client should
+    ///   not start it either. If Vapi can't set up the server-side start, no token
+    ///   is returned. If the start itself fails, the client is told during the
+    ///   call.
+    /// 
+    /// Defaults to `client`.
+    public let videoRecordingStartMode: CreateWebCallDtoVideoRecordingStartMode?
     /// This is the assistant ID that will be used for the call. To use a transient assistant, use `assistant` instead.
     /// 
     /// To start a call with:
@@ -15,7 +34,7 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     /// - Assistant, use `assistant`
     /// - Squad, use `squad`
     /// - Workflow, use `workflow`
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// These are the overrides for the `assistant` or `assistantId`'s settings and template variables.
     public let assistantOverrides: AssistantOverrides?
     /// This is the squad that will be used for the call. To use a transient squad, use `squad` instead.
@@ -55,9 +74,12 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        assistantVersion: Nullable<String>? = nil,
+        squadVersion: Nullable<String>? = nil,
         roomDeleteOnUserLeaveEnabled: Bool? = nil,
+        videoRecordingStartMode: CreateWebCallDtoVideoRecordingStartMode? = nil,
         assistantId: String? = nil,
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         squadId: String? = nil,
         squad: CreateSquadDto? = nil,
@@ -67,7 +89,10 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
         workflowOverrides: WorkflowOverrides? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.assistantVersion = assistantVersion
+        self.squadVersion = squadVersion
         self.roomDeleteOnUserLeaveEnabled = roomDeleteOnUserLeaveEnabled
+        self.videoRecordingStartMode = videoRecordingStartMode
         self.assistantId = assistantId
         self.assistant = assistant
         self.assistantOverrides = assistantOverrides
@@ -82,9 +107,12 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
+        self.squadVersion = try container.decodeNullableIfPresent(String.self, forKey: .squadVersion)
         self.roomDeleteOnUserLeaveEnabled = try container.decodeIfPresent(Bool.self, forKey: .roomDeleteOnUserLeaveEnabled)
+        self.videoRecordingStartMode = try container.decodeIfPresent(CreateWebCallDtoVideoRecordingStartMode.self, forKey: .videoRecordingStartMode)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)
@@ -98,7 +126,10 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
+        try container.encodeNullableIfPresent(self.squadVersion, forKey: .squadVersion)
         try container.encodeIfPresent(self.roomDeleteOnUserLeaveEnabled, forKey: .roomDeleteOnUserLeaveEnabled)
+        try container.encodeIfPresent(self.videoRecordingStartMode, forKey: .videoRecordingStartMode)
         try container.encodeIfPresent(self.assistantId, forKey: .assistantId)
         try container.encodeIfPresent(self.assistant, forKey: .assistant)
         try container.encodeIfPresent(self.assistantOverrides, forKey: .assistantOverrides)
@@ -112,7 +143,10 @@ public struct CreateWebCallDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case assistantVersion
+        case squadVersion
         case roomDeleteOnUserLeaveEnabled
+        case videoRecordingStartMode
         case assistantId
         case assistant
         case assistantOverrides

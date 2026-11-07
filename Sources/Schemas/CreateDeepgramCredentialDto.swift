@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating speech recognition and voice synthesis requests with Deepgram, with an optional API URL for an on-premises instance.
 public struct CreateDeepgramCredentialDto: Codable, Hashable, Sendable {
     /// This is not returned in the API.
     public let apiKey: String

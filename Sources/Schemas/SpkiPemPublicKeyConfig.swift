@@ -1,5 +1,6 @@
 import Foundation
 
+/// An SPKI public key in PEM format used to encrypt sensitive request data.
 public struct SpkiPemPublicKeyConfig: Codable, Hashable, Sendable {
     /// Optional name of the key for identification purposes.
     public let name: String?

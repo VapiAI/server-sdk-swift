@@ -1,7 +1,10 @@
 import Foundation
 
+/// A conversation message represented in OpenAI chat format.
 public struct OpenAiMessage: Codable, Hashable, Sendable {
+    /// Content of the conversation message.
     public let content: Nullable<String>
+    /// Role associated with the conversation message.
     public let role: OpenAiMessageRole
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

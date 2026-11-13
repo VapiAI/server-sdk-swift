@@ -1,9 +1,11 @@
 import Foundation
 
+/// A reusable tool that transfers the active call to one of its configured destinations.
 public struct TransferCallTool: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    public let latestVersion: Nullable<String>?
+    /// Display-only baseline label returned by the tool list before a version is stored. Fetch version history to initialize it before using it as a pin.
+    public let baselineVersion: Nullable<String>?
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [TransferCallToolMessagesItem]?
     /// These are the destinations that the call can be transferred to. If no destinations are provided, server.url will be used to get the transfer destination once the tool is called.
     public let destinations: [TransferCallToolDestinationsItem]?
@@ -98,6 +100,8 @@ public struct TransferCallTool: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        latestVersion: Nullable<String>? = nil,
+        baselineVersion: Nullable<String>? = nil,
         messages: [TransferCallToolMessagesItem]? = nil,
         destinations: [TransferCallToolDestinationsItem]? = nil,
         id: String,
@@ -107,6 +111,8 @@ public struct TransferCallTool: Codable, Hashable, Sendable {
         rejectionPlan: ToolRejectionPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.latestVersion = latestVersion
+        self.baselineVersion = baselineVersion
         self.messages = messages
         self.destinations = destinations
         self.id = id
@@ -119,6 +125,8 @@ public struct TransferCallTool: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
+        self.baselineVersion = try container.decodeNullableIfPresent(String.self, forKey: .baselineVersion)
         self.messages = try container.decodeIfPresent([TransferCallToolMessagesItem].self, forKey: .messages)
         self.destinations = try container.decodeIfPresent([TransferCallToolDestinationsItem].self, forKey: .destinations)
         self.id = try container.decode(String.self, forKey: .id)
@@ -132,6 +140,8 @@ public struct TransferCallTool: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
+        try container.encodeNullableIfPresent(self.baselineVersion, forKey: .baselineVersion)
         try container.encodeIfPresent(self.messages, forKey: .messages)
         try container.encodeIfPresent(self.destinations, forKey: .destinations)
         try container.encode(self.id, forKey: .id)
@@ -143,6 +153,8 @@ public struct TransferCallTool: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case latestVersion
+        case baselineVersion
         case messages
         case destinations
         case id

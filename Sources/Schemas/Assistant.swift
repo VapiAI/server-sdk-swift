@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved assistant configuration returned by the Vapi API. It defines how the assistant listens, reasons, speaks, handles conversations, sends events, and produces artifacts and analysis.
 public struct Assistant: Codable, Hashable, Sendable {
     /// These are the options for the assistant's transcriber.
     public let transcriber: AssistantTranscriber?
@@ -11,6 +12,7 @@ public struct Assistant: Codable, Hashable, Sendable {
     /// 
     /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
     public let firstMessage: String?
+    /// Set to `true` to allow the user to interrupt the assistant while it speaks the first message. Default is `false`.
     public let firstMessageInterruptionsEnabled: Bool?
     /// This is the mode for the first message. Default is 'assistant-speaks-first'.
     /// 
@@ -33,6 +35,7 @@ public struct Assistant: Codable, Hashable, Sendable {
     /// @default 600 (10 minutes)
     public let maxDurationSeconds: Double?
     /// This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+    /// Bundled sounds: 'office', 'white-noise', 'city', 'crowd' and 'farm'. GPT Live assistants don't play 'office'.
     /// You can also provide a custom sound by providing a URL to an audio file.
     public let backgroundSound: AssistantBackgroundSound?
     /// This determines whether the model's output is used in conversation history rather than the transcription of assistant's speech.
@@ -49,6 +52,13 @@ public struct Assistant: Codable, Hashable, Sendable {
     public let credentials: [AssistantCredentialsItem]?
     /// This is a set of actions that will be performed on certain events.
     public let hooks: [AssistantHooksItem]?
+    /// This is the latest version label (e.g. `v3`) of the assistant in the
+    /// version history. `null` while the org is not yet
+    /// onboarded to versioning, or for assistants that have not yet been
+    /// published under it.
+    public let latestVersion: Nullable<String>?
+    /// Read-only. Present only when a model this configuration uses is deprecated or retired in Vapi's model deprecation registry, judged on the day of the response. Each entry names the slot (for example `model` or `model.fallbackModels[1]`), provider, stored model, and deprecation and retirement dates as `YYYY-MM-DD` in UTC. `replacementStatus` is `available` with a `replacementModel` when a replacement can be recommended, or `manual-action-required` with no replacement model when eligibility is unknown or no eligible replacement exists. `manual-action-required` can be transient when compliance context is unavailable; re-fetch before acting. HIPAA-required configurations, sparse drafts, and squads with unresolved assistant references currently require manual action. HIPAA requirements include the organization and assistant settings, including HIPAA with data retention. Recommendations reflect the response-time decision; they do not confirm a swap or authorize future execution. Examples: an available recommendation includes `{"replacementStatus":"available","replacementModel":"gpt-5"}`; a blocked recommendation includes `{"replacementStatus":"manual-action-required"}`. Ignored if sent back in a create or update request.
+    public let modelDeprecations: [ModelDeprecationNotice]?
     /// This is the name of the assistant.
     /// 
     /// This is required when you want to transfer between assistants in a call.
@@ -57,12 +67,11 @@ public struct Assistant: Codable, Hashable, Sendable {
     /// 
     /// If unspecified, it will hang up.
     public let voicemailMessage: String?
-    /// This is the message that the assistant will say if it ends the call.
-    /// 
-    /// If unspecified, it will hang up without saying anything.
+    /// The message the assistant says when it ends the call with the Hang Up tool (`endCall`) and that tool has no messages. If the tool has a `request-start` message, the assistant says that message instead. If this field is unspecified or empty, the assistant says "Goodbye" in the transcriber's language. When an assistant hook runs `endCall`, this field isn't used and the assistant says "Goodbye" in English.
     public let endCallMessage: String?
     /// This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.
     public let endCallPhrases: [String]?
+    /// Compliance settings for the assistant, including HIPAA and PCI behavior, security filtering, and recording consent.
     public let compliancePlan: CompliancePlan?
     /// This is for metadata you want to store on the assistant.
     public let metadata: [String: JSONValue]?
@@ -115,6 +124,7 @@ public struct Assistant: Codable, Hashable, Sendable {
     /// 2. phoneNumber.serverUrl
     /// 3. org.serverUrl
     public let server: Server?
+    /// Configuration for collecting and processing DTMF keypad input during calls.
     public let keypadInputPlan: KeypadInputPlan?
     /// This is the unique identifier for the assistant.
     public let id: String
@@ -144,6 +154,8 @@ public struct Assistant: Codable, Hashable, Sendable {
         observabilityPlan: LangfuseObservabilityPlan? = nil,
         credentials: [AssistantCredentialsItem]? = nil,
         hooks: [AssistantHooksItem]? = nil,
+        latestVersion: Nullable<String>? = nil,
+        modelDeprecations: [ModelDeprecationNotice]? = nil,
         name: String? = nil,
         voicemailMessage: String? = nil,
         endCallMessage: String? = nil,
@@ -181,6 +193,8 @@ public struct Assistant: Codable, Hashable, Sendable {
         self.observabilityPlan = observabilityPlan
         self.credentials = credentials
         self.hooks = hooks
+        self.latestVersion = latestVersion
+        self.modelDeprecations = modelDeprecations
         self.name = name
         self.voicemailMessage = voicemailMessage
         self.endCallMessage = endCallMessage
@@ -221,6 +235,8 @@ public struct Assistant: Codable, Hashable, Sendable {
         self.observabilityPlan = try container.decodeIfPresent(LangfuseObservabilityPlan.self, forKey: .observabilityPlan)
         self.credentials = try container.decodeIfPresent([AssistantCredentialsItem].self, forKey: .credentials)
         self.hooks = try container.decodeIfPresent([AssistantHooksItem].self, forKey: .hooks)
+        self.latestVersion = try container.decodeNullableIfPresent(String.self, forKey: .latestVersion)
+        self.modelDeprecations = try container.decodeIfPresent([ModelDeprecationNotice].self, forKey: .modelDeprecations)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.voicemailMessage = try container.decodeIfPresent(String.self, forKey: .voicemailMessage)
         self.endCallMessage = try container.decodeIfPresent(String.self, forKey: .endCallMessage)
@@ -262,6 +278,8 @@ public struct Assistant: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.observabilityPlan, forKey: .observabilityPlan)
         try container.encodeIfPresent(self.credentials, forKey: .credentials)
         try container.encodeIfPresent(self.hooks, forKey: .hooks)
+        try container.encodeNullableIfPresent(self.latestVersion, forKey: .latestVersion)
+        try container.encodeIfPresent(self.modelDeprecations, forKey: .modelDeprecations)
         try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.voicemailMessage, forKey: .voicemailMessage)
         try container.encodeIfPresent(self.endCallMessage, forKey: .endCallMessage)
@@ -301,6 +319,8 @@ public struct Assistant: Codable, Hashable, Sendable {
         case observabilityPlan
         case credentials
         case hooks
+        case latestVersion
+        case modelDeprecations
         case name
         case voicemailMessage
         case endCallMessage

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls how an evaluation proceeds after judging an assistant message, including failure handling and optional message overrides.
 public struct AssistantMessageEvaluationContinuePlan: Codable, Hashable, Sendable {
     /// This is whether the evaluation should exit if the assistant message evaluates to false.
     /// By default, it is false and the evaluation will continue.

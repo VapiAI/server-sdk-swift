@@ -1,6 +1,6 @@
 import Foundation
 
-/// Popular Rime AI voices across mist, mistv2, and arcana models. Any valid Rime AI voice ID is accepted, not just these suggestions.
+/// Popular Rime AI voices across mist, mistv2, mistv3, arcana, and coda models. Any valid Rime AI voice ID is accepted, not just these suggestions.
 public enum FallbackRimeAiVoiceIdEnum: String, Codable, Hashable, CaseIterable, Sendable {
     case cove
     case moon
@@ -52,4 +52,11 @@ public enum FallbackRimeAiVoiceIdEnum: String, Codable, Hashable, CaseIterable, 
     case masonry
     case albion
     case parapet
+    case clementine
+    case walnut
+    case eyre
+    case bancroft
+    case hesse
+    case beatty
+    case godfrey
 }

@@ -3,6 +3,11 @@ import Foundation
 public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ClientMessageTransferUpdatePhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "transfer-update" is sent whenever a transfer happens.
     public let type: ClientMessageTransferUpdateType
     /// This is the destination of the transfer.
@@ -28,6 +33,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ClientMessageTransferUpdatePhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ClientMessageTransferUpdateType,
         destination: ClientMessageTransferUpdateDestination? = nil,
         timestamp: Double? = nil,
@@ -41,6 +47,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.destination = destination
         self.timestamp = timestamp
@@ -57,6 +64,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ClientMessageTransferUpdatePhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ClientMessageTransferUpdateType.self, forKey: .type)
         self.destination = try container.decodeIfPresent(ClientMessageTransferUpdateDestination.self, forKey: .destination)
         self.timestamp = try container.decodeIfPresent(Double.self, forKey: .timestamp)
@@ -74,6 +82,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encodeIfPresent(self.destination, forKey: .destination)
         try container.encodeIfPresent(self.timestamp, forKey: .timestamp)
@@ -89,6 +98,7 @@ public struct ClientMessageTransferUpdate: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case destination
         case timestamp

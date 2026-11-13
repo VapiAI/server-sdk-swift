@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for detecting voicemail with Vapi, including detection type, maximum beep wait, and retry backoff.
 public struct VapiVoicemailDetectionPlan: Codable, Hashable, Sendable {
     /// This is the maximum duration from the start of the call that we will wait for a voicemail beep, before speaking our message
     /// 

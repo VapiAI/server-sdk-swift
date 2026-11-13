@@ -1,5 +1,6 @@
 import Foundation
 
+/// OAuth 2.0 client credential for Google Calendar integrations.
 public struct CreateGoogleCalendarOAuth2ClientCredentialDto: Codable, Hashable, Sendable {
     /// This is the name of credential. This is just for your reference.
     public let name: String?

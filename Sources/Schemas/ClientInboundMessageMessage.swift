@@ -3,6 +3,7 @@ import Foundation
 /// These are the messages that can be sent from client-side SDKs to control the call.
 public enum ClientInboundMessageMessage: Codable, Hashable, Sendable {
     case addMessage(ClientInboundMessageAddMessage)
+    case appendContext(ClientInboundMessageAppendContext)
     case control(ClientInboundMessageControl)
     case endCall(ClientInboundMessageEndCall)
     case say(ClientInboundMessageSay)
@@ -15,6 +16,8 @@ public enum ClientInboundMessageMessage: Codable, Hashable, Sendable {
         switch discriminant {
         case "add-message":
             self = .addMessage(try ClientInboundMessageAddMessage(from: decoder))
+        case "append-context":
+            self = .appendContext(try ClientInboundMessageAppendContext(from: decoder))
         case "control":
             self = .control(try ClientInboundMessageControl(from: decoder))
         case "end-call":
@@ -40,6 +43,9 @@ public enum ClientInboundMessageMessage: Codable, Hashable, Sendable {
         switch self {
         case .addMessage(let data):
             try container.encode("add-message", forKey: .type)
+            try data.encode(to: encoder)
+        case .appendContext(let data):
+            try container.encode("append-context", forKey: .type)
             try data.encode(to: encoder)
         case .control(let data):
             try container.encode("control", forKey: .type)

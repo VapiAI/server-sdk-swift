@@ -1,5 +1,6 @@
 import Foundation
 
+/// Selects a conversation message by participant role and position for condition evaluation.
 public struct MessageTarget: Codable, Hashable, Sendable {
     /// This is the role of the message to target.
     /// 

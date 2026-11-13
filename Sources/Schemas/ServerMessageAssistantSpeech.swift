@@ -3,6 +3,11 @@ import Foundation
 public struct ServerMessageAssistantSpeech: Codable, Hashable, Sendable {
     /// This is the phone number that the message is associated with.
     public let phoneNumber: ServerMessageAssistantSpeechPhoneNumber?
+    /// This is the version label (e.g. `v3`) of the assistant the call was
+    /// configured with. `null` for inline assistants, squad/workflow calls,
+    /// pre-resolution assistant-request messages, and orgs not on
+    /// assistant versioning.
+    public let assistantVersion: Nullable<String>?
     /// This is the type of the message. "assistant-speech" is sent as assistant audio is being played.
     public let type: ServerMessageAssistantSpeechType
     /// The full assistant text for the current turn. This is the complete text,
@@ -49,6 +54,7 @@ public struct ServerMessageAssistantSpeech: Codable, Hashable, Sendable {
 
     public init(
         phoneNumber: ServerMessageAssistantSpeechPhoneNumber? = nil,
+        assistantVersion: Nullable<String>? = nil,
         type: ServerMessageAssistantSpeechType,
         text: String,
         turn: Double? = nil,
@@ -63,6 +69,7 @@ public struct ServerMessageAssistantSpeech: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.phoneNumber = phoneNumber
+        self.assistantVersion = assistantVersion
         self.type = type
         self.text = text
         self.turn = turn
@@ -80,6 +87,7 @@ public struct ServerMessageAssistantSpeech: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.phoneNumber = try container.decodeIfPresent(ServerMessageAssistantSpeechPhoneNumber.self, forKey: .phoneNumber)
+        self.assistantVersion = try container.decodeNullableIfPresent(String.self, forKey: .assistantVersion)
         self.type = try container.decode(ServerMessageAssistantSpeechType.self, forKey: .type)
         self.text = try container.decode(String.self, forKey: .text)
         self.turn = try container.decodeIfPresent(Double.self, forKey: .turn)
@@ -98,6 +106,7 @@ public struct ServerMessageAssistantSpeech: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.phoneNumber, forKey: .phoneNumber)
+        try container.encodeNullableIfPresent(self.assistantVersion, forKey: .assistantVersion)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.text, forKey: .text)
         try container.encodeIfPresent(self.turn, forKey: .turn)
@@ -114,6 +123,7 @@ public struct ServerMessageAssistantSpeech: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case phoneNumber
+        case assistantVersion
         case type
         case text
         case turn

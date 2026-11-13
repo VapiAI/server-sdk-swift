@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for sending assistant call traces to a Langfuse project, including its public key, secret key, and host URL.
 public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
     /// The public key for Langfuse project. Eg: pk-lf-...
     public let publicKey: String
@@ -7,6 +8,8 @@ public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
     public let apiKey: String
     /// The host URL for Langfuse project. Eg: https://cloud.langfuse.com
     public let apiUrl: String
+    /// The semver version of your Langfuse server, e.g. 3.63.0, as its /api/public/health endpoint reports it. Optional.
+    public let serverVersion: String?
     /// This is the name of credential. This is just for your reference.
     public let name: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -16,12 +19,14 @@ public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
         publicKey: String,
         apiKey: String,
         apiUrl: String,
+        serverVersion: String? = nil,
         name: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.publicKey = publicKey
         self.apiKey = apiKey
         self.apiUrl = apiUrl
+        self.serverVersion = serverVersion
         self.name = name
         self.additionalProperties = additionalProperties
     }
@@ -31,6 +36,7 @@ public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
         self.publicKey = try container.decode(String.self, forKey: .publicKey)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
         self.apiUrl = try container.decode(String.self, forKey: .apiUrl)
+        self.serverVersion = try container.decodeIfPresent(String.self, forKey: .serverVersion)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -41,6 +47,7 @@ public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
         try container.encode(self.publicKey, forKey: .publicKey)
         try container.encode(self.apiKey, forKey: .apiKey)
         try container.encode(self.apiUrl, forKey: .apiUrl)
+        try container.encodeIfPresent(self.serverVersion, forKey: .serverVersion)
         try container.encodeIfPresent(self.name, forKey: .name)
     }
 
@@ -49,6 +56,7 @@ public struct CreateLangfuseCredentialDto: Codable, Hashable, Sendable {
         case publicKey
         case apiKey
         case apiUrl
+        case serverVersion
         case name
     }
 }

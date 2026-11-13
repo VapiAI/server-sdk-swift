@@ -1,5 +1,6 @@
 import Foundation
 
+/// An assistant-authored message, including content, refusal text, tool calls, participant name, and metadata.
 public struct AssistantMessage: Codable, Hashable, Sendable {
     /// This is the role of the message author
     public let role: AssistantMessageRole

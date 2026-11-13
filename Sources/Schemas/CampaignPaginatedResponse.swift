@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of outbound calling campaigns and metadata describing the result set.
 public struct CampaignPaginatedResponse: Codable, Hashable, Sendable {
+    /// The campaigns returned for the current page.
     public let results: [Campaign]
+    /// Pagination metadata for the campaign result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

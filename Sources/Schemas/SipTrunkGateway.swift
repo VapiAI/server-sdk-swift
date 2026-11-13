@@ -1,7 +1,8 @@
 import Foundation
 
+/// Network and routing settings for a SIP trunk gateway, including address, port, netmask, inbound and outbound use, signaling protocol, and OPTIONS health checks.
 public struct SipTrunkGateway: Codable, Hashable, Sendable {
-    /// This is the address of the gateway. It can be an IPv4 address like 1.1.1.1 or a fully qualified domain name like my-sip-trunk.pstn.twilio.com.
+    /// This is the address of the gateway. Inbound gateways require an IPv4 address like 1.1.1.1. Outbound-only gateways can also use a fully qualified domain name like my-sip-trunk.pstn.twilio.com.
     public let ip: String
     /// This is the port number of the gateway. Default is 5060.
     /// 

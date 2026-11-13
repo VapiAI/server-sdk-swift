@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls the message and end-call behavior used when a call transfer fails.
 public struct TransferFallbackPlan: Codable, Hashable, Sendable {
     /// This is the message the assistant will deliver to the customer if the transfer fails.
     public let message: TransferFallbackPlanMessage

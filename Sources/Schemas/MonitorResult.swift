@@ -1,7 +1,10 @@
 import Foundation
 
+/// Result of evaluating an attached monitor's filter for a call.
 public struct MonitorResult: Codable, Hashable, Sendable {
+    /// Unique identifier of the monitor that produced this result.
     public let monitorId: String
+    /// Whether the monitor's filter matched the call.
     public let filterPassed: Bool
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

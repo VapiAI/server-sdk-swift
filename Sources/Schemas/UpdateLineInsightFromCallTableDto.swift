@@ -1,5 +1,6 @@
 import Foundation
 
+/// Fields used to update a line-chart insight, including its queries, formulas, grouping, time range, metadata, and name.
 public struct UpdateLineInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -21,6 +22,7 @@ public struct UpdateLineInsightFromCallTableDto: Codable, Hashable, Sendable {
     public let formulas: [InsightFormula]?
     /// This is the metadata for the insight.
     public let metadata: LineInsightMetadata?
+    /// The time range and interval used to aggregate the line-chart data.
     public let timeRange: InsightTimeRangeWithStep?
     /// This is the group by column for the insight when table is `call`.
     /// These are the columns to group the results by.

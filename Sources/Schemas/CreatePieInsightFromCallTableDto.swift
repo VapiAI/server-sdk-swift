@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to create a pie-chart insight from call data using metric queries, formulas, grouping, and a time range.
 public struct CreatePieInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// This is the name of the Insight.
     public let name: String?
@@ -19,6 +20,7 @@ public struct CreatePieInsightFromCallTableDto: Codable, Hashable, Sendable {
     /// 
     /// You can also use the query names as the variable in the formula.
     public let formulas: [InsightFormula]?
+    /// The time range used to query the pie-chart data.
     public let timeRange: InsightTimeRange?
     /// This is the group by column for the insight when table is `call`.
     /// These are the columns to group the results by.

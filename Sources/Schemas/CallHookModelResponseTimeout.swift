@@ -1,5 +1,6 @@
 import Foundation
 
+/// Runs configured actions when the language model does not respond before its timeout.
 public struct CallHookModelResponseTimeout: Codable, Hashable, Sendable {
     /// This is the event that triggers this hook
     public let on: CallHookModelResponseTimeoutOn

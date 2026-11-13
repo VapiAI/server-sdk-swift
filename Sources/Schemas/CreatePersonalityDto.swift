@@ -1,11 +1,10 @@
 import Foundation
 
 public struct CreatePersonalityDto: Codable, Hashable, Sendable {
-    /// This is the name of the personality (e.g., "Confused Carl", "Rude Rob").
+    /// The display name of the personality, for example `Impatient customer`.
     public let name: String
-    /// This is the full assistant configuration for this personality.
-    /// It defines the tester's voice, model, behavior via system prompt, and other settings.
-    public let assistant: CreateAssistantDto
+    /// The assistant configuration for the AI tester: the model, voice, and system prompt that determine how the AI tester behaves during the conversation.
+    public let assistant: TransientAssistantDto
     /// Optional folder path for organizing personalities.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").
     /// Maps to GitOps resource folder structure.
@@ -15,7 +14,7 @@ public struct CreatePersonalityDto: Codable, Hashable, Sendable {
 
     public init(
         name: String,
-        assistant: CreateAssistantDto,
+        assistant: TransientAssistantDto,
         path: Nullable<String>? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -28,7 +27,7 @@ public struct CreatePersonalityDto: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = try container.decode(String.self, forKey: .name)
-        self.assistant = try container.decode(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decode(TransientAssistantDto.self, forKey: .assistant)
         self.path = try container.decodeNullableIfPresent(String.self, forKey: .path)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }

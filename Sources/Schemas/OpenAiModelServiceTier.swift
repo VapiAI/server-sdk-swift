@@ -1,0 +1,18 @@
+import Foundation
+
+/// This is the OpenAI service tier to request.
+/// 
+/// - `fast`: requests Fast mode, which gives faster responses at a higher per-token rate. How much faster depends on the model.
+/// - `priority`: the old name for `fast`, accepted and billed the same.
+/// - `default`: standard processing.
+/// - `auto`: the default when unset. On Vapi's OpenAI keys this is standard processing; on your own OpenAI key, OpenAI applies your project's default tier.
+/// 
+/// OpenAI sets Fast mode rates per model, and they are not a fixed multiple of the standard rates. Vapi bills them only when OpenAI reports that it served the request in Fast mode. Otherwise the request is billed at standard rates, for example when Fast mode isn't available for the model on Vapi, OpenAI downgrades the request, or the request runs on Azure OpenAI.
+/// 
+/// Supported models and their Fast mode rates: https://docs.vapi.ai/providers/model/openai
+public enum OpenAiModelServiceTier: String, Codable, Hashable, CaseIterable, Sendable {
+    case auto
+    case `default`
+    case fast
+    case priority
+}

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration used to import a Telnyx phone number into Vapi with a stored credential and routing settings.
 public struct CreateTelnyxPhoneNumberDto: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

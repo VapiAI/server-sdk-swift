@@ -1,8 +1,9 @@
 import Foundation
 
+/// Result of the recording-consent flow, including consent type and the time consent was granted.
 public struct RecordingConsent: Codable, Hashable, Sendable {
     /// This is the type of recording consent.
-    public let type: [String: JSONValue]
+    public let type: RecordingConsentType
     /// This is the date and time the recording consent was granted.
     /// If not specified, it means the recording consent was not granted.
     public let grantedAt: Date?
@@ -10,7 +11,7 @@ public struct RecordingConsent: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        type: [String: JSONValue],
+        type: RecordingConsentType,
         grantedAt: Date? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -21,7 +22,7 @@ public struct RecordingConsent: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.decode([String: JSONValue].self, forKey: .type)
+        self.type = try container.decode(RecordingConsentType.self, forKey: .type)
         self.grantedAt = try container.decodeIfPresent(Date.self, forKey: .grantedAt)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }

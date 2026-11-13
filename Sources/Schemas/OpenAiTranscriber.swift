@@ -1,10 +1,18 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with OpenAI, including model, language, and fallback settings.
 public struct OpenAiTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
+    /// Digit formatting can differ by model: `gpt-transcribe` may write spoken digit strings as words (for example, "four seven two"), where `gpt-4o-transcribe` and `gpt-4o-mini-transcribe` may write them as digits ("472"). Do not rely on either format.
     public let model: OpenAiTranscriberModel
     /// This is the language that will be set for the transcription.
     public let language: OpenAiTranscriberLanguage?
+    /// These are words and phrases the model should recognize, such as names, brands, and product terms.
+    /// Supported only by `gpt-transcribe`. Each keyword is one line and must not contain `<` or `>`. Maximum 16,384 keywords.
+    public let keywords: [String]?
+    /// This is free-text context for the transcription, such as the topic of the call or the expected vocabulary.
+    /// Maximum length: 8,192 characters for `gpt-transcribe`, and 1,024 characters for `gpt-4o-transcribe` and `gpt-4o-mini-transcribe`.
+    public let prompt: String?
     /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?
     /// Additional properties that are not explicitly defined in the schema
@@ -13,11 +21,15 @@ public struct OpenAiTranscriber: Codable, Hashable, Sendable {
     public init(
         model: OpenAiTranscriberModel,
         language: OpenAiTranscriberLanguage? = nil,
+        keywords: [String]? = nil,
+        prompt: String? = nil,
         fallbackPlan: FallbackTranscriberPlan? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.model = model
         self.language = language
+        self.keywords = keywords
+        self.prompt = prompt
         self.fallbackPlan = fallbackPlan
         self.additionalProperties = additionalProperties
     }
@@ -26,6 +38,8 @@ public struct OpenAiTranscriber: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.model = try container.decode(OpenAiTranscriberModel.self, forKey: .model)
         self.language = try container.decodeIfPresent(OpenAiTranscriberLanguage.self, forKey: .language)
+        self.keywords = try container.decodeIfPresent([String].self, forKey: .keywords)
+        self.prompt = try container.decodeIfPresent(String.self, forKey: .prompt)
         self.fallbackPlan = try container.decodeIfPresent(FallbackTranscriberPlan.self, forKey: .fallbackPlan)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -35,6 +49,8 @@ public struct OpenAiTranscriber: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.model, forKey: .model)
         try container.encodeIfPresent(self.language, forKey: .language)
+        try container.encodeIfPresent(self.keywords, forKey: .keywords)
+        try container.encodeIfPresent(self.prompt, forKey: .prompt)
         try container.encodeIfPresent(self.fallbackPlan, forKey: .fallbackPlan)
     }
 
@@ -42,6 +58,8 @@ public struct OpenAiTranscriber: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case model
         case language
+        case keywords
+        case prompt
         case fallbackPlan
     }
 }

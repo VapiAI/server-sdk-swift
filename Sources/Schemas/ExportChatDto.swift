@@ -13,6 +13,8 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
     public let sessionId: String?
     /// This is the unique identifier for the previous chat to filter by.
     public let previousChatId: String?
+    /// Filter by multiple chat IDs. Provide as comma-separated values.
+    public let idAny: String?
     /// Columns to include in the CSV export
     public let columns: ExportChatDtoColumns?
     /// This is the email address to send the export to.
@@ -26,6 +28,8 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
     public let page: Double?
     /// This is the sort order for pagination. Defaults to 'DESC'.
     public let sortOrder: ExportChatDtoSortOrder?
+    /// This is the column to sort by. Defaults to 'createdAt'.
+    public let sortBy: ExportChatDtoSortBy?
     /// This is the maximum number of items to return. Defaults to 100.
     public let limit: Double?
     /// This will return items where the createdAt is greater than the specified value.
@@ -54,11 +58,13 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
         squadId: String? = nil,
         sessionId: String? = nil,
         previousChatId: String? = nil,
+        idAny: String? = nil,
         columns: ExportChatDtoColumns? = nil,
         email: String? = nil,
         format: ExportChatDtoFormat? = nil,
         page: Double? = nil,
         sortOrder: ExportChatDtoSortOrder? = nil,
+        sortBy: ExportChatDtoSortBy? = nil,
         limit: Double? = nil,
         createdAtGt: Date? = nil,
         createdAtLt: Date? = nil,
@@ -76,11 +82,13 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
         self.squadId = squadId
         self.sessionId = sessionId
         self.previousChatId = previousChatId
+        self.idAny = idAny
         self.columns = columns
         self.email = email
         self.format = format
         self.page = page
         self.sortOrder = sortOrder
+        self.sortBy = sortBy
         self.limit = limit
         self.createdAtGt = createdAtGt
         self.createdAtLt = createdAtLt
@@ -101,11 +109,13 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.sessionId = try container.decodeIfPresent(String.self, forKey: .sessionId)
         self.previousChatId = try container.decodeIfPresent(String.self, forKey: .previousChatId)
+        self.idAny = try container.decodeIfPresent(String.self, forKey: .idAny)
         self.columns = try container.decodeIfPresent(ExportChatDtoColumns.self, forKey: .columns)
         self.email = try container.decodeIfPresent(String.self, forKey: .email)
         self.format = try container.decodeIfPresent(ExportChatDtoFormat.self, forKey: .format)
         self.page = try container.decodeIfPresent(Double.self, forKey: .page)
         self.sortOrder = try container.decodeIfPresent(ExportChatDtoSortOrder.self, forKey: .sortOrder)
+        self.sortBy = try container.decodeIfPresent(ExportChatDtoSortBy.self, forKey: .sortBy)
         self.limit = try container.decodeIfPresent(Double.self, forKey: .limit)
         self.createdAtGt = try container.decodeIfPresent(Date.self, forKey: .createdAtGt)
         self.createdAtLt = try container.decodeIfPresent(Date.self, forKey: .createdAtLt)
@@ -127,11 +137,13 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.squadId, forKey: .squadId)
         try container.encodeIfPresent(self.sessionId, forKey: .sessionId)
         try container.encodeIfPresent(self.previousChatId, forKey: .previousChatId)
+        try container.encodeIfPresent(self.idAny, forKey: .idAny)
         try container.encodeIfPresent(self.columns, forKey: .columns)
         try container.encodeIfPresent(self.email, forKey: .email)
         try container.encodeIfPresent(self.format, forKey: .format)
         try container.encodeIfPresent(self.page, forKey: .page)
         try container.encodeIfPresent(self.sortOrder, forKey: .sortOrder)
+        try container.encodeIfPresent(self.sortBy, forKey: .sortBy)
         try container.encodeIfPresent(self.limit, forKey: .limit)
         try container.encodeIfPresent(self.createdAtGt, forKey: .createdAtGt)
         try container.encodeIfPresent(self.createdAtLt, forKey: .createdAtLt)
@@ -151,11 +163,13 @@ public struct ExportChatDto: Codable, Hashable, Sendable {
         case squadId
         case sessionId
         case previousChatId
+        case idAny
         case columns
         case email
         case format
         case page
         case sortOrder
+        case sortBy
         case limit
         case createdAtGt
         case createdAtLt

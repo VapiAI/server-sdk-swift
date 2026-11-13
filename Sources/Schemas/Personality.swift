@@ -14,7 +14,7 @@ public struct Personality: Codable, Hashable, Sendable {
     public let name: String
     /// This is the full assistant configuration for this personality.
     /// It defines the tester's voice, model, behavior via system prompt, and other settings.
-    public let assistant: CreateAssistantDto
+    public let assistant: TransientAssistantDto
     /// Optional folder path for organizing personalities.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").
     /// Maps to GitOps resource folder structure.
@@ -28,7 +28,7 @@ public struct Personality: Codable, Hashable, Sendable {
         createdAt: Date,
         updatedAt: Date,
         name: String,
-        assistant: CreateAssistantDto,
+        assistant: TransientAssistantDto,
         path: Nullable<String>? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -49,7 +49,7 @@ public struct Personality: Codable, Hashable, Sendable {
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.name = try container.decode(String.self, forKey: .name)
-        self.assistant = try container.decode(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decode(TransientAssistantDto.self, forKey: .assistant)
         self.path = try container.decodeNullableIfPresent(String.self, forKey: .path)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }

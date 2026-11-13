@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for sending Vapi alerts through a Slack incoming webhook.
 public struct CreateSlackWebhookCredentialDto: Codable, Hashable, Sendable {
     /// Slack incoming webhook URL. See https://api.slack.com/messaging/webhooks for setup instructions. This is not returned in the API.
     public let webhookUrl: String

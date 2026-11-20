@@ -9,15 +9,16 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
     case hume(FallbackHumeVoice)
     case inworld(FallbackInworldVoice)
     case lmnt(FallbackLmntVoice)
+    case microsoft(FallbackMicrosoftVoice)
     case neuphonic(FallbackNeuphonicVoice)
     case openai(FallbackOpenAiVoice)
     case playht(FallbackPlayHtVoice)
     case rimeAi(FallbackRimeAiVoice)
     case sesame(FallbackSesameVoice)
     case smallestAi(FallbackSmallestAiVoice)
-    case tavus(FallbackTavusVoice)
     case vapi(FallbackVapiVoice)
     case wellsaid(FallbackWellSaidVoice)
+    case xai(FallbackXaiVoice)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -39,6 +40,8 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
             self = .inworld(try FallbackInworldVoice(from: decoder))
         case "lmnt":
             self = .lmnt(try FallbackLmntVoice(from: decoder))
+        case "microsoft":
+            self = .microsoft(try FallbackMicrosoftVoice(from: decoder))
         case "neuphonic":
             self = .neuphonic(try FallbackNeuphonicVoice(from: decoder))
         case "openai":
@@ -51,12 +54,12 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
             self = .sesame(try FallbackSesameVoice(from: decoder))
         case "smallest-ai":
             self = .smallestAi(try FallbackSmallestAiVoice(from: decoder))
-        case "tavus":
-            self = .tavus(try FallbackTavusVoice(from: decoder))
         case "vapi":
             self = .vapi(try FallbackVapiVoice(from: decoder))
         case "wellsaid":
             self = .wellsaid(try FallbackWellSaidVoice(from: decoder))
+        case "xai":
+            self = .xai(try FallbackXaiVoice(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -94,6 +97,9 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
         case .lmnt(let data):
             try container.encode("lmnt", forKey: .provider)
             try data.encode(to: encoder)
+        case .microsoft(let data):
+            try container.encode("microsoft", forKey: .provider)
+            try data.encode(to: encoder)
         case .neuphonic(let data):
             try container.encode("neuphonic", forKey: .provider)
             try data.encode(to: encoder)
@@ -112,14 +118,14 @@ public enum FallbackPlanVoicesItem: Codable, Hashable, Sendable {
         case .smallestAi(let data):
             try container.encode("smallest-ai", forKey: .provider)
             try data.encode(to: encoder)
-        case .tavus(let data):
-            try container.encode("tavus", forKey: .provider)
-            try data.encode(to: encoder)
         case .vapi(let data):
             try container.encode("vapi", forKey: .provider)
             try data.encode(to: encoder)
         case .wellsaid(let data):
             try container.encode("wellsaid", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

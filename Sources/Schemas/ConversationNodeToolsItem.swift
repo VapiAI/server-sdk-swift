@@ -1,6 +1,6 @@
 import Foundation
 
-public enum ConversationNodeToolsItem: Codable, Hashable, Sendable {
+public indirect enum ConversationNodeToolsItem: Codable, Hashable, Sendable {
     case apiRequest(CreateApiRequestToolDto)
     case bash(CreateBashToolDto)
     case code(CreateCodeToolDto)

@@ -4,6 +4,7 @@ public enum LineInsightQueriesItem: Codable, Hashable, Sendable {
     case jsonQueryOnCallTableWithNumberTypeColumn(JsonQueryOnCallTableWithNumberTypeColumn)
     case jsonQueryOnCallTableWithStringTypeColumn(JsonQueryOnCallTableWithStringTypeColumn)
     case jsonQueryOnCallTableWithStructuredOutputColumn(JsonQueryOnCallTableWithStructuredOutputColumn)
+    case jsonQueryOnEventsTable(JsonQueryOnEventsTable)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -13,6 +14,8 @@ public enum LineInsightQueriesItem: Codable, Hashable, Sendable {
             self = .jsonQueryOnCallTableWithStringTypeColumn(value)
         } else if let value = try? container.decode(JsonQueryOnCallTableWithStructuredOutputColumn.self) {
             self = .jsonQueryOnCallTableWithStructuredOutputColumn(value)
+        } else if let value = try? container.decode(JsonQueryOnEventsTable.self) {
+            self = .jsonQueryOnEventsTable(value)
         } else {
             throw DecodingError.dataCorruptedError(
                 in: container,
@@ -29,6 +32,8 @@ public enum LineInsightQueriesItem: Codable, Hashable, Sendable {
         case .jsonQueryOnCallTableWithStringTypeColumn(let value):
             try container.encode(value)
         case .jsonQueryOnCallTableWithStructuredOutputColumn(let value):
+            try container.encode(value)
+        case .jsonQueryOnEventsTable(let value):
             try container.encode(value)
         }
     }

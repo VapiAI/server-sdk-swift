@@ -1,5 +1,6 @@
 import Foundation
 
+/// A system-authored entry in the call message history, including its content and timing.
 public struct SystemMessage: Codable, Hashable, Sendable {
     /// The role of the system in the conversation.
     public let role: String

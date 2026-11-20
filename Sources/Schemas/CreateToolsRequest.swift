@@ -3,6 +3,7 @@ import Foundation
 public enum CreateToolsRequest: Codable, Hashable, Sendable {
     case apiRequest(CreateApiRequestToolDto)
     case bash(CreateBashToolDto)
+    case code(CreateCodeToolDto)
     case computer(CreateComputerToolDto)
     case dtmf(CreateDtmfToolDto)
     case endCall(CreateEndCallToolDto)
@@ -32,6 +33,8 @@ public enum CreateToolsRequest: Codable, Hashable, Sendable {
             self = .apiRequest(try CreateApiRequestToolDto(from: decoder))
         case "bash":
             self = .bash(try CreateBashToolDto(from: decoder))
+        case "code":
+            self = .code(try CreateCodeToolDto(from: decoder))
         case "computer":
             self = .computer(try CreateComputerToolDto(from: decoder))
         case "dtmf":
@@ -90,6 +93,9 @@ public enum CreateToolsRequest: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .bash(let data):
             try container.encode("bash", forKey: .type)
+            try data.encode(to: encoder)
+        case .code(let data):
+            try container.encode("code", forKey: .type)
             try data.encode(to: encoder)
         case .computer(let data):
             try container.encode("computer", forKey: .type)

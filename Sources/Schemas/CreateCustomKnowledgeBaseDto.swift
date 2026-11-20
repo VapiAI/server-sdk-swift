@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for connecting a custom knowledge-base implementation through a customer-hosted server.
 public struct CreateCustomKnowledgeBaseDto: Codable, Hashable, Sendable {
     /// This knowledge base is bring your own knowledge base implementation.
     public let provider: CreateCustomKnowledgeBaseDtoProvider

@@ -1,7 +1,10 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with Cartesia, including model, language, and fallback settings.
 public struct CartesiaTranscriber: Codable, Hashable, Sendable {
+    /// The Cartesia speech-to-text model used for transcription.
     public let model: CartesiaTranscriberModel?
+    /// The language code used for transcription.
     public let language: CartesiaTranscriberLanguage?
     /// This is the plan for transcriber provider fallbacks in the event that the primary transcriber provider fails.
     public let fallbackPlan: FallbackTranscriberPlan?

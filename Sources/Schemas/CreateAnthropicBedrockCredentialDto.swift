@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for authenticating Anthropic model requests through Amazon Bedrock, including AWS region and authentication method.
 public struct CreateAnthropicBedrockCredentialDto: Codable, Hashable, Sendable {
     /// AWS region where Bedrock is configured.
     public let region: CreateAnthropicBedrockCredentialDtoRegion

@@ -5,6 +5,7 @@ public enum HandoffDestinationAssistantContextEngineeringPlan: Codable, Hashable
     case all(ContextEngineeringPlanAll)
     case lastNMessages(ContextEngineeringPlanLastNMessages)
     case none(ContextEngineeringPlanNone)
+    case previousAssistantMessages(ContextEngineeringPlanPreviousAssistantMessages)
     case userAndAssistantMessages(ContextEngineeringPlanUserAndAssistantMessages)
 
     public init(from decoder: Decoder) throws {
@@ -17,6 +18,8 @@ public enum HandoffDestinationAssistantContextEngineeringPlan: Codable, Hashable
             self = .lastNMessages(try ContextEngineeringPlanLastNMessages(from: decoder))
         case "none":
             self = .none(try ContextEngineeringPlanNone(from: decoder))
+        case "previousAssistantMessages":
+            self = .previousAssistantMessages(try ContextEngineeringPlanPreviousAssistantMessages(from: decoder))
         case "userAndAssistantMessages":
             self = .userAndAssistantMessages(try ContextEngineeringPlanUserAndAssistantMessages(from: decoder))
         default:
@@ -40,6 +43,9 @@ public enum HandoffDestinationAssistantContextEngineeringPlan: Codable, Hashable
             try data.encode(to: encoder)
         case .none(let data):
             try container.encode("none", forKey: .type)
+            try data.encode(to: encoder)
+        case .previousAssistantMessages(let data):
+            try container.encode("previousAssistantMessages", forKey: .type)
             try data.encode(to: encoder)
         case .userAndAssistantMessages(let data):
             try container.encode("userAndAssistantMessages", forKey: .type)

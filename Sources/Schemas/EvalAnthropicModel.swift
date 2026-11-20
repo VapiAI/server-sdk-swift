@@ -1,9 +1,15 @@
 import Foundation
 
+/// Anthropic model configuration for an LLM judge, including its messages, generation settings, and optional extended thinking.
 public struct EvalAnthropicModel: Codable, Hashable, Sendable {
     /// This is the specific model that will be used.
     public let model: EvalAnthropicModelModel
+    /// Reasoning effort for the judge on claude-haiku-5-5. `none` turns thinking
+    /// off. `low` to `max` let the judge think before it submits its verdict.
+    /// Unset means `none`. Rejected for every other model.
+    public let reasoningEffort: EvalAnthropicModelReasoningEffort?
     /// This is the optional configuration for Anthropic's thinking feature.
+    /// claude-haiku-5-5 uses `reasoningEffort` instead.
     /// 
     /// - If provided, `maxTokens` must be greater than `thinking.budgetTokens`.
     public let thinking: AnthropicThinkingConfig?
@@ -25,6 +31,7 @@ public struct EvalAnthropicModel: Codable, Hashable, Sendable {
 
     public init(
         model: EvalAnthropicModelModel,
+        reasoningEffort: EvalAnthropicModelReasoningEffort? = nil,
         thinking: AnthropicThinkingConfig? = nil,
         temperature: Double? = nil,
         maxTokens: Double? = nil,
@@ -32,6 +39,7 @@ public struct EvalAnthropicModel: Codable, Hashable, Sendable {
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.model = model
+        self.reasoningEffort = reasoningEffort
         self.thinking = thinking
         self.temperature = temperature
         self.maxTokens = maxTokens
@@ -42,6 +50,7 @@ public struct EvalAnthropicModel: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.model = try container.decode(EvalAnthropicModelModel.self, forKey: .model)
+        self.reasoningEffort = try container.decodeIfPresent(EvalAnthropicModelReasoningEffort.self, forKey: .reasoningEffort)
         self.thinking = try container.decodeIfPresent(AnthropicThinkingConfig.self, forKey: .thinking)
         self.temperature = try container.decodeIfPresent(Double.self, forKey: .temperature)
         self.maxTokens = try container.decodeIfPresent(Double.self, forKey: .maxTokens)
@@ -53,6 +62,7 @@ public struct EvalAnthropicModel: Codable, Hashable, Sendable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.model, forKey: .model)
+        try container.encodeIfPresent(self.reasoningEffort, forKey: .reasoningEffort)
         try container.encodeIfPresent(self.thinking, forKey: .thinking)
         try container.encodeIfPresent(self.temperature, forKey: .temperature)
         try container.encodeIfPresent(self.maxTokens, forKey: .maxTokens)
@@ -62,6 +72,7 @@ public struct EvalAnthropicModel: Codable, Hashable, Sendable {
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
         case model
+        case reasoningEffort
         case thinking
         case temperature
         case maxTokens

@@ -1,12 +1,16 @@
 import Foundation
 
+/// Credentials for authenticating assistant model requests with Azure OpenAI, including region, endpoint, and available models.
 public struct CreateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
+    /// Azure region that hosts the OpenAI resource.
     public let region: CreateAzureOpenAiCredentialDtoRegion
+    /// Azure OpenAI models available through this credential.
     public let models: [CreateAzureOpenAiCredentialDtoModelsItem]
     /// This is not returned in the API.
     public let openAiKey: String
     /// This is not returned in the API.
     public let ocpApimSubscriptionKey: String?
+    /// Endpoint URL for the Azure OpenAI resource.
     public let openAiEndpoint: String
     /// This is the name of credential. This is just for your reference.
     public let name: String?

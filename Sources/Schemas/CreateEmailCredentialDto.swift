@@ -1,5 +1,6 @@
 import Foundation
 
+/// Destination configuration for sending Vapi alerts to an email address.
 public struct CreateEmailCredentialDto: Codable, Hashable, Sendable {
     /// The recipient email address for alerts
     public let email: String

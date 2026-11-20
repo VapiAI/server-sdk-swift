@@ -1,5 +1,6 @@
 import Foundation
 
+/// Per-call or handoff overrides for an assistant's providers, messages, tools, credentials, call behavior, and server configuration.
 public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// These are the options for the assistant's transcriber.
     public let transcriber: AssistantOverridesTranscriber?
@@ -11,6 +12,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// 
     /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
     public let firstMessage: String?
+    /// Set to `true` to allow the user to interrupt the assistant while it speaks the first message. Default is `false`.
     public let firstMessageInterruptionsEnabled: Bool?
     /// This is the mode for the first message. Default is 'assistant-speaks-first'.
     /// 
@@ -33,6 +35,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// @default 600 (10 minutes)
     public let maxDurationSeconds: Double?
     /// This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+    /// Bundled sounds: 'office', 'white-noise', 'city', 'crowd' and 'farm'. GPT Live assistants don't play 'office'.
     /// You can also provide a custom sound by providing a URL to an audio file.
     public let backgroundSound: AssistantOverridesBackgroundSound?
     /// This determines whether the model's output is used in conversation history rather than the transcription of assistant's speech.
@@ -49,6 +52,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     public let credentials: [AssistantOverridesCredentialsItem]?
     /// This is a set of actions that will be performed on certain events.
     public let hooks: [AssistantOverridesHooksItem]?
+    /// Tools to append to the assistant's existing tool configuration.
     public let toolsAppend: [AssistantOverridesToolsAppendItem]?
     /// These are values that will be used to replace the template variables in the assistant messages and other text-based fields.
     /// This uses LiquidJS syntax. https://liquidjs.com/tutorials/intro-to-liquid.html
@@ -66,12 +70,11 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// 
     /// If unspecified, it will hang up.
     public let voicemailMessage: String?
-    /// This is the message that the assistant will say if it ends the call.
-    /// 
-    /// If unspecified, it will hang up without saying anything.
+    /// The message the assistant says when it ends the call with the Hang Up tool (`endCall`) and that tool has no messages. If the tool has a `request-start` message, the assistant says that message instead. If this field is unspecified or empty, the assistant says "Goodbye" in the transcriber's language. When an assistant hook runs `endCall`, this field isn't used and the assistant says "Goodbye" in English.
     public let endCallMessage: String?
     /// This list contains phrases that, if spoken by the assistant, will trigger the call to be hung up. Case insensitive.
     public let endCallPhrases: [String]?
+    /// Compliance settings to apply, including HIPAA and PCI behavior, security filtering, and recording consent.
     public let compliancePlan: CompliancePlan?
     /// This is for metadata you want to store on the assistant.
     public let metadata: [String: JSONValue]?
@@ -124,6 +127,7 @@ public struct AssistantOverrides: Codable, Hashable, Sendable {
     /// 2. phoneNumber.serverUrl
     /// 3. org.serverUrl
     public let server: Server?
+    /// Configuration for collecting and processing DTMF keypad input.
     public let keypadInputPlan: KeypadInputPlan?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

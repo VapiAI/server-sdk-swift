@@ -1,5 +1,6 @@
 import Foundation
 
+/// Associates a phone number with the customers to dial through that number in a batch call plan.
 public struct DialPlanEntry: Codable, Hashable, Sendable {
     /// The phone number ID to use for calling the customers in this entry.
     public let phoneNumberId: String

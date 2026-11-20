@@ -1,5 +1,6 @@
 import Foundation
 
+/// A simulated system message in an evaluation conversation.
 public struct ChatEvalSystemMessageMock: Codable, Hashable, Sendable {
     /// This is the role of the message author.
     /// For a mock system message, the role is always 'system'

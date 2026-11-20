@@ -15,6 +15,7 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
     /// If unspecified, assistant will wait for user to speak and use the model to respond once they speak.
     public let firstMessage: String?
     /// This is the background sound in the transfer assistant call. Default for phone calls is 'office' and default for web calls is 'off'.
+    /// Bundled sounds: 'office', 'white-noise', 'city', 'crowd' and 'farm'. GPT Live assistants don't play 'office'.
     /// You can also provide a custom sound by providing a URL to an audio file.
     public let backgroundSound: TransferAssistantBackgroundSound?
     /// This is the plan for when the transfer assistant should start talking.
@@ -36,6 +37,10 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
     /// After this time, the transfer will be cancelled automatically.
     /// @default 120
     public let maxDurationSeconds: Double?
+    /// This decides whether the transfer assistant runs the main assistant's hooks on the operator leg of a `warm-transfer-experimental` transfer. The operator is the "customer" there. When unset or `true`, the transfer assistant runs all of the main assistant's hooks, plus `hooks`. When `false`, it runs only `hooks`, plus the main assistant's `call.ending` hooks. An `endCall` in an inherited `customer.speech.timeout` hook ends the whole call when the operator is silent, so set this to `false` to stop that.
+    public let assistantHooksInheritEnabled: Bool?
+    /// These are the hooks the transfer assistant runs on the operator leg of a `warm-transfer-experimental` transfer. The operator is the "customer" there, so `customer.speech.timeout` fires on operator silence. Whether the main assistant's other hooks also run on the operator leg depends on `assistantHooksInheritEnabled`. These hooks run after them. `call.ending` and `call.timeElapsed` are not allowed here. The main assistant's `call.ending` hooks are kept automatically. Time-elapsed hooks are not armed on the operator leg. An `endCall` tool in these hooks ends the whole call, not only the operator leg. A `tool` action must carry an inline `tool`, because `toolId` is not resolved for the transfer assistant.
+    public let hooks: [TransferAssistantHooksItem]?
     /// This enables filtering of noise and background speech while the user is talking.
     /// 
     /// Features:
@@ -65,6 +70,8 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         startSpeakingPlan: StartSpeakingPlan? = nil,
         firstMessageMode: TransferAssistantFirstMessageMode? = nil,
         maxDurationSeconds: Double? = nil,
+        assistantHooksInheritEnabled: Bool? = nil,
+        hooks: [TransferAssistantHooksItem]? = nil,
         backgroundSpeechDenoisingPlan: BackgroundSpeechDenoisingPlan? = nil,
         silenceTimeoutSeconds: Double? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -78,6 +85,8 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         self.startSpeakingPlan = startSpeakingPlan
         self.firstMessageMode = firstMessageMode
         self.maxDurationSeconds = maxDurationSeconds
+        self.assistantHooksInheritEnabled = assistantHooksInheritEnabled
+        self.hooks = hooks
         self.backgroundSpeechDenoisingPlan = backgroundSpeechDenoisingPlan
         self.silenceTimeoutSeconds = silenceTimeoutSeconds
         self.additionalProperties = additionalProperties
@@ -94,6 +103,8 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         self.startSpeakingPlan = try container.decodeIfPresent(StartSpeakingPlan.self, forKey: .startSpeakingPlan)
         self.firstMessageMode = try container.decodeIfPresent(TransferAssistantFirstMessageMode.self, forKey: .firstMessageMode)
         self.maxDurationSeconds = try container.decodeIfPresent(Double.self, forKey: .maxDurationSeconds)
+        self.assistantHooksInheritEnabled = try container.decodeIfPresent(Bool.self, forKey: .assistantHooksInheritEnabled)
+        self.hooks = try container.decodeIfPresent([TransferAssistantHooksItem].self, forKey: .hooks)
         self.backgroundSpeechDenoisingPlan = try container.decodeIfPresent(BackgroundSpeechDenoisingPlan.self, forKey: .backgroundSpeechDenoisingPlan)
         self.silenceTimeoutSeconds = try container.decodeIfPresent(Double.self, forKey: .silenceTimeoutSeconds)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
@@ -111,6 +122,8 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.startSpeakingPlan, forKey: .startSpeakingPlan)
         try container.encodeIfPresent(self.firstMessageMode, forKey: .firstMessageMode)
         try container.encodeIfPresent(self.maxDurationSeconds, forKey: .maxDurationSeconds)
+        try container.encodeIfPresent(self.assistantHooksInheritEnabled, forKey: .assistantHooksInheritEnabled)
+        try container.encodeIfPresent(self.hooks, forKey: .hooks)
         try container.encodeIfPresent(self.backgroundSpeechDenoisingPlan, forKey: .backgroundSpeechDenoisingPlan)
         try container.encodeIfPresent(self.silenceTimeoutSeconds, forKey: .silenceTimeoutSeconds)
     }
@@ -126,6 +139,8 @@ public struct TransferAssistant: Codable, Hashable, Sendable {
         case startSpeakingPlan
         case firstMessageMode
         case maxDurationSeconds
+        case assistantHooksInheritEnabled
+        case hooks
         case backgroundSpeechDenoisingPlan
         case silenceTimeoutSeconds
     }

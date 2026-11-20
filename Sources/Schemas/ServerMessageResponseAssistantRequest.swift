@@ -18,7 +18,7 @@ public struct ServerMessageResponseAssistantRequest: Codable, Hashable, Sendable
     /// - Assistant, use `assistant`
     /// - Squad, use `squad`
     /// - Workflow, use `workflow`
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// These are the overrides for the `assistant` or `assistantId`'s settings and template variables.
     public let assistantOverrides: AssistantOverrides?
     /// This is the squad that will be used for the call. To use a transient squad, use `squad` instead.
@@ -64,7 +64,7 @@ public struct ServerMessageResponseAssistantRequest: Codable, Hashable, Sendable
     public init(
         destination: ServerMessageResponseAssistantRequestDestination? = nil,
         assistantId: String? = nil,
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         squadId: String? = nil,
         squad: CreateSquadDto? = nil,
@@ -93,7 +93,7 @@ public struct ServerMessageResponseAssistantRequest: Codable, Hashable, Sendable
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.destination = try container.decodeIfPresent(ServerMessageResponseAssistantRequestDestination.self, forKey: .destination)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)

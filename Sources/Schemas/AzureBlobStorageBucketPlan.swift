@@ -1,5 +1,6 @@
 import Foundation
 
+/// Azure Blob Storage container configuration for call artifacts, including its connection string, container name, and storage path.
 public struct AzureBlobStorageBucketPlan: Codable, Hashable, Sendable {
     /// This is the blob storage connection string for the Azure resource.
     public let connectionString: String

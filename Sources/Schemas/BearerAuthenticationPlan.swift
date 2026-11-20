@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for authenticating outbound requests with a bearer token, including header name and optional `Bearer` prefix.
 public struct BearerAuthenticationPlan: Codable, Hashable, Sendable {
     /// This is the bearer token value.
     public let token: String

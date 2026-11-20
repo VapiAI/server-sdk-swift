@@ -1,5 +1,6 @@
 import Foundation
 
+/// Cost for an individual analysis request, including analysis type, model, token usage, and amount.
 public struct AnalysisCost: Codable, Hashable, Sendable {
     /// This is the type of analysis performed.
     public let analysisType: AnalysisCostAnalysisType
@@ -11,6 +12,14 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
     public let completionTokens: Double
     /// This is the number of cached prompt tokens used in the analysis. This is only applicable to certain providers (e.g., OpenAI, Azure OpenAI) that support prompt caching. Cached tokens are billed at a discounted rate.
     public let cachedPromptTokens: Double?
+    /// This is the number of reasoning tokens generated in the analysis, reported only by reasoning models (e.g., GPT-5) on providers that report them. This is a subset of `completionTokens`, not an addition to it: reasoning tokens are already billed at the output-token rate, so this is for visibility only and does not affect `cost`.
+    public let reasoningTokens: Double?
+    /// This is the per-structured-output breakdown of this cost. The `cost`, `promptTokens`, `completionTokens` and `cachedPromptTokens` above are the sums of these rows.
+    /// 
+    /// This is only set when `analysisType` is `structuredOutput`, and it is omitted entirely rather than partially populated, so when it is present the rows always reconcile to the totals above.
+    /// 
+    /// A structured output that was skipped, or that extracts via regex, makes no LLM call and so has no row here — this is not a complete list of the call's configured structured outputs. There is one row per evaluation, so a `structuredOutputId` can appear more than once if it was evaluated more than once; sum the rows rather than indexing them by id.
+    public let structuredOutputBreakdown: [StructuredOutputCostBreakdown]?
     /// This is the cost of the component in USD.
     public let cost: Double
     /// Additional properties that are not explicitly defined in the schema
@@ -22,6 +31,8 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         promptTokens: Double,
         completionTokens: Double,
         cachedPromptTokens: Double? = nil,
+        reasoningTokens: Double? = nil,
+        structuredOutputBreakdown: [StructuredOutputCostBreakdown]? = nil,
         cost: Double,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -30,6 +41,8 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         self.promptTokens = promptTokens
         self.completionTokens = completionTokens
         self.cachedPromptTokens = cachedPromptTokens
+        self.reasoningTokens = reasoningTokens
+        self.structuredOutputBreakdown = structuredOutputBreakdown
         self.cost = cost
         self.additionalProperties = additionalProperties
     }
@@ -41,6 +54,8 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         self.promptTokens = try container.decode(Double.self, forKey: .promptTokens)
         self.completionTokens = try container.decode(Double.self, forKey: .completionTokens)
         self.cachedPromptTokens = try container.decodeIfPresent(Double.self, forKey: .cachedPromptTokens)
+        self.reasoningTokens = try container.decodeIfPresent(Double.self, forKey: .reasoningTokens)
+        self.structuredOutputBreakdown = try container.decodeIfPresent([StructuredOutputCostBreakdown].self, forKey: .structuredOutputBreakdown)
         self.cost = try container.decode(Double.self, forKey: .cost)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -53,6 +68,8 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         try container.encode(self.promptTokens, forKey: .promptTokens)
         try container.encode(self.completionTokens, forKey: .completionTokens)
         try container.encodeIfPresent(self.cachedPromptTokens, forKey: .cachedPromptTokens)
+        try container.encodeIfPresent(self.reasoningTokens, forKey: .reasoningTokens)
+        try container.encodeIfPresent(self.structuredOutputBreakdown, forKey: .structuredOutputBreakdown)
         try container.encode(self.cost, forKey: .cost)
     }
 
@@ -63,6 +80,8 @@ public struct AnalysisCost: Codable, Hashable, Sendable {
         case promptTokens
         case completionTokens
         case cachedPromptTokens
+        case reasoningTokens
+        case structuredOutputBreakdown
         case cost
     }
 }

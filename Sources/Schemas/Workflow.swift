@@ -19,6 +19,7 @@ public struct Workflow: Codable, Hashable, Sendable {
     /// Currently, only Langfuse is supported.
     public let observabilityPlan: LangfuseObservabilityPlan?
     /// This is the background sound in the call. Default for phone calls is 'office' and default for web calls is 'off'.
+    /// Bundled sounds: 'office', 'white-noise', 'city', 'crowd' and 'farm'. GPT Live assistants don't play 'office'.
     /// You can also provide a custom sound by providing a URL to an audio file.
     public let backgroundSound: WorkflowBackgroundSound?
     /// This is a set of actions that will be performed on certain events.

@@ -1,6 +1,7 @@
 import Foundation
 
 public struct UpdateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
+    public let provider: UpdateAzureOpenAiCredentialDtoProvider?
     public let region: UpdateAzureOpenAiCredentialDtoRegion?
     public let models: [UpdateAzureOpenAiCredentialDtoModelsItem]?
     /// This is not returned in the API.
@@ -14,6 +15,7 @@ public struct UpdateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
+        provider: UpdateAzureOpenAiCredentialDtoProvider? = nil,
         region: UpdateAzureOpenAiCredentialDtoRegion? = nil,
         models: [UpdateAzureOpenAiCredentialDtoModelsItem]? = nil,
         openAiKey: String? = nil,
@@ -22,6 +24,7 @@ public struct UpdateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
         openAiEndpoint: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
+        self.provider = provider
         self.region = region
         self.models = models
         self.openAiKey = openAiKey
@@ -33,6 +36,7 @@ public struct UpdateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.provider = try container.decodeIfPresent(UpdateAzureOpenAiCredentialDtoProvider.self, forKey: .provider)
         self.region = try container.decodeIfPresent(UpdateAzureOpenAiCredentialDtoRegion.self, forKey: .region)
         self.models = try container.decodeIfPresent([UpdateAzureOpenAiCredentialDtoModelsItem].self, forKey: .models)
         self.openAiKey = try container.decodeIfPresent(String.self, forKey: .openAiKey)
@@ -45,6 +49,7 @@ public struct UpdateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
     public func encode(to encoder: Encoder) throws -> Void {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encodeIfPresent(self.provider, forKey: .provider)
         try container.encodeIfPresent(self.region, forKey: .region)
         try container.encodeIfPresent(self.models, forKey: .models)
         try container.encodeIfPresent(self.openAiKey, forKey: .openAiKey)
@@ -55,6 +60,7 @@ public struct UpdateAzureOpenAiCredentialDto: Codable, Hashable, Sendable {
 
     /// Keys for encoding/decoding struct properties.
     enum CodingKeys: String, CodingKey, CaseIterable {
+        case provider
         case region
         case models
         case openAiKey = "openAIKey"

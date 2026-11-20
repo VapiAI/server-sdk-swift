@@ -1,5 +1,6 @@
 import Foundation
 
+/// VapiQL JSON query that aggregates a numeric call-table column with optional call filters.
 public struct JsonQueryOnCallTableWithNumberTypeColumn: Codable, Hashable, Sendable {
     /// This is the type of query. Only allowed type is "vapiql-json".
     public let type: JsonQueryOnCallTableWithNumberTypeColumnType
@@ -14,6 +15,7 @@ public struct JsonQueryOnCallTableWithNumberTypeColumn: Codable, Hashable, Senda
     public let column: JsonQueryOnCallTableWithNumberTypeColumnColumn
     /// This is the aggregation operation to perform on the column.
     /// When the column is a number type, the operation must be one of the following:
+    /// - count
     /// - average
     /// - sum
     /// - min

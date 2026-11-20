@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with MiniMax, including voice and model selection, emotion, pitch, speed, volume, region, language, text normalization, chunking, caching, and fallback settings.
 public struct MinimaxVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?

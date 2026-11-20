@@ -29,6 +29,7 @@ public enum FallbackCartesiaVoiceLanguage: String, Codable, Hashable, CaseIterab
     case ms
     case nl
     case no
+    case or
     case pa
     case pl
     case pt
@@ -42,6 +43,7 @@ public enum FallbackCartesiaVoiceLanguage: String, Codable, Hashable, CaseIterab
     case tl
     case tr
     case uk
+    case ur
     case vi
     case zh
 }

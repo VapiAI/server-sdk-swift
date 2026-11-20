@@ -13,9 +13,12 @@ public enum ConversationNodeTranscriber: Codable, Hashable, Sendable {
     case gladia(GladiaTranscriber)
     case google(GoogleTranscriber)
     case openai(OpenAiTranscriber)
+    case reson8(Reson8Transcriber)
     case soniox(SonioxTranscriber)
     case speechmatics(SpeechmaticsTranscriber)
     case talkscriber(TalkscriberTranscriber)
+    case vapi(VapiTranscriber)
+    case xai(XaiTranscriber)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -39,12 +42,18 @@ public enum ConversationNodeTranscriber: Codable, Hashable, Sendable {
             self = .google(try GoogleTranscriber(from: decoder))
         case "openai":
             self = .openai(try OpenAiTranscriber(from: decoder))
+        case "reson8":
+            self = .reson8(try Reson8Transcriber(from: decoder))
         case "soniox":
             self = .soniox(try SonioxTranscriber(from: decoder))
         case "speechmatics":
             self = .speechmatics(try SpeechmaticsTranscriber(from: decoder))
         case "talkscriber":
             self = .talkscriber(try TalkscriberTranscriber(from: decoder))
+        case "vapi":
+            self = .vapi(try VapiTranscriber(from: decoder))
+        case "xai":
+            self = .xai(try XaiTranscriber(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -85,6 +94,9 @@ public enum ConversationNodeTranscriber: Codable, Hashable, Sendable {
         case .openai(let data):
             try container.encode("openai", forKey: .provider)
             try data.encode(to: encoder)
+        case .reson8(let data):
+            try container.encode("reson8", forKey: .provider)
+            try data.encode(to: encoder)
         case .soniox(let data):
             try container.encode("soniox", forKey: .provider)
             try data.encode(to: encoder)
@@ -93,6 +105,12 @@ public enum ConversationNodeTranscriber: Codable, Hashable, Sendable {
             try data.encode(to: encoder)
         case .talkscriber(let data):
             try container.encode("talkscriber", forKey: .provider)
+            try data.encode(to: encoder)
+        case .vapi(let data):
+            try container.encode("vapi", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

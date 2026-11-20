@@ -1,5 +1,6 @@
 import Foundation
 
+/// A Twilio phone number connected to Vapi, including its Twilio account details, SMS configuration, routing, hooks, server settings, and lifecycle metadata.
 public struct TwilioPhoneNumber: Codable, Hashable, Sendable {
     /// This is the fallback destination an inbound call will be transferred to if:
     /// 1. `assistantId` is not set

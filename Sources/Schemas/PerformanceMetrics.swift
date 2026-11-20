@@ -1,11 +1,15 @@
 import Foundation
 
+/// Call performance measurements, including per-turn and average provider, endpointing, transport, and interruption metrics.
 public struct PerformanceMetrics: Codable, Hashable, Sendable {
-    /// These are the individual latencies for each turn.
+    /// These are the individual latencies for each turn, in milliseconds, measured on Vapi's servers without network or playback time.
+    /// A turn is recorded only when the assistant replies to the user. A first message the assistant speaks first is not recorded; with `assistant-waits-for-user` it is recorded, with `endpointingLatency` 0. A component that was not measured on a turn is 0.
     public let turnLatencies: [TurnLatency]?
-    /// This is the average latency for the model to output the first token.
+    /// This is the average `modelLatency` across `turnLatencies`, in milliseconds.
+    /// Turns that recorded 0 because the model latency was not measured are included in the average.
     public let modelLatencyAverage: Double?
-    /// This is the average latency for the text to speech.
+    /// This is the average `voiceLatency` across `turnLatencies`, in milliseconds.
+    /// Turns that recorded 0 because the voice latency was not measured are included in the average.
     public let voiceLatencyAverage: Double?
     /// This is the average latency for the transcriber.
     public let transcriberLatencyAverage: Double?
@@ -21,6 +25,9 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
     public let numUserInterrupted: Double?
     /// This is the number of times the assistant was interrupted by the user during the call.
     public let numAssistantInterrupted: Double?
+    /// This is `true` when the call was recorded with `TurnLatency.unmeasured`, so a turn without that list had every component measured.
+    /// Absent on calls recorded before `unmeasured` existed, where a 0 latency may mean either 0ms or "not measured".
+    public let turnLatencyUnmeasuredTracked: Bool?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -35,6 +42,7 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         toTransportLatencyAverage: Double? = nil,
         numUserInterrupted: Double? = nil,
         numAssistantInterrupted: Double? = nil,
+        turnLatencyUnmeasuredTracked: Bool? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.turnLatencies = turnLatencies
@@ -47,6 +55,7 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         self.toTransportLatencyAverage = toTransportLatencyAverage
         self.numUserInterrupted = numUserInterrupted
         self.numAssistantInterrupted = numAssistantInterrupted
+        self.turnLatencyUnmeasuredTracked = turnLatencyUnmeasuredTracked
         self.additionalProperties = additionalProperties
     }
 
@@ -62,6 +71,7 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         self.toTransportLatencyAverage = try container.decodeIfPresent(Double.self, forKey: .toTransportLatencyAverage)
         self.numUserInterrupted = try container.decodeIfPresent(Double.self, forKey: .numUserInterrupted)
         self.numAssistantInterrupted = try container.decodeIfPresent(Double.self, forKey: .numAssistantInterrupted)
+        self.turnLatencyUnmeasuredTracked = try container.decodeIfPresent(Bool.self, forKey: .turnLatencyUnmeasuredTracked)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -78,6 +88,7 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.toTransportLatencyAverage, forKey: .toTransportLatencyAverage)
         try container.encodeIfPresent(self.numUserInterrupted, forKey: .numUserInterrupted)
         try container.encodeIfPresent(self.numAssistantInterrupted, forKey: .numAssistantInterrupted)
+        try container.encodeIfPresent(self.turnLatencyUnmeasuredTracked, forKey: .turnLatencyUnmeasuredTracked)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -92,5 +103,6 @@ public struct PerformanceMetrics: Codable, Hashable, Sendable {
         case toTransportLatencyAverage
         case numUserInterrupted
         case numAssistantInterrupted
+        case turnLatencyUnmeasuredTracked
     }
 }

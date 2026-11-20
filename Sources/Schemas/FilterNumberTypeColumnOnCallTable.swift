@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters call records by comparing a numeric field with a value.
 public struct FilterNumberTypeColumnOnCallTable: Codable, Hashable, Sendable {
     /// This is the column in the call table that will be filtered on.
     /// Number Type columns are columns where the rows store data as a number.

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Compares a named parameter with a value using the selected comparison operator.
 public struct Condition: Codable, Hashable, Sendable {
     /// This is the operator you want to use to compare the parameter and value.
     public let `operator`: ConditionOperator

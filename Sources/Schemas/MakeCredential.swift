@@ -4,10 +4,10 @@ public struct MakeCredential: Codable, Hashable, Sendable {
     public let provider: MakeCredentialProvider
     /// Team ID
     public let teamId: String
-    /// Region of your application. For example: eu1, eu2, us1, us2
-    public let region: String
     /// This is not returned in the API.
     public let apiKey: String
+    /// Region of your application. For example: eu1, eu2, us1, us2
+    public let region: String
     /// This is the unique identifier for the credential.
     public let id: String
     /// This is the unique identifier for the org that this credential belongs to.
@@ -24,8 +24,8 @@ public struct MakeCredential: Codable, Hashable, Sendable {
     public init(
         provider: MakeCredentialProvider,
         teamId: String,
-        region: String,
         apiKey: String,
+        region: String,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -35,8 +35,8 @@ public struct MakeCredential: Codable, Hashable, Sendable {
     ) {
         self.provider = provider
         self.teamId = teamId
-        self.region = region
         self.apiKey = apiKey
+        self.region = region
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -49,8 +49,8 @@ public struct MakeCredential: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.provider = try container.decode(MakeCredentialProvider.self, forKey: .provider)
         self.teamId = try container.decode(String.self, forKey: .teamId)
-        self.region = try container.decode(String.self, forKey: .region)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
+        self.region = try container.decode(String.self, forKey: .region)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -64,8 +64,8 @@ public struct MakeCredential: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.provider, forKey: .provider)
         try container.encode(self.teamId, forKey: .teamId)
-        try container.encode(self.region, forKey: .region)
         try container.encode(self.apiKey, forKey: .apiKey)
+        try container.encode(self.region, forKey: .region)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -77,8 +77,8 @@ public struct MakeCredential: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case provider
         case teamId
-        case region
         case apiKey
+        case region
         case id
         case orgId
         case createdAt

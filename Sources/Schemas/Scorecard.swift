@@ -1,5 +1,6 @@
 import Foundation
 
+/// A saved scorecard containing its evaluation metrics, scoring conditions, assistant associations, descriptive metadata, and lifecycle information.
 public struct Scorecard: Codable, Hashable, Sendable {
     /// This is the unique identifier for the scorecard.
     public let id: String

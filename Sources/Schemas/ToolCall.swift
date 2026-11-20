@@ -1,5 +1,6 @@
 import Foundation
 
+/// A tool invocation requested by the assistant, including its identifier, type, and function details.
 public struct ToolCall: Codable, Hashable, Sendable {
     /// This is the ID of the tool call
     public let id: String

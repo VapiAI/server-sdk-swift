@@ -1,5 +1,6 @@
 import Foundation
 
+/// Evaluates a Liquid template that must return `true` or `false`.
 public struct LiquidCondition: Codable, Hashable, Sendable {
     /// This is the Liquid template that must return exactly "true" or "false" as a string.
     /// The template is evaluated and the entire output must be either "true" or "false" - nothing else.

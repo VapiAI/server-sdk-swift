@@ -1,19 +1,24 @@
 import Foundation
 
 public struct CreateScenarioDto: Codable, Hashable, Sendable {
-    /// This is the name of the scenario.
+    /// The display name of the scenario, for example `Book an appointment`.
     public let name: String
-    /// This is the script/instructions for the tester to follow during the simulation.
+    /// What the AI tester should try to accomplish in the conversation. Write it as the AI tester's goal, for example `Book an appointment for next week and confirm the time.`
     public let instructions: String
-    /// This is the structured output-based evaluation plan for the simulation.
-    /// Each item defines a structured output to extract and evaluate against an expected value.
+    /// The checks that decide whether a run passes. Each evaluation compares a structured output against an expected value. At least one evaluation is required to run.
     public let evaluations: [EvaluationPlanItem]
     /// Hooks to run on simulation lifecycle events
     public let hooks: [CreateScenarioDtoHooksItem]?
     /// Overrides to inject into the simulated target assistant or squad
     public let targetOverrides: AssistantOverrides?
-    /// Scenario-level tool call mocks to use during simulations.
+    /// Mock results for the assistant or squad's tools during the simulation, so the run stays deterministic without calling real services.
     public let toolMocks: [ScenarioToolMock]?
+    /// Latency ceilings for voice simulations. Each expectation aggregates the
+    /// target call's per-turn latencies and fails the simulation (when required)
+    /// if the aggregated value exceeds its threshold. Skipped for chat simulations
+    /// and GPT Live targets; on any other voice simulation, a metric that no turn
+    /// measured fails.
+    public let latencyExpectations: [LatencyExpectation]?
     /// Optional folder path for organizing scenarios.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").
     /// Maps to GitOps resource folder structure.
@@ -28,6 +33,7 @@ public struct CreateScenarioDto: Codable, Hashable, Sendable {
         hooks: [CreateScenarioDtoHooksItem]? = nil,
         targetOverrides: AssistantOverrides? = nil,
         toolMocks: [ScenarioToolMock]? = nil,
+        latencyExpectations: [LatencyExpectation]? = nil,
         path: Nullable<String>? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -37,6 +43,7 @@ public struct CreateScenarioDto: Codable, Hashable, Sendable {
         self.hooks = hooks
         self.targetOverrides = targetOverrides
         self.toolMocks = toolMocks
+        self.latencyExpectations = latencyExpectations
         self.path = path
         self.additionalProperties = additionalProperties
     }
@@ -49,6 +56,7 @@ public struct CreateScenarioDto: Codable, Hashable, Sendable {
         self.hooks = try container.decodeIfPresent([CreateScenarioDtoHooksItem].self, forKey: .hooks)
         self.targetOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .targetOverrides)
         self.toolMocks = try container.decodeIfPresent([ScenarioToolMock].self, forKey: .toolMocks)
+        self.latencyExpectations = try container.decodeIfPresent([LatencyExpectation].self, forKey: .latencyExpectations)
         self.path = try container.decodeNullableIfPresent(String.self, forKey: .path)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -62,6 +70,7 @@ public struct CreateScenarioDto: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.hooks, forKey: .hooks)
         try container.encodeIfPresent(self.targetOverrides, forKey: .targetOverrides)
         try container.encodeIfPresent(self.toolMocks, forKey: .toolMocks)
+        try container.encodeIfPresent(self.latencyExpectations, forKey: .latencyExpectations)
         try container.encodeNullableIfPresent(self.path, forKey: .path)
     }
 
@@ -73,6 +82,7 @@ public struct CreateScenarioDto: Codable, Hashable, Sendable {
         case hooks
         case targetOverrides
         case toolMocks
+        case latencyExpectations
         case path
     }
 }

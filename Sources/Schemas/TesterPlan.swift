@@ -4,7 +4,7 @@ public struct TesterPlan: Codable, Hashable, Sendable {
     /// Pass a transient assistant to use for the test assistant.
     /// 
     /// Make sure to write a detailed system prompt for a test assistant, and use the {{test.script}} variable to access the test script.
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// Pass an assistant id that can be access
     /// 
     /// Make sure to write a detailed system prompt for the test assistant, and use the {{test.script}} variable to access the test script.
@@ -18,7 +18,7 @@ public struct TesterPlan: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         assistantId: String? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -31,7 +31,7 @@ public struct TesterPlan: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)

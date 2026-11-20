@@ -1,5 +1,6 @@
 import Foundation
 
+/// Filters call records by comparing or searching a string-valued field.
 public struct FilterStringTypeColumnOnCallTable: Codable, Hashable, Sendable {
     /// This is the column in the call table that will be filtered on.
     /// String Type columns are columns where the rows store data as a string.

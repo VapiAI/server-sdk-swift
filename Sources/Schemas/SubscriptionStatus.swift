@@ -5,4 +5,5 @@ import Foundation
 public enum SubscriptionStatus: String, Codable, Hashable, CaseIterable, Sendable {
     case active
     case frozen
+    case blocked
 }

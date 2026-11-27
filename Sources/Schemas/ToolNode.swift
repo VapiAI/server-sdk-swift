@@ -1,10 +1,12 @@
 import Foundation
 
+/// A workflow node that invokes an inline tool or an existing saved tool.
 public struct ToolNode: Codable, Hashable, Sendable {
     /// This is the tool to call. To use an existing tool, send `toolId` instead.
     public let tool: ToolNodeTool?
     /// This is the tool to call. To use a transient tool, send `tool` instead.
     public let toolId: String?
+    /// Unique name used to identify this workflow node.
     public let name: String
     /// This is whether or not the node is the start of the workflow.
     public let isStart: Bool?

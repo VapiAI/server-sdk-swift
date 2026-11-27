@@ -1,6 +1,6 @@
 import Foundation
 
-public enum WorkflowUserEditableNodesItem: Codable, Hashable, Sendable {
+public indirect enum WorkflowUserEditableNodesItem: Codable, Hashable, Sendable {
     case conversation(ConversationNode)
     case tool(ToolNode)
 

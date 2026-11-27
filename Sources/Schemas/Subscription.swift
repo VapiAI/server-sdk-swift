@@ -7,6 +7,10 @@ public struct Subscription: Codable, Hashable, Sendable {
     public let createdAt: Date
     /// This is the timestamp when the subscription was last updated.
     public let updatedAt: Date
+    /// This is the display name for the subscription, used to tell subscriptions
+    /// apart in the dashboard. It is unique across all subscriptions and does not
+    /// appear on invoices, which use the company details on the invoice plan.
+    public let name: Nullable<String>?
     /// This is the type / tier of the subscription.
     public let type: SubscriptionType
     /// This is the status of the subscription. Past due subscriptions are subscriptions
@@ -35,10 +39,6 @@ public struct Subscription: Codable, Hashable, Sendable {
     public let stripeCustomerId: String?
     /// This is the Stripe payment ID.
     public let stripePaymentMethodId: String?
-    /// If this flag is true, then the user has purchased slack support.
-    public let slackSupportEnabled: Bool?
-    /// If this subscription has a slack support subscription, the slack channel's ID will be stored here.
-    public let slackChannelId: String?
     /// This is the HIPAA enabled flag for the subscription. It determines whether orgs under this
     /// subscription have the option to enable HIPAA compliance.
     public let hipaaEnabled: Bool?
@@ -87,15 +87,27 @@ public struct Subscription: Codable, Hashable, Sendable {
     /// This is the ID for the Common Paper agreement outlining the PCI contract.
     public let pciCommonPaperAgreementId: String?
     /// This is the call retention days for the subscription.
-    public let callRetentionDays: Double?
+    public let callRetentionDays: Nullable<Double>?
     /// This is the chat retention days for the subscription.
-    public let chatRetentionDays: Double?
+    public let chatRetentionDays: Nullable<Double>?
     /// This is the minutes_included reset frequency for the subscription.
     public let minutesIncludedResetFrequency: SubscriptionMinutesIncludedResetFrequency?
     /// This is the Role Based Access Control (RBAC) enabled flag for the subscription.
     public let rbacEnabled: Bool?
     /// This is the platform fee for the subscription.
     public let platformFee: Double?
+    /// This is how payment is collected for the subscription: charged to the card
+    /// on file, or invoiced.
+    public let billingCollectionMethod: Nullable<SubscriptionBillingCollectionMethod>?
+    /// This is when the current or most recent demo on this subscription started,
+    /// either when Vapi created the account as a demo or when Vapi made an
+    /// existing pay-as-you-go account one. Not set if it was never a demo.
+    public let demoStartedAt: Nullable<Date>?
+    /// This is when that demo ended, by an upgrade or by Vapi. Not set while the
+    /// demo is active, and cleared when an ended demo starts again. A demo is
+    /// active while `demoStartedAt` is set, this is not, and the subscription is
+    /// pay-as-you-go.
+    public let demoEndedAt: Nullable<Date>?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
@@ -103,6 +115,7 @@ public struct Subscription: Codable, Hashable, Sendable {
         id: String,
         createdAt: Date,
         updatedAt: Date,
+        name: Nullable<String>? = nil,
         type: SubscriptionType,
         status: SubscriptionStatus,
         credits: String,
@@ -115,8 +128,6 @@ public struct Subscription: Codable, Hashable, Sendable {
         monthlyCreditCheckScheduleId: Double? = nil,
         stripeCustomerId: String? = nil,
         stripePaymentMethodId: String? = nil,
-        slackSupportEnabled: Bool? = nil,
-        slackChannelId: String? = nil,
         hipaaEnabled: Bool? = nil,
         zdrEnabled: Bool? = nil,
         dataRetentionEnabled: Bool? = nil,
@@ -138,16 +149,20 @@ public struct Subscription: Codable, Hashable, Sendable {
         invoicePlan: InvoicePlan? = nil,
         pciEnabled: Bool? = nil,
         pciCommonPaperAgreementId: String? = nil,
-        callRetentionDays: Double? = nil,
-        chatRetentionDays: Double? = nil,
+        callRetentionDays: Nullable<Double>? = nil,
+        chatRetentionDays: Nullable<Double>? = nil,
         minutesIncludedResetFrequency: SubscriptionMinutesIncludedResetFrequency? = nil,
         rbacEnabled: Bool? = nil,
         platformFee: Double? = nil,
+        billingCollectionMethod: Nullable<SubscriptionBillingCollectionMethod>? = nil,
+        demoStartedAt: Nullable<Date>? = nil,
+        demoEndedAt: Nullable<Date>? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.id = id
         self.createdAt = createdAt
         self.updatedAt = updatedAt
+        self.name = name
         self.type = type
         self.status = status
         self.credits = credits
@@ -160,8 +175,6 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.monthlyCreditCheckScheduleId = monthlyCreditCheckScheduleId
         self.stripeCustomerId = stripeCustomerId
         self.stripePaymentMethodId = stripePaymentMethodId
-        self.slackSupportEnabled = slackSupportEnabled
-        self.slackChannelId = slackChannelId
         self.hipaaEnabled = hipaaEnabled
         self.zdrEnabled = zdrEnabled
         self.dataRetentionEnabled = dataRetentionEnabled
@@ -188,6 +201,9 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.minutesIncludedResetFrequency = minutesIncludedResetFrequency
         self.rbacEnabled = rbacEnabled
         self.platformFee = platformFee
+        self.billingCollectionMethod = billingCollectionMethod
+        self.demoStartedAt = demoStartedAt
+        self.demoEndedAt = demoEndedAt
         self.additionalProperties = additionalProperties
     }
 
@@ -196,6 +212,7 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.id = try container.decode(String.self, forKey: .id)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
+        self.name = try container.decodeNullableIfPresent(String.self, forKey: .name)
         self.type = try container.decode(SubscriptionType.self, forKey: .type)
         self.status = try container.decode(SubscriptionStatus.self, forKey: .status)
         self.credits = try container.decode(String.self, forKey: .credits)
@@ -208,8 +225,6 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.monthlyCreditCheckScheduleId = try container.decodeIfPresent(Double.self, forKey: .monthlyCreditCheckScheduleId)
         self.stripeCustomerId = try container.decodeIfPresent(String.self, forKey: .stripeCustomerId)
         self.stripePaymentMethodId = try container.decodeIfPresent(String.self, forKey: .stripePaymentMethodId)
-        self.slackSupportEnabled = try container.decodeIfPresent(Bool.self, forKey: .slackSupportEnabled)
-        self.slackChannelId = try container.decodeIfPresent(String.self, forKey: .slackChannelId)
         self.hipaaEnabled = try container.decodeIfPresent(Bool.self, forKey: .hipaaEnabled)
         self.zdrEnabled = try container.decodeIfPresent(Bool.self, forKey: .zdrEnabled)
         self.dataRetentionEnabled = try container.decodeIfPresent(Bool.self, forKey: .dataRetentionEnabled)
@@ -231,11 +246,14 @@ public struct Subscription: Codable, Hashable, Sendable {
         self.invoicePlan = try container.decodeIfPresent(InvoicePlan.self, forKey: .invoicePlan)
         self.pciEnabled = try container.decodeIfPresent(Bool.self, forKey: .pciEnabled)
         self.pciCommonPaperAgreementId = try container.decodeIfPresent(String.self, forKey: .pciCommonPaperAgreementId)
-        self.callRetentionDays = try container.decodeIfPresent(Double.self, forKey: .callRetentionDays)
-        self.chatRetentionDays = try container.decodeIfPresent(Double.self, forKey: .chatRetentionDays)
+        self.callRetentionDays = try container.decodeNullableIfPresent(Double.self, forKey: .callRetentionDays)
+        self.chatRetentionDays = try container.decodeNullableIfPresent(Double.self, forKey: .chatRetentionDays)
         self.minutesIncludedResetFrequency = try container.decodeIfPresent(SubscriptionMinutesIncludedResetFrequency.self, forKey: .minutesIncludedResetFrequency)
         self.rbacEnabled = try container.decodeIfPresent(Bool.self, forKey: .rbacEnabled)
         self.platformFee = try container.decodeIfPresent(Double.self, forKey: .platformFee)
+        self.billingCollectionMethod = try container.decodeNullableIfPresent(SubscriptionBillingCollectionMethod.self, forKey: .billingCollectionMethod)
+        self.demoStartedAt = try container.decodeNullableIfPresent(Date.self, forKey: .demoStartedAt)
+        self.demoEndedAt = try container.decodeNullableIfPresent(Date.self, forKey: .demoEndedAt)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 
@@ -245,6 +263,7 @@ public struct Subscription: Codable, Hashable, Sendable {
         try container.encode(self.id, forKey: .id)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
+        try container.encodeNullableIfPresent(self.name, forKey: .name)
         try container.encode(self.type, forKey: .type)
         try container.encode(self.status, forKey: .status)
         try container.encode(self.credits, forKey: .credits)
@@ -257,8 +276,6 @@ public struct Subscription: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.monthlyCreditCheckScheduleId, forKey: .monthlyCreditCheckScheduleId)
         try container.encodeIfPresent(self.stripeCustomerId, forKey: .stripeCustomerId)
         try container.encodeIfPresent(self.stripePaymentMethodId, forKey: .stripePaymentMethodId)
-        try container.encodeIfPresent(self.slackSupportEnabled, forKey: .slackSupportEnabled)
-        try container.encodeIfPresent(self.slackChannelId, forKey: .slackChannelId)
         try container.encodeIfPresent(self.hipaaEnabled, forKey: .hipaaEnabled)
         try container.encodeIfPresent(self.zdrEnabled, forKey: .zdrEnabled)
         try container.encodeIfPresent(self.dataRetentionEnabled, forKey: .dataRetentionEnabled)
@@ -280,11 +297,14 @@ public struct Subscription: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.invoicePlan, forKey: .invoicePlan)
         try container.encodeIfPresent(self.pciEnabled, forKey: .pciEnabled)
         try container.encodeIfPresent(self.pciCommonPaperAgreementId, forKey: .pciCommonPaperAgreementId)
-        try container.encodeIfPresent(self.callRetentionDays, forKey: .callRetentionDays)
-        try container.encodeIfPresent(self.chatRetentionDays, forKey: .chatRetentionDays)
+        try container.encodeNullableIfPresent(self.callRetentionDays, forKey: .callRetentionDays)
+        try container.encodeNullableIfPresent(self.chatRetentionDays, forKey: .chatRetentionDays)
         try container.encodeIfPresent(self.minutesIncludedResetFrequency, forKey: .minutesIncludedResetFrequency)
         try container.encodeIfPresent(self.rbacEnabled, forKey: .rbacEnabled)
         try container.encodeIfPresent(self.platformFee, forKey: .platformFee)
+        try container.encodeNullableIfPresent(self.billingCollectionMethod, forKey: .billingCollectionMethod)
+        try container.encodeNullableIfPresent(self.demoStartedAt, forKey: .demoStartedAt)
+        try container.encodeNullableIfPresent(self.demoEndedAt, forKey: .demoEndedAt)
     }
 
     /// Keys for encoding/decoding struct properties.
@@ -292,6 +312,7 @@ public struct Subscription: Codable, Hashable, Sendable {
         case id
         case createdAt
         case updatedAt
+        case name
         case type
         case status
         case credits
@@ -304,8 +325,6 @@ public struct Subscription: Codable, Hashable, Sendable {
         case monthlyCreditCheckScheduleId
         case stripeCustomerId
         case stripePaymentMethodId
-        case slackSupportEnabled
-        case slackChannelId
         case hipaaEnabled
         case zdrEnabled
         case dataRetentionEnabled
@@ -332,5 +351,8 @@ public struct Subscription: Codable, Hashable, Sendable {
         case minutesIncludedResetFrequency
         case rbacEnabled
         case platformFee
+        case billingCollectionMethod
+        case demoStartedAt
+        case demoEndedAt
     }
 }

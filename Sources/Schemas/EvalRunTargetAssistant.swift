@@ -1,8 +1,9 @@
 import Foundation
 
+/// An assistant evaluation target provided as a saved assistant ID or a transient assistant, with optional assistant overrides.
 public struct EvalRunTargetAssistant: Codable, Hashable, Sendable {
     /// This is the transient assistant that will be run against the eval
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// This is the overrides that will be applied to the assistant.
     public let assistantOverrides: AssistantOverrides?
     /// This is the id of the assistant that will be run against the eval
@@ -11,7 +12,7 @@ public struct EvalRunTargetAssistant: Codable, Hashable, Sendable {
     public let additionalProperties: [String: JSONValue]
 
     public init(
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         assistantId: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
@@ -24,7 +25,7 @@ public struct EvalRunTargetAssistant: Codable, Hashable, Sendable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)

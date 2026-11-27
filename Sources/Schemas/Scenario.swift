@@ -11,10 +11,9 @@ public struct Scenario: Codable, Hashable, Sendable {
     public let updatedAt: Date
     /// This is the name of the scenario.
     public let name: String
-    /// This is the script/instructions for the tester to follow during the simulation.
+    /// This is the script/instructions for the tester to follow during the simulation. Optional when `transcriptReplay` is set, which has no tester.
     public let instructions: String
-    /// This is the structured output-based evaluation plan for the simulation.
-    /// Each item defines a structured output to extract and evaluate against an expected value.
+    /// This is the evaluation plan for the simulation. At least one is required. With `transcriptReplay`, only `metric` evaluations are allowed, and none are required.
     public let evaluations: [EvaluationPlanItem]
     /// Hooks to run on simulation lifecycle events
     public let hooks: [ScenarioHooksItem]?
@@ -22,6 +21,16 @@ public struct Scenario: Codable, Hashable, Sendable {
     public let targetOverrides: AssistantOverrides?
     /// Scenario-level tool call mocks to use during simulations.
     public let toolMocks: [ScenarioToolMock]?
+    /// Latency ceilings for voice simulations. Each expectation aggregates the
+    /// target call's per-turn latencies and fails the simulation (when required)
+    /// if the aggregated value exceeds its threshold. Skipped for chat simulations
+    /// and GPT Live targets; on any other voice simulation, a metric that no turn
+    /// measured fails.
+    public let latencyExpectations: [LatencyExpectation]?
+    /// This turns the scenario into a transcription test: a recording is streamed
+    /// into the target's call in place of a simulated caller, and the target's
+    /// transcript is scored against an answer key.
+    public let transcriptReplay: Nullable<TranscriptReplay>?
     /// Optional folder path for organizing scenarios.
     /// Supports up to 3 levels (e.g., "dept/feature/variant").
     /// Maps to GitOps resource folder structure.
@@ -40,6 +49,8 @@ public struct Scenario: Codable, Hashable, Sendable {
         hooks: [ScenarioHooksItem]? = nil,
         targetOverrides: AssistantOverrides? = nil,
         toolMocks: [ScenarioToolMock]? = nil,
+        latencyExpectations: [LatencyExpectation]? = nil,
+        transcriptReplay: Nullable<TranscriptReplay>? = nil,
         path: Nullable<String>? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -53,6 +64,8 @@ public struct Scenario: Codable, Hashable, Sendable {
         self.hooks = hooks
         self.targetOverrides = targetOverrides
         self.toolMocks = toolMocks
+        self.latencyExpectations = latencyExpectations
+        self.transcriptReplay = transcriptReplay
         self.path = path
         self.additionalProperties = additionalProperties
     }
@@ -69,6 +82,8 @@ public struct Scenario: Codable, Hashable, Sendable {
         self.hooks = try container.decodeIfPresent([ScenarioHooksItem].self, forKey: .hooks)
         self.targetOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .targetOverrides)
         self.toolMocks = try container.decodeIfPresent([ScenarioToolMock].self, forKey: .toolMocks)
+        self.latencyExpectations = try container.decodeIfPresent([LatencyExpectation].self, forKey: .latencyExpectations)
+        self.transcriptReplay = try container.decodeNullableIfPresent(TranscriptReplay.self, forKey: .transcriptReplay)
         self.path = try container.decodeNullableIfPresent(String.self, forKey: .path)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -86,6 +101,8 @@ public struct Scenario: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.hooks, forKey: .hooks)
         try container.encodeIfPresent(self.targetOverrides, forKey: .targetOverrides)
         try container.encodeIfPresent(self.toolMocks, forKey: .toolMocks)
+        try container.encodeIfPresent(self.latencyExpectations, forKey: .latencyExpectations)
+        try container.encodeNullableIfPresent(self.transcriptReplay, forKey: .transcriptReplay)
         try container.encodeNullableIfPresent(self.path, forKey: .path)
     }
 
@@ -101,6 +118,8 @@ public struct Scenario: Codable, Hashable, Sendable {
         case hooks
         case targetOverrides
         case toolMocks
+        case latencyExpectations
+        case transcriptReplay
         case path
     }
 }

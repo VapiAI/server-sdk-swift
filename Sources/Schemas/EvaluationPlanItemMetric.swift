@@ -1,0 +1,10 @@
+import Foundation
+
+/// This is a built-in metric to evaluate instead of a structured output. Mutually exclusive with structuredOutputId
+/// and structuredOutput, and only available on a scenario with `transcriptReplay`, which takes no other evaluations.
+/// - wer: the word error rate of the replayed recording's transcript against the answer key, as a fraction where 0
+///   is perfect and 0.1 is 10%; insertions can push it above 1. `value` must be from 0 to 1. For example,
+///   `{ "metric": "wer", "comparator": "<=", "value": 0.1 }`.
+public enum EvaluationPlanItemMetric: String, Codable, Hashable, CaseIterable, Sendable {
+    case wer
+}

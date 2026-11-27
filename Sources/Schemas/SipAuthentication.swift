@@ -1,7 +1,8 @@
 import Foundation
 
+/// Realm, username, and password used to authenticate SIP requests.
 public struct SipAuthentication: Codable, Hashable, Sendable {
-    /// This will be expected in the `realm` field of the `authorization` header of the SIP INVITE. Defaults to sip.vapi.ai.
+    /// This will be expected in the `realm` field of the `authorization` header of the SIP INVITE. Defaults to the SIP realm of the Vapi region serving the request (e.g. `sip.vapi.ai` for US, `sip.eu.vapi.ai` for EU).
     public let realm: String?
     /// This will be expected in the `username` field of the `authorization` header of the SIP INVITE.
     public let username: String

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A simulated assistant tool call with the tool name and optional arguments.
 public struct ChatEvalAssistantMessageMockToolCall: Codable, Hashable, Sendable {
     /// This is the name of the tool that will be called.
     /// It should be one of the tools created in the organization.

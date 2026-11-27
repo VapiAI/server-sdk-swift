@@ -1,18 +1,16 @@
 import Foundation
 
+/// Controls retry behavior for failed server requests, including strategy, maximum retries, base delay, and status codes excluded from retries.
 public struct BackoffPlan: Codable, Hashable, Sendable {
     /// This is the type of backoff plan to use. Defaults to fixed.
     /// 
     /// @default fixed
     public let type: [String: JSONValue]
-    /// This is the maximum number of retries to attempt if the request fails. Defaults to 0 (no retries).
-    /// 
-    /// @default 0
+    /// Total number of attempts, including the first request. For example, `3` sends the request up to 3 times. Values of `0` and `1` both send it once, with no retries. Defaults to 0.
     public let maxRetries: Double
-    /// This is the base delay in seconds. For linear backoff, this is the delay between each retry. For exponential backoff, this is the initial delay.
+    /// Base delay in seconds. For fixed backoff, this is the delay between retries. For exponential backoff, this is the initial delay.
     public let baseDelaySeconds: Double
-    /// This is the excluded status codes. If the response status code is in this list, the request will not be retried.
-    /// By default, the request will be retried for any non-2xx status code.
+    /// HTTP status codes that should not trigger a retry. By default, any non-2xx status code not listed here can be retried.
     public let excludedStatusCodes: [[String: JSONValue]]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

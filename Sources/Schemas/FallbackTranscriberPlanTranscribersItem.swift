@@ -10,9 +10,11 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
     case gladia(FallbackGladiaTranscriber)
     case google(FallbackGoogleTranscriber)
     case openai(FallbackOpenAiTranscriber)
+    case reson8(FallbackReson8Transcriber)
     case soniox(FallbackSonioxTranscriber)
     case speechmatics(FallbackSpeechmaticsTranscriber)
     case talkscriber(FallbackTalkscriberTranscriber)
+    case xai(FallbackXaiTranscriber)
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -36,12 +38,16 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
             self = .google(try FallbackGoogleTranscriber(from: decoder))
         case "openai":
             self = .openai(try FallbackOpenAiTranscriber(from: decoder))
+        case "reson8":
+            self = .reson8(try FallbackReson8Transcriber(from: decoder))
         case "soniox":
             self = .soniox(try FallbackSonioxTranscriber(from: decoder))
         case "speechmatics":
             self = .speechmatics(try FallbackSpeechmaticsTranscriber(from: decoder))
         case "talkscriber":
             self = .talkscriber(try FallbackTalkscriberTranscriber(from: decoder))
+        case "xai":
+            self = .xai(try FallbackXaiTranscriber(from: decoder))
         default:
             throw DecodingError.dataCorrupted(
                 DecodingError.Context(
@@ -82,6 +88,9 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
         case .openai(let data):
             try container.encode("openai", forKey: .provider)
             try data.encode(to: encoder)
+        case .reson8(let data):
+            try container.encode("reson8", forKey: .provider)
+            try data.encode(to: encoder)
         case .soniox(let data):
             try container.encode("soniox", forKey: .provider)
             try data.encode(to: encoder)
@@ -90,6 +99,9 @@ public enum FallbackTranscriberPlanTranscribersItem: Codable, Hashable, Sendable
             try data.encode(to: encoder)
         case .talkscriber(let data):
             try container.encode("talkscriber", forKey: .provider)
+            try data.encode(to: encoder)
+        case .xai(let data):
+            try container.encode("xai", forKey: .provider)
             try data.encode(to: encoder)
         }
     }

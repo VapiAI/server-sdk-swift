@@ -1,5 +1,6 @@
 import Foundation
 
+/// Speech-to-text cost for a call, including transcriber, billable minutes, and amount.
 public struct TranscriberCost: Codable, Hashable, Sendable {
     /// This is the transcriber that was used during the call.
     /// 

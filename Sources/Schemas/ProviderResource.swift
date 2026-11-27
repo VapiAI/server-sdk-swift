@@ -1,5 +1,6 @@
 import Foundation
 
+/// A provider-managed pronunciation-dictionary resource mirrored in Vapi, including its provider identifiers, resource data, and lifecycle information.
 public struct ProviderResource: Codable, Hashable, Sendable {
     /// This is the unique identifier for the provider resource.
     public let id: String

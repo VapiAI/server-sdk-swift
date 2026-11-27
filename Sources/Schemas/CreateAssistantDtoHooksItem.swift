@@ -1,6 +1,6 @@
 import Foundation
 
-public indirect enum CreateAssistantDtoHooksItem: Codable, Hashable, Sendable {
+public enum CreateAssistantDtoHooksItem: Codable, Hashable, Sendable {
     case callHookAssistantSpeechInterrupted(CallHookAssistantSpeechInterrupted)
     case callHookCallEnding(CallHookCallEnding)
     case callHookCustomerSpeechInterrupted(CallHookCustomerSpeechInterrupted)

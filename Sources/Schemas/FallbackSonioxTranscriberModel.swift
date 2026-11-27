@@ -1,6 +1,8 @@
 import Foundation
 
-/// The Soniox model to use for transcription.
+/// The Soniox model to use for transcription. Defaults to stt-rt-v6.
 public enum FallbackSonioxTranscriberModel: String, Codable, Hashable, CaseIterable, Sendable {
     case sttRtV4 = "stt-rt-v4"
+    case sttRtV5 = "stt-rt-v5"
+    case sttRtV6 = "stt-rt-v6"
 }

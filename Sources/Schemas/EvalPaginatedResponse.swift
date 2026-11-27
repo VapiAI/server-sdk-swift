@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of saved eval definitions and metadata describing the result set.
 public struct EvalPaginatedResponse: Codable, Hashable, Sendable {
+    /// The eval definitions returned for the current page.
     public let results: [Eval]
+    /// Pagination metadata for the eval result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

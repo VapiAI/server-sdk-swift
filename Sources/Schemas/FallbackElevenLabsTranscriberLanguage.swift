@@ -1,6 +1,6 @@
 import Foundation
 
-/// This is the language that will be used for the transcription.
+/// Language for transcription. `multi` enables automatic code-switching on scribe_v3_live.
 public enum FallbackElevenLabsTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case aa
     case ab
@@ -187,4 +187,5 @@ public enum FallbackElevenLabsTranscriberLanguage: String, Codable, Hashable, Ca
     case za
     case zh
     case zu
+    case multi
 }

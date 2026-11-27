@@ -1,5 +1,6 @@
 import Foundation
 
+/// Transfers a call to a phone number, with optional extension, caller ID, message, transfer plan, and number validation.
 public struct TransferDestinationNumber: Codable, Hashable, Sendable {
     /// This is spoken to the customer before connecting them to the destination.
     /// 
@@ -34,12 +35,25 @@ public struct TransferDestinationNumber: Codable, Hashable, Sendable {
     /// - Set to '{{phoneNumber.number}}' to always use the phone number of the assistant as the caller ID.
     /// - Set to any E164 number to always use that number as the caller ID. This needs to be a number that is owned or verified by your Transport provider like Twilio.
     /// 
+    /// Note: on Twilio, a caller who withheld their number has no caller ID the destination carrier will accept, so the assistant's phone number is presented instead and the transfer goes through. This applies when `callerId` is not provided and when it is set to '{{customer.number}}'.
+    /// 
     /// For Twilio, you can read up more here: https://www.twilio.com/docs/voice/twiml/dial#callerid
     public let callerId: String?
     /// This configures how transfer is executed and the experience of the destination party receiving the call. Defaults to `blind-transfer`.
     /// 
     /// @default `transferPlan.mode='blind-transfer'`
     public let transferPlan: TransferPlan?
+    /// This is the name of the transfer destination. This is just for your own reference.
+    /// 
+    /// Usage:
+    /// - Optional. Stored with the destination wherever it is supplied. For `number`
+    ///   and `sip` destinations it is also persisted on the transfer record in the
+    ///   call artifact after a transfer and displayed in the dashboard call log (on
+    ///   the transfer divider in the transcript view) alongside the destination.
+    ///   When omitted, everything behaves exactly as before.
+    /// - Display-only. Unlike `description`, it is never included in prompts or tool
+    ///   descriptions and has no effect on model behavior or destination choice.
+    public let name: String?
     /// This is the description of the destination, used by the AI to choose when and how to transfer the call.
     public let description: String?
     /// Additional properties that are not explicitly defined in the schema
@@ -52,6 +66,7 @@ public struct TransferDestinationNumber: Codable, Hashable, Sendable {
         extension: String? = nil,
         callerId: String? = nil,
         transferPlan: TransferPlan? = nil,
+        name: String? = nil,
         description: String? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -61,6 +76,7 @@ public struct TransferDestinationNumber: Codable, Hashable, Sendable {
         self.extension = `extension`
         self.callerId = callerId
         self.transferPlan = transferPlan
+        self.name = name
         self.description = description
         self.additionalProperties = additionalProperties
     }
@@ -73,6 +89,7 @@ public struct TransferDestinationNumber: Codable, Hashable, Sendable {
         self.extension = try container.decodeIfPresent(String.self, forKey: .extension)
         self.callerId = try container.decodeIfPresent(String.self, forKey: .callerId)
         self.transferPlan = try container.decodeIfPresent(TransferPlan.self, forKey: .transferPlan)
+        self.name = try container.decodeIfPresent(String.self, forKey: .name)
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -86,6 +103,7 @@ public struct TransferDestinationNumber: Codable, Hashable, Sendable {
         try container.encodeIfPresent(self.extension, forKey: .extension)
         try container.encodeIfPresent(self.callerId, forKey: .callerId)
         try container.encodeIfPresent(self.transferPlan, forKey: .transferPlan)
+        try container.encodeIfPresent(self.name, forKey: .name)
         try container.encodeIfPresent(self.description, forKey: .description)
     }
 
@@ -97,6 +115,7 @@ public struct TransferDestinationNumber: Codable, Hashable, Sendable {
         case `extension`
         case callerId
         case transferPlan
+        case name
         case description
     }
 }

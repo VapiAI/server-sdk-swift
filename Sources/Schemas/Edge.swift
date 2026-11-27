@@ -1,8 +1,12 @@
 import Foundation
 
+/// A directed connection between two workflow nodes, with an optional AI-evaluated transition condition.
 public struct Edge: Codable, Hashable, Sendable {
+    /// Condition that must evaluate to true to follow this edge.
     public let condition: AiEdgeCondition?
+    /// Name of the source workflow node.
     public let from: String
+    /// Name of the destination workflow node.
     public let to: String
     /// This is for metadata you want to store on the edge.
     public let metadata: [String: JSONValue]?

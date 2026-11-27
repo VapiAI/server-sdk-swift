@@ -1,6 +1,8 @@
 import Foundation
 
+/// Client-credentials configuration for obtaining an OAuth 2.0 access token used to authenticate outbound requests.
 public struct OAuth2AuthenticationPlan: Codable, Hashable, Sendable {
+    /// Selects OAuth 2.0 authentication.
     public let type: OAuth2AuthenticationPlanType
     /// This is the OAuth2 URL.
     public let url: String

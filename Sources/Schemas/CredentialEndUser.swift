@@ -3,7 +3,7 @@ import Foundation
 public struct CredentialEndUser: Codable, Hashable, Sendable {
     public let endUserEmail: Nullable<String>?
     public let endUserId: String
-    public let organizationId: String
+    public let organizationId: String?
     public let tags: [String: JSONValue]?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
@@ -11,7 +11,7 @@ public struct CredentialEndUser: Codable, Hashable, Sendable {
     public init(
         endUserEmail: Nullable<String>? = nil,
         endUserId: String,
-        organizationId: String,
+        organizationId: String? = nil,
         tags: [String: JSONValue]? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -26,7 +26,7 @@ public struct CredentialEndUser: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.endUserEmail = try container.decodeNullableIfPresent(String.self, forKey: .endUserEmail)
         self.endUserId = try container.decode(String.self, forKey: .endUserId)
-        self.organizationId = try container.decode(String.self, forKey: .organizationId)
+        self.organizationId = try container.decodeIfPresent(String.self, forKey: .organizationId)
         self.tags = try container.decodeIfPresent([String: JSONValue].self, forKey: .tags)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -36,7 +36,7 @@ public struct CredentialEndUser: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeNullableIfPresent(self.endUserEmail, forKey: .endUserEmail)
         try container.encode(self.endUserId, forKey: .endUserId)
-        try container.encode(self.organizationId, forKey: .organizationId)
+        try container.encodeIfPresent(self.organizationId, forKey: .organizationId)
         try container.encodeIfPresent(self.tags, forKey: .tags)
     }
 

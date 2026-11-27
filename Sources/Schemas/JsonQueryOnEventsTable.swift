@@ -1,5 +1,6 @@
 import Foundation
 
+/// VapiQL JSON query that counts or calculates the percentage of matching events using optional typed event-data filters.
 public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
     /// This is the type of query. Only allowed type is "vapiql-json".
     public let type: JsonQueryOnEventsTableType
@@ -8,6 +9,8 @@ public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
     public let table: JsonQueryOnEventsTableTable
     /// The event type to query
     public let on: JsonQueryOnEventsTableOn
+    /// The structured output an evaluation monitor tracks, as artifact.structuredOutputs[OutputID]
+    public let column: String?
     /// This is the operation to perform on matching events.
     /// - "count": Returns the raw count of matching events
     /// - "percentage": Returns (count of matching events / total calls) * 100
@@ -25,6 +28,7 @@ public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
         type: JsonQueryOnEventsTableType,
         table: JsonQueryOnEventsTableTable,
         on: JsonQueryOnEventsTableOn,
+        column: String? = nil,
         operation: JsonQueryOnEventsTableOperation,
         filters: [JsonQueryOnEventsTableFiltersItem]? = nil,
         name: String? = nil,
@@ -33,6 +37,7 @@ public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
         self.type = type
         self.table = table
         self.on = on
+        self.column = column
         self.operation = operation
         self.filters = filters
         self.name = name
@@ -44,6 +49,7 @@ public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
         self.type = try container.decode(JsonQueryOnEventsTableType.self, forKey: .type)
         self.table = try container.decode(JsonQueryOnEventsTableTable.self, forKey: .table)
         self.on = try container.decode(JsonQueryOnEventsTableOn.self, forKey: .on)
+        self.column = try container.decodeIfPresent(String.self, forKey: .column)
         self.operation = try container.decode(JsonQueryOnEventsTableOperation.self, forKey: .operation)
         self.filters = try container.decodeIfPresent([JsonQueryOnEventsTableFiltersItem].self, forKey: .filters)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
@@ -56,6 +62,7 @@ public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
         try container.encode(self.type, forKey: .type)
         try container.encode(self.table, forKey: .table)
         try container.encode(self.on, forKey: .on)
+        try container.encodeIfPresent(self.column, forKey: .column)
         try container.encode(self.operation, forKey: .operation)
         try container.encodeIfPresent(self.filters, forKey: .filters)
         try container.encodeIfPresent(self.name, forKey: .name)
@@ -66,6 +73,7 @@ public struct JsonQueryOnEventsTable: Codable, Hashable, Sendable {
         case type
         case table
         case on
+        case column
         case operation
         case filters
         case name

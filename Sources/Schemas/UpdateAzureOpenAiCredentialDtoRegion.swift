@@ -19,6 +19,8 @@ public enum UpdateAzureOpenAiCredentialDtoRegion: String, Codable, Hashable, Cas
     case spaincentral
     case swedencentral
     case switzerland
+    case switzerlandnorth
+    case switzerlandwest
     case uaenorth
     case uk
     case westeurope

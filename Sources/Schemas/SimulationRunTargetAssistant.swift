@@ -4,13 +4,13 @@ public struct SimulationRunTargetAssistant: Codable, Hashable, Sendable {
     /// ID of an existing assistant to test against. Cannot be combined with inline assistant.
     public let assistantId: String?
     /// Inline assistant configuration to test against. Cannot be combined with assistantId.
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
 
     public init(
         assistantId: String? = nil,
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         additionalProperties: [String: JSONValue] = .init()
     ) {
         self.assistantId = assistantId
@@ -21,7 +21,7 @@ public struct SimulationRunTargetAssistant: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
 

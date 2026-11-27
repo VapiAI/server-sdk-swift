@@ -4,6 +4,8 @@ public struct ElevenLabsCredential: Codable, Hashable, Sendable {
     public let provider: Value
     /// This is not returned in the API.
     public let apiKey: String
+    /// ElevenLabs-only API environment for this key: the global endpoint or the EU data residency endpoint. In EU deployments, new credentials must explicitly use the EU data residency endpoint; existing credentials may omit this field on update to retain their saved endpoint. Outside EU deployments, Vapi detects an omitted endpoint automatically and null on update clears and re-detects the endpoint.
+    public let apiUrl: Nullable<ElevenLabsCredentialApiUrl>?
     /// This is the unique identifier for the credential.
     public let id: String
     /// This is the unique identifier for the org that this credential belongs to.
@@ -20,6 +22,7 @@ public struct ElevenLabsCredential: Codable, Hashable, Sendable {
     public init(
         provider: Value,
         apiKey: String,
+        apiUrl: Nullable<ElevenLabsCredentialApiUrl>? = nil,
         id: String,
         orgId: String,
         createdAt: Date,
@@ -29,6 +32,7 @@ public struct ElevenLabsCredential: Codable, Hashable, Sendable {
     ) {
         self.provider = provider
         self.apiKey = apiKey
+        self.apiUrl = apiUrl
         self.id = id
         self.orgId = orgId
         self.createdAt = createdAt
@@ -41,6 +45,7 @@ public struct ElevenLabsCredential: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.provider = try container.decode(Value.self, forKey: .provider)
         self.apiKey = try container.decode(String.self, forKey: .apiKey)
+        self.apiUrl = try container.decodeNullableIfPresent(ElevenLabsCredentialApiUrl.self, forKey: .apiUrl)
         self.id = try container.decode(String.self, forKey: .id)
         self.orgId = try container.decode(String.self, forKey: .orgId)
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
@@ -54,6 +59,7 @@ public struct ElevenLabsCredential: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encode(self.provider, forKey: .provider)
         try container.encode(self.apiKey, forKey: .apiKey)
+        try container.encodeNullableIfPresent(self.apiUrl, forKey: .apiUrl)
         try container.encode(self.id, forKey: .id)
         try container.encode(self.orgId, forKey: .orgId)
         try container.encode(self.createdAt, forKey: .createdAt)
@@ -69,6 +75,7 @@ public struct ElevenLabsCredential: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case provider
         case apiKey
+        case apiUrl
         case id
         case orgId
         case createdAt

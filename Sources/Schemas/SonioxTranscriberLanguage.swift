@@ -1,6 +1,6 @@
 import Foundation
 
-/// The language for transcription. Uses ISO 639-1 codes. Soniox supports 60+ languages with a single universal model.
+/// Single language for transcription as an ISO 639-1 code (e.g., `en`, `es`). For multi-language hints or to enable Soniox auto-detect, use `languages` instead — when `languages` is set (including to an empty array), this field is ignored when building the Soniox request. Defaults to `en` if neither this nor `languages` is set.
 public enum SonioxTranscriberLanguage: String, Codable, Hashable, CaseIterable, Sendable {
     case aa
     case ab

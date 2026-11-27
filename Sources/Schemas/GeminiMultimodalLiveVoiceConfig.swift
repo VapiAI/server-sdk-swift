@@ -1,6 +1,8 @@
 import Foundation
 
+/// Voice selection configuration for Gemini Multimodal Live.
 public struct GeminiMultimodalLiveVoiceConfig: Codable, Hashable, Sendable {
+    /// Prebuilt voice used for Gemini Multimodal Live speech output.
     public let prebuiltVoiceConfig: GeminiMultimodalLivePrebuiltVoiceConfig
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

@@ -2,6 +2,9 @@ import Foundation
 
 /// The model to use for the knowledge base
 public enum KnowledgeBaseModel: String, Codable, Hashable, CaseIterable, Sendable {
+    case gemini38Flash = "gemini-3.8-flash"
+    case gemini35Flash = "gemini-3.5-flash"
+    case gemini31FlashLite = "gemini-3.1-flash-lite"
     case gemini3FlashPreview = "gemini-3-flash-preview"
     case gemini25Pro = "gemini-2.5-pro"
     case gemini25Flash = "gemini-2.5-flash"

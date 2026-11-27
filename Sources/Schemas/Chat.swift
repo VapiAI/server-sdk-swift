@@ -4,7 +4,7 @@ public struct Chat: Codable, Hashable, Sendable {
     /// This is the assistant that will be used for the chat. To use an existing assistant, use `assistantId` instead.
     public let assistantId: String?
     /// This is the assistant that will be used for the chat. To use an existing assistant, use `assistantId` instead.
-    public let assistant: CreateAssistantDto?
+    public let assistant: TransientAssistantDto?
     /// These are the variable values that will be used to replace template variables in the assistant messages.
     /// Only variable substitution is supported in chat contexts - other assistant properties cannot be overridden.
     public let assistantOverrides: AssistantOverrides?
@@ -49,7 +49,7 @@ public struct Chat: Codable, Hashable, Sendable {
 
     public init(
         assistantId: String? = nil,
-        assistant: CreateAssistantDto? = nil,
+        assistant: TransientAssistantDto? = nil,
         assistantOverrides: AssistantOverrides? = nil,
         squadId: String? = nil,
         squad: CreateSquadDto? = nil,
@@ -92,7 +92,7 @@ public struct Chat: Codable, Hashable, Sendable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.assistantId = try container.decodeIfPresent(String.self, forKey: .assistantId)
-        self.assistant = try container.decodeIfPresent(CreateAssistantDto.self, forKey: .assistant)
+        self.assistant = try container.decodeIfPresent(TransientAssistantDto.self, forKey: .assistant)
         self.assistantOverrides = try container.decodeIfPresent(AssistantOverrides.self, forKey: .assistantOverrides)
         self.squadId = try container.decodeIfPresent(String.self, forKey: .squadId)
         self.squad = try container.decodeIfPresent(CreateSquadDto.self, forKey: .squad)

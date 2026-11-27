@@ -1,5 +1,6 @@
 import Foundation
 
+/// Controls voicemail-detection retry timing, including when retries start, retry frequency, and maximum attempts.
 public struct VoicemailDetectionBackoffPlan: Codable, Hashable, Sendable {
     /// This is the number of seconds to wait before starting the first retry attempt.
     public let startAtSeconds: Double?

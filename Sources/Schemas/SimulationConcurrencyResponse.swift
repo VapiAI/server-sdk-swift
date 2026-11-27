@@ -8,6 +8,8 @@ public struct SimulationConcurrencyResponse: Codable, Hashable, Sendable {
     public let activeSimulations: Double
     /// Number of voice simulations that can start now (available call slots / 2)
     public let availableToStart: Double
+    /// Max chat simulations that can run at once. A count of simulations, not call slots: chat simulations use none.
+    public let chatConcurrencyLimit: Double
     public let createdAt: Nullable<Date>
     public let updatedAt: Nullable<Date>
     /// True if org is using platform default concurrency limit
@@ -20,6 +22,7 @@ public struct SimulationConcurrencyResponse: Codable, Hashable, Sendable {
         concurrencyLimit: Double,
         activeSimulations: Double,
         availableToStart: Double,
+        chatConcurrencyLimit: Double,
         createdAt: Nullable<Date>,
         updatedAt: Nullable<Date>,
         isDefault: Bool,
@@ -29,6 +32,7 @@ public struct SimulationConcurrencyResponse: Codable, Hashable, Sendable {
         self.concurrencyLimit = concurrencyLimit
         self.activeSimulations = activeSimulations
         self.availableToStart = availableToStart
+        self.chatConcurrencyLimit = chatConcurrencyLimit
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.isDefault = isDefault
@@ -41,6 +45,7 @@ public struct SimulationConcurrencyResponse: Codable, Hashable, Sendable {
         self.concurrencyLimit = try container.decode(Double.self, forKey: .concurrencyLimit)
         self.activeSimulations = try container.decode(Double.self, forKey: .activeSimulations)
         self.availableToStart = try container.decode(Double.self, forKey: .availableToStart)
+        self.chatConcurrencyLimit = try container.decode(Double.self, forKey: .chatConcurrencyLimit)
         self.createdAt = try container.decode(Nullable<Date>.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Nullable<Date>.self, forKey: .updatedAt)
         self.isDefault = try container.decode(Bool.self, forKey: .isDefault)
@@ -54,6 +59,7 @@ public struct SimulationConcurrencyResponse: Codable, Hashable, Sendable {
         try container.encode(self.concurrencyLimit, forKey: .concurrencyLimit)
         try container.encode(self.activeSimulations, forKey: .activeSimulations)
         try container.encode(self.availableToStart, forKey: .availableToStart)
+        try container.encode(self.chatConcurrencyLimit, forKey: .chatConcurrencyLimit)
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encode(self.isDefault, forKey: .isDefault)
@@ -65,6 +71,7 @@ public struct SimulationConcurrencyResponse: Codable, Hashable, Sendable {
         case concurrencyLimit
         case activeSimulations
         case availableToStart
+        case chatConcurrencyLimit
         case createdAt
         case updatedAt
         case isDefault

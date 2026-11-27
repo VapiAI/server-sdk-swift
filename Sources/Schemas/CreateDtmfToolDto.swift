@@ -1,9 +1,8 @@
 import Foundation
 
+/// Configuration used to create a tool that lets an assistant send DTMF keypad tones during a call.
 public struct CreateDtmfToolDto: Codable, Hashable, Sendable {
-    /// These are the messages that will be spoken to the user as the tool is running.
-    /// 
-    /// For some tools, this is auto-filled based on special fields like `tool.destinations`. For others like the function tool, these can be custom configured.
+    /// Messages spoken while the tool is running. Multiple request-start messages are variants. For request-response-delayed, same timing means variants and different timings mean staged updates.
     public let messages: [CreateDtmfToolDtoMessagesItem]?
     /// This enables sending DTMF tones via SIP INFO messages instead of RFC 2833 (RTP events). When enabled, DTMF digits will be sent using the SIP INFO method, which can be more reliable in some network configurations. Only relevant when using the `vapi.sip` transport.
     public let sipInfoDtmfEnabled: Bool?

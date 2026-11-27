@@ -1,5 +1,6 @@
 import Foundation
 
+/// Vapi platform cost for a call, including cost subtype, billable minutes, and amount.
 public struct VapiCost: Codable, Hashable, Sendable {
     /// This is the sub type of the cost.
     public let subType: VapiCostSubType

@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of eval runs and metadata describing the result set.
 public struct EvalRunPaginatedResponse: Codable, Hashable, Sendable {
+    /// The eval runs returned for the current page.
     public let results: [EvalRun]
+    /// Pagination metadata for the eval-run result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

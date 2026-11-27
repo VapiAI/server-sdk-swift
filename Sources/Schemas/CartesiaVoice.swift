@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for synthesizing assistant speech with Cartesia, including voice and model selection, language, generation controls, pronunciation dictionaries, chunking, caching, and fallback settings.
 public struct CartesiaVoice: Codable, Hashable, Sendable {
     /// This is the flag to toggle voice caching for the assistant.
     public let cachingEnabled: Bool?
@@ -7,7 +8,7 @@ public struct CartesiaVoice: Codable, Hashable, Sendable {
     public let voiceId: String
     /// This is the model that will be used. This is optional and will default to the correct model for the voiceId.
     public let model: CartesiaVoiceModel?
-    /// This is the language that will be used. This is optional and will default to the correct language for the voiceId.
+    /// This is the language the voice speaks. When omitted, Vapi uses the voice's native language if it has one on record for that voice; otherwise no language is sent to Cartesia. Regional codes such as `es-MX` require the `sonic-3.6` model.
     public let language: CartesiaVoiceLanguage?
     /// Experimental controls for Cartesia voice generation
     public let experimentalControls: CartesiaExperimentalControls?

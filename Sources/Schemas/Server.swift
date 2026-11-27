@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for requests Vapi sends to a customer server, including URL, authentication, headers, timeout, encryption, static IP addresses, and retry behavior.
 public struct Server: Codable, Hashable, Sendable {
     /// This is the timeout in seconds for the request. Defaults to 20 seconds.
     /// 

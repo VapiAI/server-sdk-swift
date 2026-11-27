@@ -1,7 +1,10 @@
 import Foundation
 
+/// A paginated collection of scorecards and metadata describing the result set.
 public struct ScorecardPaginatedResponse: Codable, Hashable, Sendable {
+    /// The scorecards returned for the current page.
     public let results: [Scorecard]
+    /// Pagination metadata for the scorecard result set.
     public let metadata: PaginationMeta
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]

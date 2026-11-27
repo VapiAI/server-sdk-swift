@@ -1,6 +1,6 @@
 import Foundation
 
-/// Current status of the run
+/// The run's current status. One of `queued`, `running`, or `ended`.
 public enum SimulationRunStatus: String, Codable, Hashable, CaseIterable, Sendable {
     case queued
     case running

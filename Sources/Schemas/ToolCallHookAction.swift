@@ -1,5 +1,6 @@
 import Foundation
 
+/// A hook action that invokes an inline tool or an existing tool when the hook triggers.
 public struct ToolCallHookAction: Codable, Hashable, Sendable {
     /// This is the type of action - must be "tool"
     public let type: ToolCallHookActionType

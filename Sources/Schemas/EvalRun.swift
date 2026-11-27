@@ -1,5 +1,6 @@
 import Foundation
 
+/// A record of an eval execution, including its target, status, results, costs, completion details, and lifecycle timestamps.
 public struct EvalRun: Codable, Hashable, Sendable {
     /// This is the status of the eval run. When an eval run is created, the status is 'running'.
     /// When the eval run is completed, the status is 'ended'.
@@ -15,19 +16,23 @@ public struct EvalRun: Codable, Hashable, Sendable {
     public let eval: CreateEvalDto?
     /// This is the target that will be run against the eval
     public let target: EvalRunTarget
+    /// The unique identifier for the eval run.
     public let id: String
+    /// The unique identifier for the organization that owns the run.
     public let orgId: String
+    /// The ISO 8601 timestamp when the eval run was created.
     public let createdAt: Date
+    /// The ISO 8601 timestamp when the eval run started.
     public let startedAt: Date
+    /// The ISO 8601 timestamp when the eval run ended.
     public let endedAt: Date
     /// This is the ended message when the eval run ended for any reason apart from mockConversation.done
     public let endedMessage: String?
-    /// This is the results of the eval or suite run.
-    /// The array will have a single item for an eval run, and multiple items each corresponding to the an eval in a suite run in the same order as the evals in the suite.
+    /// Results for this individual Eval. Check them after status is ended. An Eval that finishes normally contains one result; it passes only when all judged checkpoints pass. Grouping multiple Evals requires your own orchestration, not an Eval suite.
     public let results: [EvalRunResult]
-    /// This is the cost of the eval or suite run in USD.
+    /// The cost of this Eval run in USD.
     public let cost: Double
-    /// This is the break up of costs of the eval or suite run.
+    /// The cost breakdown for this Eval run.
     public let costs: [[String: JSONValue]]
     /// This is the type of the run.
     /// Currently it is fixed to `eval`.

@@ -1,5 +1,6 @@
 import Foundation
 
+/// A phone-number hook action that speaks an exact message to the caller.
 public struct SayPhoneNumberHookAction: Codable, Hashable, Sendable {
     /// This is the message to say
     public let exact: String

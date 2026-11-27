@@ -1,5 +1,6 @@
 import Foundation
 
+/// Call recording locations, including stereo, video, and separated mono recording URLs.
 public struct Recording: Codable, Hashable, Sendable {
     /// This is the stereo recording url for the call. To enable, set `assistant.artifactPlan.recordingEnabled`.
     public let stereoUrl: String?

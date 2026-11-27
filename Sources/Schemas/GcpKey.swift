@@ -1,5 +1,6 @@
 import Foundation
 
+/// Google Cloud service-account key used to authenticate access to Google Cloud resources.
 public struct GcpKey: Codable, Hashable, Sendable {
     /// This is the type of the key. Most likely, this is "service_account".
     public let type: String

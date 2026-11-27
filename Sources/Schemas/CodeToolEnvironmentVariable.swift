@@ -1,5 +1,6 @@
 import Foundation
 
+/// An environment variable supplied to code-tool execution, with support for Liquid templates in its value.
 public struct CodeToolEnvironmentVariable: Codable, Hashable, Sendable {
     /// Name of the environment variable
     public let name: String

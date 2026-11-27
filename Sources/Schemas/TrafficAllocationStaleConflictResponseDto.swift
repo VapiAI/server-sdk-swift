@@ -1,0 +1,40 @@
+import Foundation
+
+public struct TrafficAllocationStaleConflictResponseDto: Codable, Hashable, Sendable {
+    /// Human-readable reason the create was rejected.
+    public let message: String
+    /// The allocation currently in effect. Null if none exists yet.
+    public let currentAllocationId: Nullable<String>?
+    /// Additional properties that are not explicitly defined in the schema
+    public let additionalProperties: [String: JSONValue]
+
+    public init(
+        message: String,
+        currentAllocationId: Nullable<String>? = nil,
+        additionalProperties: [String: JSONValue] = .init()
+    ) {
+        self.message = message
+        self.currentAllocationId = currentAllocationId
+        self.additionalProperties = additionalProperties
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.message = try container.decode(String.self, forKey: .message)
+        self.currentAllocationId = try container.decodeNullableIfPresent(String.self, forKey: .currentAllocationId)
+        self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
+    }
+
+    public func encode(to encoder: Encoder) throws -> Void {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try encoder.encodeAdditionalProperties(self.additionalProperties)
+        try container.encode(self.message, forKey: .message)
+        try container.encodeNullableIfPresent(self.currentAllocationId, forKey: .currentAllocationId)
+    }
+
+    /// Keys for encoding/decoding struct properties.
+    enum CodingKeys: String, CodingKey, CaseIterable {
+        case message
+        case currentAllocationId
+    }
+}

@@ -18,6 +18,8 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
     public let updatedAt: Date
     /// This is the name of credential. This is just for your reference.
     public let name: String?
+    /// These are the names of your Azure deployments, one entry for every model in `models`. Omit the field when every deployment is named after its model; once it has any entry, a model with no entry is rejected, so a deployment named after its model takes `{ "model": "<model>", "name": "<model>" }`. Requests use the first of the org's keys that matches the region (on a live call, also the model), so an org holding two keys for the same region and model should pin `credentialIds` on its assistants.
+    public let deployments: [AzureOpenAiDeployment]?
     public let openAiEndpoint: String
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
@@ -33,6 +35,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
         createdAt: Date,
         updatedAt: Date,
         name: String? = nil,
+        deployments: [AzureOpenAiDeployment]? = nil,
         openAiEndpoint: String,
         additionalProperties: [String: JSONValue] = .init()
     ) {
@@ -46,6 +49,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.name = name
+        self.deployments = deployments
         self.openAiEndpoint = openAiEndpoint
         self.additionalProperties = additionalProperties
     }
@@ -62,6 +66,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
         self.createdAt = try container.decode(Date.self, forKey: .createdAt)
         self.updatedAt = try container.decode(Date.self, forKey: .updatedAt)
         self.name = try container.decodeIfPresent(String.self, forKey: .name)
+        self.deployments = try container.decodeIfPresent([AzureOpenAiDeployment].self, forKey: .deployments)
         self.openAiEndpoint = try container.decode(String.self, forKey: .openAiEndpoint)
         self.additionalProperties = try decoder.decodeAdditionalProperties(using: CodingKeys.self)
     }
@@ -79,6 +84,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
         try container.encode(self.createdAt, forKey: .createdAt)
         try container.encode(self.updatedAt, forKey: .updatedAt)
         try container.encodeIfPresent(self.name, forKey: .name)
+        try container.encodeIfPresent(self.deployments, forKey: .deployments)
         try container.encode(self.openAiEndpoint, forKey: .openAiEndpoint)
     }
 
@@ -94,6 +100,7 @@ public struct AzureOpenAiCredential: Codable, Hashable, Sendable {
         case createdAt
         case updatedAt
         case name
+        case deployments
         case openAiEndpoint = "openAIEndpoint"
     }
 }

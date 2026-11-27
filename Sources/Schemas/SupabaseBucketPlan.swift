@@ -1,5 +1,6 @@
 import Foundation
 
+/// Supabase S3-compatible bucket configuration for call artifacts, including region, endpoint, access keys, bucket name, and path.
 public struct SupabaseBucketPlan: Codable, Hashable, Sendable {
     /// This is the S3 Region. It should look like us-east-1
     /// It should be one of the supabase regions defined in the SUPABASE_REGION enum

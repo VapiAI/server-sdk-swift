@@ -1,10 +1,15 @@
 import Foundation
 
+/// Configuration for transcribing speech during assistant conversations with ElevenLabs, including model, language, speech thresholds, and fallback settings.
 public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
     /// This is the model that will be used for the transcription.
     public let model: ElevenLabsTranscriberModel?
-    /// This is the language that will be used for the transcription.
+    /// Language for transcription. `multi` enables automatic code-switching on scribe_v3_live.
     public let language: ElevenLabsTranscriberLanguage?
+    /// Language detection hints for scribe_v3_live. Duplicates are removed; [] explicitly clears inherited hints.
+    public let languages: [ElevenLabsTranscriberLanguagesItem]?
+    /// Words or phrases to bias the transcription towards, such as product names. Supported on scribe_v2 (up to 100 terms of 50 characters each) and scribe_v2_realtime or scribe_v3_live (up to 50 terms of 20 characters each). Each term has at most 5 words and none of `< > { } [ ] \`. Adds ElevenLabs' keyterm prompting rate to the transcriber cost.
+    public let keyterms: [String]?
     /// This is the number of seconds of silence before VAD commits (0.3-3.0).
     public let silenceThresholdSeconds: Double?
     /// This is the VAD sensitivity (0.1-0.9, lower indicates more sensitive).
@@ -21,6 +26,8 @@ public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
     public init(
         model: ElevenLabsTranscriberModel? = nil,
         language: ElevenLabsTranscriberLanguage? = nil,
+        languages: [ElevenLabsTranscriberLanguagesItem]? = nil,
+        keyterms: [String]? = nil,
         silenceThresholdSeconds: Double? = nil,
         confidenceThreshold: Double? = nil,
         minSpeechDurationMs: Double? = nil,
@@ -30,6 +37,8 @@ public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
     ) {
         self.model = model
         self.language = language
+        self.languages = languages
+        self.keyterms = keyterms
         self.silenceThresholdSeconds = silenceThresholdSeconds
         self.confidenceThreshold = confidenceThreshold
         self.minSpeechDurationMs = minSpeechDurationMs
@@ -42,6 +51,8 @@ public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.model = try container.decodeIfPresent(ElevenLabsTranscriberModel.self, forKey: .model)
         self.language = try container.decodeIfPresent(ElevenLabsTranscriberLanguage.self, forKey: .language)
+        self.languages = try container.decodeIfPresent([ElevenLabsTranscriberLanguagesItem].self, forKey: .languages)
+        self.keyterms = try container.decodeIfPresent([String].self, forKey: .keyterms)
         self.silenceThresholdSeconds = try container.decodeIfPresent(Double.self, forKey: .silenceThresholdSeconds)
         self.confidenceThreshold = try container.decodeIfPresent(Double.self, forKey: .confidenceThreshold)
         self.minSpeechDurationMs = try container.decodeIfPresent(Double.self, forKey: .minSpeechDurationMs)
@@ -55,6 +66,8 @@ public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
         try encoder.encodeAdditionalProperties(self.additionalProperties)
         try container.encodeIfPresent(self.model, forKey: .model)
         try container.encodeIfPresent(self.language, forKey: .language)
+        try container.encodeIfPresent(self.languages, forKey: .languages)
+        try container.encodeIfPresent(self.keyterms, forKey: .keyterms)
         try container.encodeIfPresent(self.silenceThresholdSeconds, forKey: .silenceThresholdSeconds)
         try container.encodeIfPresent(self.confidenceThreshold, forKey: .confidenceThreshold)
         try container.encodeIfPresent(self.minSpeechDurationMs, forKey: .minSpeechDurationMs)
@@ -66,6 +79,8 @@ public struct ElevenLabsTranscriber: Codable, Hashable, Sendable {
     enum CodingKeys: String, CodingKey, CaseIterable {
         case model
         case language
+        case languages
+        case keyterms
         case silenceThresholdSeconds
         case confidenceThreshold
         case minSpeechDurationMs

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Configuration for signing outbound requests with an HMAC secret, including algorithm, headers, payload format, and signature encoding.
 public struct HmacAuthenticationPlan: Codable, Hashable, Sendable {
     /// This is the HMAC secret key used to sign requests.
     public let secretKey: String

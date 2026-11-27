@@ -1,5 +1,6 @@
 import Foundation
 
+/// Credentials for Azure Speech or Blob Storage, including service, region, and optional storage bucket settings.
 public struct CreateAzureCredentialDto: Codable, Hashable, Sendable {
     /// This is the service being used in Azure.
     public let service: CreateAzureCredentialDtoService

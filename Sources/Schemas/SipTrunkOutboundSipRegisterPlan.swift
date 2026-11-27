@@ -1,8 +1,12 @@
 import Foundation
 
+/// Registration settings used when the SIP trunk requires SIP REGISTER.
 public struct SipTrunkOutboundSipRegisterPlan: Codable, Hashable, Sendable {
+    /// SIP registrar domain used for registration.
     public let domain: String?
+    /// Username sent with the SIP REGISTER request.
     public let username: String?
+    /// Authentication realm used for SIP registration.
     public let realm: String?
     /// Additional properties that are not explicitly defined in the schema
     public let additionalProperties: [String: JSONValue]
